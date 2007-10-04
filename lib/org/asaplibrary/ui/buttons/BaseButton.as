@@ -1,0 +1,46 @@
+/*
+Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
+Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package org.asaplibrary.ui.buttons {
+	import flash.display.MovieClip;
+	
+	public class BaseButton extends MovieClip {
+		public var hitArea_mc:MovieClip;
+		
+		/**
+		* Constructor
+		*/
+		public function BaseButton () {
+			// act as button
+			buttonMode = true;
+			
+			// set and hide hit area
+			if (hitArea_mc != null) {
+				hitArea = hitArea_mc;
+				hitArea_mc.visible = false;
+			}
+			
+			// don't handle mouse events on children
+			mouseChildren = false;
+		}
+
+		override public function toString () : String {
+			return ";org.asaplibrary.ui.buttons.BaseButton";
+		}
+	}
+	
+}
