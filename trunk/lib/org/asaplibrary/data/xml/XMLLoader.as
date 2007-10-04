@@ -1,0 +1,194 @@
+﻿/*
+Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
+Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package org.asaplibrary.data.xml {
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.EventDispatcher;
+	import flash.net.URLRequest;
+	import flash.net.URLVariables;
+	import flash.net.URLLoader;
+	
+	import org.asaplibrary.util.debug.Log;
+
+	
+	public class XMLLoader extends EventDispatcher {
+		
+		private var mWaitingStack : Array = new Array();
+		private var mLoadingStack : Array = new Array();
+		
+		private var mLoaderCount : int;
+		
+		/**
+		* Constructor
+		* @param	inLoaderCount: number of parallel loaders
+		*/
+		public function XMLLoader (inLoaderCount:int = 1) {
+			mLoaderCount = inLoaderCount;
+		}
+		
+		/**
+		* Load XML
+		* @param	inURL: source url of the xml
+		* @param	inName: unique identifying name
+		* @param	inVariables: (optional) URLVariables object to be sent to the server
+		*/
+		public function loadXML (inURL:String, inName:String = "", inVariables:URLVariables = null) : void {
+			// Check if url is valid
+			if ((inURL== null) || (inURL.length == 0)) {
+				Log.error("loadXML: url is not valid", toString());
+				// dispatch error event
+				var e:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.ERROR, inName, null, this);
+				e.error = "invalid url";
+				dispatchEvent(e);
+				
+				return;
+			}
+
+			var xld:XMLLoaderData = new XMLLoaderData(inURL, inName, inVariables);
+			mWaitingStack.push(xld);
+			
+			loadNext();
+		}
+
+		/**
+		* Load next xml if the waiting stack isn't empty
+		*/
+		private function loadNext () : void {
+			// quit if all loaders taken
+			if (mLoadingStack.length == mLoaderCount) return;
+			
+			// quit if no waiting data
+			if (mWaitingStack.length == 0) return;
+
+			// get the data
+			var xld:XMLLoaderData = mWaitingStack.shift() as XMLLoaderData;
+			
+			// create loader
+			var loader:URLLoader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, handleURLLoaderEvent);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, handleURLLoaderEvent);
+			loader.addEventListener(ProgressEvent.PROGRESS, handleURLLoaderProgressEvent);
+
+			// create request
+			var request:URLRequest = new URLRequest(xld.url);
+			if (xld.variables != null) request.data = xld.variables;
+			
+			// store loader in data
+			xld.loader = loader;
+			
+			// store data in loading stack
+			mLoadingStack.push(xld);
+			
+			// start loading
+			loader.load(request);
+		}
+		
+		/**
+		* Handle events from URLLoader
+		* @param	e: Event sent 
+		*/
+		private function handleURLLoaderEvent (e:Event) : void {
+			// get loader
+			var loader:URLLoader = e.target as URLLoader;
+			
+			// get data for loader
+			var xld:XMLLoaderData = getDataForLoader(loader);
+			if (xld == null) {
+				Log.error("handleURLLoaderEvent: data for loader not found", toString());
+				return;
+			}
+
+			// check if an IOError occurred
+			var evt:XMLLoaderEvent;
+			if (e is IOErrorEvent) {
+				// fill error event
+				var errorEvent:IOErrorEvent = e as IOErrorEvent;
+				evt = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
+				evt.error = errorEvent.text;
+			} else {
+				// notify we're done loading this xml
+				evt = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data), this);
+			}
+			dispatchEvent(evt);
+			
+			// remove data from stack
+			mLoadingStack.splice(mLoadingStack.indexOf(xld), 1);
+			
+			// continue loading
+			loadNext();
+		}
+		
+		/**
+		* Handle ProgressEvent from URLLoader
+		* @param	e: ProgressEvent sent
+		*/
+		private function handleURLLoaderProgressEvent (e:ProgressEvent) : void {
+			// get loader
+			var loader:URLLoader = e.target as URLLoader;
+			
+			// get data for loader
+			var xld:XMLLoaderData = getDataForLoader(loader);
+			if (xld == null) {
+				Log.error("handleURLLoaderProgressEvent: data for loader not found", toString());
+				return;
+			}
+
+			// create & dispatch event with relevant data
+			var evt:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.PROGRESS, xld.name, null, this);
+			evt.bytesLoaded = e.bytesLoaded;
+			evt.bytesTotal = e.bytesTotal;
+			dispatchEvent(evt);
+		}
+		
+		/**
+		* Get the data block in the loading stack for the specified URLLoader
+		* @param	inLoader: URLLoader
+		* @return the data, or null if none was found
+		*/
+		private function getDataForLoader (inLoader:URLLoader) : XMLLoaderData {
+			var len:int = mLoadingStack.length;
+			for (var i:int = 0; i < len; i++) {
+				var xld:XMLLoaderData = mLoadingStack[i] as XMLLoaderData;
+				if (xld.loader == inLoader) return xld;
+			}
+			return null;
+		}
+		
+		public override function toString () : String {
+			return ";org.asaplibrary.data.xml.XMLLoader";
+		}
+	}	
+}
+
+
+import flash.net.URLVariables;
+import flash.net.URLLoader;
+
+class XMLLoaderData {
+	public var url:String;
+	public var name:String;
+	public var variables:URLVariables;
+	public var loader:URLLoader;
+	
+	public function XMLLoaderData (inURL:String, inName:String, inVariables:URLVariables = null) {
+		url = inURL;
+		name = inName;
+		variables = inVariables;
+	}
+}
