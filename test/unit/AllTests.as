@@ -17,8 +17,8 @@
 			//addTest(new BooleanUtilsTestCase());
 			//addTest(new FramePulseTestCase());
 			//addTest(new FrameDelayTestCase());
-			addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
-			// TODO: NumberUtils testcase
+			//addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
+			addTest(new NumberUtilsTestCase());
 		}
 	}
 	

@@ -42,7 +42,7 @@ package org.asaplibrary.util {
 		
 		/**
 		Creates a random number within a list of ranges.
-		Pass a list of Arrays, each one separated by a comma.
+		Pass a list of Arrays containing 2 Numbers each, each Array separated by a comma.
 		@return A new random number.
 		@example
 		This example creates 1 random number between -45 and 40, or between 40 and 45:
@@ -50,10 +50,11 @@ package org.asaplibrary.util {
 		var rotation:Number = NumberUtils.randomInRanges([-45, 40], [40, 45]);
 		</code>
 		*/
-		public static function randomInRanges (inRanges:Array) : Number {
-			var args:Array = arguments;
-			var item:Number = Math.floor(Math.random() * args.length);
-			var range:Array = args[item];
+		public static function randomInRanges (...inRanges:Array) : Number {
+			// pick a random Array from the argument list
+			var picked:Number = Math.floor(Math.random() * inRanges.length);
+			// use the picked array to create random value between the 2 Array items
+			var range:Array = inRanges[picked];
 			return NumberUtils.randomInRange(range[0], range[1]);
 		}
 		
@@ -65,12 +66,12 @@ package org.asaplibrary.util {
 		@example
 		<code>
 		var pi:Number = 3.14159265;
-		pi = NumberUtils.truncate(pi, 2);
+		pi = NumberUtils.roundFloat(pi, 2);
 		// 3.14
 		</code>
 		*/
 		public static function roundFloat (inNumber:Number,
-										   inDigitCount:Number) : Number {
+										   inDigitCount:int) : Number {
 			if (inDigitCount < 0) {
 				return inNumber;
 			}
@@ -83,20 +84,21 @@ package org.asaplibrary.util {
 		
 		/**
 		Finds the x value of a point on a sine curve of which only the y value is known. The closest x value is returned, ranging between -1 pi and 1 pi.
-		@param inFindValue: y value of point to find on the sine curve
-		@param inMinValue: min y value (bottom) of the sine curve
-		@param inMaxValue: max y value (top) of the sine curve
+		@param inYPosOnCurve: y value of point to find on the sine curve
+		@param inCurveBottom: min y value (bottom) of the sine curve
+		@param inCurveTop: max y value (top) of the sine curve
 		@return The offset value as multiplier of pi.
 		@implementationNote Calls {@link #normalizedValue}.
 		@example
+		This code returns the x position of a normal sine curve - running from -1 to 1 - at x position 1 (when the curve is at its highest):
 		<code>
 		NumberUtils.xPosOnSinus(1, -1, 1); // 1.5707963267949 ( = 0.5 * Math.PI )
 		</code>
 		*/
-		public static function xPosOnSinus (inFindValue:Number,
-											inMinValue:Number,
-											inMaxValue:Number) : Number {
-			return Math.asin( 2 * NumberUtils.normalizedValue(inFindValue, inMinValue, inMaxValue) - 1 );
+		public static function xPosOnSinus (inYPosOnCurve:Number,
+											inCurveBottom:Number,
+											inCurveTop:Number) : Number {
+			return Math.asin( 2 * NumberUtils.normalizedValue(inYPosOnCurve, inCurveBottom, inCurveTop) - 1 );
 		}
 		
 		/**
@@ -115,7 +117,7 @@ package org.asaplibrary.util {
 												inMinValue:Number,
 												inMaxValue:Number) : Number {
 			var diff:Number = inMaxValue - inMinValue;
-			if (diff == 0) return 1;
+			if (diff == 0) return inMinValue;
 			var f:Number = 1 / diff;
 			return f * (inValueToNormalize - inMinValue);
 		}
@@ -126,7 +128,8 @@ package org.asaplibrary.util {
 		@param inDy : the y component of the vector
 		@return The the angle of the passed vector in degrees.
 		*/
-		public static function angle (inDx:Number, inDy:Number) : Number {
+		public static function angle (inDx:Number,
+									  inDy:Number) : Number {
 			return Math.atan2(inDy, inDx) * 180/Math.PI;
 		}
 	}	
