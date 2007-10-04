@@ -34,7 +34,8 @@ package org.asaplibrary.util {
 		var scale:Number = NumberUtils.randomInRange(10, 20);
 		</code>
 		*/
-		public static function randomInRange (inStartRange:Number, inEndRange:Number) : Number {
+		public static function randomInRange (inStartRange:Number,
+											  inEndRange:Number) : Number {
 			var d:Number = inEndRange - inStartRange;
 			return inStartRange + (d - Math.random() * d);
 		}
@@ -44,9 +45,9 @@ package org.asaplibrary.util {
 		Pass a list of Arrays, each one separated by a comma.
 		@return A new random number.
 		@example
-		This example creates a random number in between -45 and 40, or between 40 and 45:
+		This example creates 1 random number between -45 and 40, or between 40 and 45:
 		<code>
-		var rotation:Number = NumberUtils.randomInRanges([-45, -40], [40, 45]);
+		var rotation:Number = NumberUtils.randomInRanges([-45, 40], [40, 45]);
 		</code>
 		*/
 		public static function randomInRanges (inRanges:Array) : Number {
@@ -57,9 +58,9 @@ package org.asaplibrary.util {
 		}
 		
 		/**
-		Truncates floating point digits.
+		Rounds a floating point number to a given number of digits.
 		@param inNumber : the number to truncate
-		@param inDigits : the number of digits to keep after truncating
+		@param inDigitCount : the number of digits to keep after truncating
 		@return A new number with truncated floating point digits.
 		@example
 		<code>
@@ -68,19 +69,20 @@ package org.asaplibrary.util {
 		// 3.14
 		</code>
 		*/
-		public static function truncate (inNumber:Number, inDigits:Number) : Number {
-			if (inDigits < 0) {
+		public static function roundFloat (inNumber:Number,
+										   inDigitCount:Number) : Number {
+			if (inDigitCount < 0) {
 				return inNumber;
 			}
 			var n:Number = 1;
-			while (inDigits--) {
+			while (inDigitCount--) {
 				n *= 10;
 			}
 			return Math.round(inNumber * n) / n;
 		}
 		
 		/**
-		Finds the x value of a point on a sine curve, of which only the y value is known. The closest x value is returned. This will range from -1 pi to 1 pi.
+		Finds the x value of a point on a sine curve of which only the y value is known. The closest x value is returned, ranging between -1 pi and 1 pi.
 		@param inFindValue: y value of point to find on the sine curve
 		@param inMinValue: min y value (bottom) of the sine curve
 		@param inMaxValue: max y value (top) of the sine curve
@@ -98,12 +100,11 @@ package org.asaplibrary.util {
 		}
 		
 		/**
-		Finds the normalized value (between 0 and 1) of the number inValueToNormalize, related to the normalized range, defined by lowest range value inMinValue and highest range value inMaxValue.
-		Normalizes a value, making it a value between 0 and 1
+		Finds the relative position of a number in a range between min and max, and returns its normalized value between 0 and 1.
 		@param inValueToNormalize: value to normalize
-		@param inMinValue: min value
-		@param inMaxValue: max value
-		@return The normalized y value: a value between 0 and 1.
+		@param inMinValue: lowest range value
+		@param inMaxValue: highest range value
+		@return The normalized value between 0 and 1.
 		@example
 		<code>
 		NumberUtils.normalizedValue(25, 0, 100); // 0.25
