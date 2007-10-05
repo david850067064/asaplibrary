@@ -21,7 +21,7 @@ A collection of Boolean utility functions.
 
 package org.asaplibrary.util {
 
-	class BooleanUtils {
+	public class BooleanUtils {
 	
 		/**
 		Attempts to convert a String or Number to a native Boolean.
