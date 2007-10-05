@@ -33,37 +33,6 @@
 			assertTrue("NumberUtilsTest testRandomInRange 1 1", (r == 1));
 		}
 		
-		public function testRandomInRanges () : void {
-			var a1:Array;
-			var a2:Array;
-			var r:Number;
-			
-			a1 = [1,1];
-			a2 = [1,1];
-			r = NumberUtils.randomInRanges(a1, a2);
-			assertTrue("NumberUtilsTest testRandomInRange 1", (r == 1));
-			
-			a1 = [1,10];
-			a2 = [1,10];
-			r = NumberUtils.randomInRanges(a1, a2);
-			assertTrue("NumberUtilsTest testRandomInRange 2", (r >= 1 && r <= 10));
-			
-			a1 = [10,1];
-			a2 = [10,1];
-			r = NumberUtils.randomInRanges(a1, a2);
-			assertTrue("NumberUtilsTest testRandomInRange 3", (r >= 1 && r <= 10));
-			
-			a1 = [10,-10];
-			a2 = [10,-10];
-			r = NumberUtils.randomInRanges(a1, a2);
-			assertTrue("NumberUtilsTest testRandomInRange 4", (r >= -10 && r <= 10));
-			
-			a1 = [0,10];
-			a2 = [10,20];
-			r = NumberUtils.randomInRanges(a1, a2);
-			assertTrue("NumberUtilsTest testRandomInRange 5", (r >= 0 && r <= 20));
-		}
-		
 		public function testRoundFloat () : void {
 			var pi:Number = 3.14159265;
 			var r:Number;

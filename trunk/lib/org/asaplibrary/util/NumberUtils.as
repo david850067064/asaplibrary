@@ -41,24 +41,6 @@ package org.asaplibrary.util {
 		}
 		
 		/**
-		Creates a random number within a list of ranges.
-		Pass a list of Arrays containing 2 Numbers each, each Array separated by a comma.
-		@return A new random number.
-		@example
-		This example creates 1 random number between -45 and 40, or between 40 and 45:
-		<code>
-		var rotation:Number = NumberUtils.randomInRanges([-45, 40], [40, 45]);
-		</code>
-		*/
-		public static function randomInRanges (...inRanges:Array) : Number {
-			// pick a random Array from the argument list
-			var picked:Number = Math.floor(Math.random() * inRanges.length);
-			// use the picked array to create random value between the 2 Array items
-			var range:Array = inRanges[picked];
-			return NumberUtils.randomInRange(range[0], range[1]);
-		}
-		
-		/**
 		Rounds a floating point number to a given number of digits.
 		@param inNumber : the number to truncate
 		@param inDigitCount : the number of digits to keep after truncating
