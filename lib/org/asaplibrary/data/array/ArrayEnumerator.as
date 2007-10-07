@@ -24,7 +24,7 @@ package org.asaplibrary.data.array {
 
 	import org.asaplibrary.data.BaseEnumerator;
 
-	class ArrayEnumerator extends BaseEnumerator {
+	public class ArrayEnumerator extends BaseEnumerator {
 
 		private var mArray:Array; /**< Pointer to external array. */
 		private var mLocation:int;
