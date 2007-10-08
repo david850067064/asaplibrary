@@ -27,17 +27,20 @@ package org.asaplibrary.util.loader {
 
 	import org.asaplibrary.util.debug.Log;
 
-	
+	/**
+	@todo stop, stopAll
+	*/
 	public class AssetLoader extends EventDispatcher {
+	
 		/** Default number of loaders before queueing */
 		private static var DEFAULT_LOADER_COUNT:Number = 1;
 		
 		/** FileData */
-		private var mWaitingStack : Array = new Array();
+		private var mWaitingStack:Array = new Array();
 		/** FileData */
-		private var mLoadingStack : Array = new Array();
+		private var mLoadingStack:Array = new Array();
 		
-		private var mLoaderCount : int;
+		private var mLoaderCount:int;
 			
 		
 		/**
@@ -54,7 +57,9 @@ package org.asaplibrary.util.loader {
 		* @param	inName: (optional) unique identifying name
 		* @param	inIsVisible: (optional) visibility state of loaded item
 		*/
-		public function loadAsset (inUrl:String, inName:String = "", inIsVisible:Boolean = true) : void {
+		public function loadAsset (inUrl:String,
+								   inName:String = "",
+								   inIsVisible:Boolean = true) : void {
 			// Check if url is valid
 			if ((inUrl== null) || (inUrl.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());
@@ -70,6 +75,34 @@ package org.asaplibrary.util.loader {
 			mWaitingStack.push(fd);
 			
 			loadNext();
+		}
+		
+		/**
+		Stops loading of all loaders and clears the loading stack.
+		*/
+		public function stopLoadingAll () : void {
+			var i:int, ilen:int = mLoadingStack.length;
+			for (i=0; i<ilen; ++i) {
+				var loader:Loader = mLoadingStack[i].loader;
+				loader.close();
+			}
+			mLoadingStack = new Array();
+		}
+		
+		/**
+		Stops loading of asset with name inName.
+		@param inName:	identifying name as passed to {@link loadAsset}
+		*/
+		public function stopLoadingAsset (inName:String) : void {
+			var i:int, ilen:int = mLoadingStack.length;
+			for (i=0; i<ilen; ++i) {
+				if (mLoadingStack[i].name == inName) {
+					var loader:Loader = mLoadingStack[i].loader;
+					loader.close();
+					mLoadingStack.splice(i,1);
+					return;
+				}
+			}
 		}
 		
 		/**
@@ -105,7 +138,6 @@ package org.asaplibrary.util.loader {
 			
 			// load object
 			loader.load(new URLRequest(fd.url));
-			
 		}
 		
 		private function handleLoadStarted (e:Event) : void {
@@ -188,7 +220,7 @@ package org.asaplibrary.util.loader {
 		* @param	inInfo: LoaderInfo
 		* @return the data, or null if none was found
 		*/
-		private function getDataForLoaderInfo (inInfo:LoaderInfo) : FileData {
+		private function getDataForLoaderInfo (inInfo:LoaderInfo):FileData {
 			var len:int = mLoadingStack.length;
 			for (var i:int = 0; i < len; i++) {
 				var fd:FileData = mLoadingStack[i] as FileData;
@@ -197,7 +229,7 @@ package org.asaplibrary.util.loader {
 			return null;
 		}
 		
-		override public function toString () : String {
+		override public function toString ():String {
 			return "org.asaplibrary.util.loader.AssetLoader";
 		}
 	}
@@ -207,6 +239,7 @@ import flash.display.Loader;
 import flash.display.LoaderInfo;
 
 class FileData {
+
 	public var loader:Loader;
 	public var url:String;
 	public var name:String;
