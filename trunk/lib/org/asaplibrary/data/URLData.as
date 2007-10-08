@@ -20,10 +20,10 @@ package org.asaplibrary.data {
 	import org.asaplibrary.data.xml.IParsable;
 
 	/**
-	Data value object class to hold information about urls.
+	Data object class to hold information about urls.
 	Can get its information through the {@link Parser} since it implements {@link IParsable}.
+	{@link #parseXML} can be used to to test if the XML has valid data.
 	*/
-
 	public class URLData implements IParsable {
 		// the names of the urls in the file settings.xml
 
@@ -35,8 +35,7 @@ package org.asaplibrary.data {
 		public var target:String;
 		
 		/**
-		*	Constructor
-		*	NB: This will be called without parameters by the Parser
+		The constructor will be called without parameters by the Parser.
 		*/
 		public function URLData (inName:String = null,
 								 inURL:String = null,
@@ -47,8 +46,14 @@ package org.asaplibrary.data {
 		}
 		
 		/**
-		*	Parse XML
-		*	@return true if parsing went ok, otherwise false: name & url are mandatory for this type of node
+		This method can be used to test if the XML has valid data. Valid XML must have this setup:
+		<code>
+		<urls>
+			<url name="..." url="..." target="..." />
+		</urls>
+		</code>
+		... where name and url are mandatory, and target is optional.
+		@return True if parsing went ok, otherwise false.
 		*/
 		public function parseXML (inXML:XML) : Boolean {
 			name   = inXML.@name;
