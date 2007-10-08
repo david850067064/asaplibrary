@@ -46,6 +46,7 @@ package org.asaplibrary.management.movie {
 		}
 
 		public function die () : void {
+			//
 		}
 
 		public function getName () : String {
