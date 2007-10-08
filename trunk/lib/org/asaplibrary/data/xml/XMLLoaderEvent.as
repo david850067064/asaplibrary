@@ -16,31 +16,40 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.xml {
+	
 	import flash.events.Event;
 	
 	public class XMLLoaderEvent extends Event {
+	
 		public static const _EVENT:String = "onXMLLoaderEvent";
 		
-		public static const COMPLETE:String = "loaded";
+		public static const COMPLETE:String = "complete";
 		public static const ERROR:String = "error";
 		public static const PROGRESS:String = "progress";
 		
-		public var source : XMLLoader;
-		public var name : String;
-		public var subtype : String;
-		public var data : XML;
-		public var error : String;
-		public var bytesLoaded : uint;
-		public var bytesTotal : uint;
+		public var source:XMLLoader;
+		public var name:String;
+		public var subtype:String;
+		public var data:XML;
+		public var error:String;
+		public var bytesLoaded:uint;
+		public var bytesTotal:uint;
 
 		
-		public function XMLLoaderEvent (inSubtype:String, inName:String, inData:XML, inSource:XMLLoader) {
+		public function XMLLoaderEvent (inSubtype:String,
+										inName:String,
+										inData:XML,
+										inSource:XMLLoader) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
 			name = inName;
 			data = inData;
 			source = inSource;
+		}
+		
+		public override function toString ():String {
+			return "org.asaplibrary.data.xml.XMLLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; bytesLoaded=" + bytesLoaded + "; bytesTotal=" + bytesTotal;
 		}
 	}	
 }

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.xml {
+
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
@@ -26,13 +27,15 @@ package org.asaplibrary.data.xml {
 	
 	import org.asaplibrary.util.debug.Log;
 
+	/**
 	
+	*/
 	public class XMLLoader extends EventDispatcher {
 		
-		private var mWaitingStack : Array = new Array();
-		private var mLoadingStack : Array = new Array();
+		private var mWaitingStack:Array = new Array();
+		private var mLoadingStack:Array = new Array();
 		
-		private var mLoaderCount : int;
+		private var mLoaderCount:int;
 		
 		/**
 		* Constructor
@@ -48,14 +51,16 @@ package org.asaplibrary.data.xml {
 		* @param	inName: unique identifying name
 		* @param	inVariables: (optional) URLVariables object to be sent to the server
 		*/
-		public function loadXML (inURL:String, inName:String = "", inVariables:URLVariables = null) : void {
+		public function loadXML (inURL:String,
+								 inName:String = "",
+								 inVariables:URLVariables = null) : void {
 			// Check if url is valid
 			if ((inURL== null) || (inURL.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());
 				// dispatch error event
-				var e:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.ERROR, inName, null, this);
-				e.error = "invalid url";
-				dispatchEvent(e);
+				var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.ERROR, inName, null, this);
+				event.error = "invalid url";
+				dispatchEvent(event);
 				
 				return;
 			}
@@ -101,31 +106,33 @@ package org.asaplibrary.data.xml {
 		
 		/**
 		* Handle events from URLLoader
-		* @param	e: Event sent 
+		* @param	inEvent: Event sent 
 		*/
-		private function handleURLLoaderEvent (e:Event) : void {
+		private function handleURLLoaderEvent (inEvent:Event) : void {
 			// get loader
-			var loader:URLLoader = e.target as URLLoader;
+			var loader:URLLoader = inEvent.target as URLLoader;
 			
 			// get data for loader
 			var xld:XMLLoaderData = getDataForLoader(loader);
 			if (xld == null) {
 				Log.error("handleURLLoaderEvent: data for loader not found", toString());
+				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
+				dispatchEvent(event);
 				return;
 			}
 
 			// check if an IOError occurred
-			var evt:XMLLoaderEvent;
-			if (e is IOErrorEvent) {
+			var event:XMLLoaderEvent;
+			if (inEvent is IOErrorEvent) {
 				// fill error event
-				var errorEvent:IOErrorEvent = e as IOErrorEvent;
-				evt = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
-				evt.error = errorEvent.text;
+				var errorEvent:IOErrorEvent = inEvent as IOErrorEvent;
+				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
+				event.error = errorEvent.text;
 			} else {
 				// notify we're done loading this xml
-				evt = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data), this);
+				event = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data), this);
 			}
-			dispatchEvent(evt);
+			dispatchEvent(event);
 			
 			// remove data from stack
 			mLoadingStack.splice(mLoadingStack.indexOf(xld), 1);
@@ -136,11 +143,11 @@ package org.asaplibrary.data.xml {
 		
 		/**
 		* Handle ProgressEvent from URLLoader
-		* @param	e: ProgressEvent sent
+		* @param	inEvent: ProgressEvent sent
 		*/
-		private function handleURLLoaderProgressEvent (e:ProgressEvent) : void {
+		private function handleURLLoaderProgressEvent (inEvent:ProgressEvent) : void {
 			// get loader
-			var loader:URLLoader = e.target as URLLoader;
+			var loader:URLLoader = inEvent.target as URLLoader;
 			
 			// get data for loader
 			var xld:XMLLoaderData = getDataForLoader(loader);
@@ -150,10 +157,10 @@ package org.asaplibrary.data.xml {
 			}
 
 			// create & dispatch event with relevant data
-			var evt:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.PROGRESS, xld.name, null, this);
-			evt.bytesLoaded = e.bytesLoaded;
-			evt.bytesTotal = e.bytesTotal;
-			dispatchEvent(evt);
+			var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.PROGRESS, xld.name, null, this);
+			event.bytesLoaded = inEvent.bytesLoaded;
+			event.bytesTotal = inEvent.bytesTotal;
+			dispatchEvent(event);
 		}
 		
 		/**
