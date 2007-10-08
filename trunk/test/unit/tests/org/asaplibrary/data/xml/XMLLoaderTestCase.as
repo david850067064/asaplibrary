@@ -1,4 +1,4 @@
-package org.asaplibrary.data.xml {
+﻿package org.asaplibrary.data.xml {
 	
 	import asunit.framework.TestCase;
 	import org.asaplibrary.data.xml.XMLLoader;
@@ -33,7 +33,7 @@ package org.asaplibrary.data.xml {
 		private function doTestLoadGood() : void {
 			var instance:XMLLoader = new XMLLoader();
 			instance.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
-			instance.loadXML("testdata/test.xml", XML_NAME)
+			instance.loadXML("testdata/test.xml", XML_NAME);
 		}
 		
 		private function doTestLoadBad() : void {
@@ -41,22 +41,14 @@ package org.asaplibrary.data.xml {
 			instance.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
 			instance.loadXML("testdata/XXX.xml", XML_NAME)
 		}
-
+		
 		private function handleXMLLoaded (e:XMLLoaderEvent) : void {
 			if (e.name != XML_NAME) return;
 			
 			switch (e.subtype) {
-				case XMLLoaderEvent.COMPLETE: handleXMLComplete(e); break;
-				case XMLLoaderEvent.ERROR: handleXMLError(e); break;
+				case XMLLoaderEvent.COMPLETE: sCompleteCalled++; break;
+				case XMLLoaderEvent.ERROR: sErrorCalled++; break;
 			}
-		}
-		
-		private function handleXMLComplete (e:XMLLoaderEvent) : void {
-			sCompleteCalled++;
-		}
-		
-		private function handleXMLError (e:XMLLoaderEvent) : void {
-			sErrorCalled++;
 		}
 		
 		private function assertResults () : void {

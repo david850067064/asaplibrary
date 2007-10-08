@@ -28,7 +28,22 @@ package org.asaplibrary.data.xml {
 	import org.asaplibrary.util.debug.Log;
 
 	/**
-	
+	Loads XML data.
+	@example
+	<code>
+	var xmlLoader:XMLLoader = new XMLLoader();
+	xmlLoader.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
+	xmlLoader.loadXML("data.xml");
+	</code>
+	Listen for loader events:
+	<code>
+	private function handleXMLLoaded (e:XMLLoaderEvent) : void {
+		switch (e.subtype) {
+			case XMLLoaderEvent.COMPLETE: handleXmlComplete(); break;
+			case XMLLoaderEvent.ERROR: handleXmlError(); break;
+		}
+	}
+	</code>
 	*/
 	public class XMLLoader extends EventDispatcher {
 		
