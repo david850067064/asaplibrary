@@ -49,5 +49,9 @@ package org.asaplibrary.util.loader {
 			subtype = inSubtype;
 			name = inName;
 		}
-}
+		
+		public override function toString ():String {
+			return "org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
+		}
+	}
 }
