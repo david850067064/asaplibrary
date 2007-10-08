@@ -6,6 +6,7 @@
 
 	public class XMLLoaderTestCase extends TestCase {
 
+		private static const URL_XML:String = "testdata/XMLLoaderTestCase.xml";
 		private static const XML_NAME:String = "TESTXML";
 		private static const TEST_DELAY:Number = 31;
 
@@ -33,13 +34,13 @@
 		private function doTestLoadGood() : void {
 			var instance:XMLLoader = new XMLLoader();
 			instance.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
-			instance.loadXML("testdata/test.xml", XML_NAME);
+			instance.loadXML(URL_XML, XML_NAME);
 		}
 		
 		private function doTestLoadBad() : void {
 			var instance:XMLLoader = new XMLLoader();
 			instance.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
-			instance.loadXML("testdata/XXX.xml", XML_NAME)
+			instance.loadXML("XXX.xml", XML_NAME)
 		}
 		
 		private function handleXMLLoaded (e:XMLLoaderEvent) : void {

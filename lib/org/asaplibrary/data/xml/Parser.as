@@ -36,19 +36,19 @@ package org.asaplibrary.data.xml {
 	</code>
 	Once the XML has been loaded, it can be converted into an Array of URLData objects with the following code:
 	<code>
-		// objects of type URLData
-		private var mURLs:Array;
-		
-		// parse XML
-		// @param o: XML
-		// @return true if parsing went ok, otherwise false
-		private function handleSettingsLoaded (o:XML) : Boolean {
-			mURLs = Parser.parseList(o.settings.urls.url, org.asaplibrary.data.loader.URLData, false);
-			
-			return (mURLs != null);
-		}
+	// objects of type URLData
+	private var mURLs:Array;
+	
+	// parse XML
+	// @param inXml: XML
+	// @return true if parsing went ok, otherwise false
+	private function handleSettingsLoaded (inXml:XML) : Boolean {
+		var xmlList:XMLList = XMLList(inXml);
+		mURLs = Parser.parseList(xmlList.urls.url, URLData, false);
+		return (mURLs != null);
+	}
 	</code>
-	After calling this function, the member variable <code>mURLs</code> contains a list of objects of type URLData, filled with the content of the XML file.
+	After calling this function, the member variable <code>mURLs</code> contains a list of objects of type {@link URLData}, filled with the content of the XML file.
 
 	Notes to this code:
 	<ul>
@@ -59,14 +59,17 @@ package org.asaplibrary.data.xml {
 	*/
 	 
 	public class Parser {
+	
 		/**
 		*	Parse an XMLList into an array of the specified class instance by calling its parseXML function
 		*	@param inXMLList: list of XML nodes
 		*	@param inClass: classname to be instanced; class must implement IParsable
 		*	@param ignoreError: if true, the return value of {@link #parseXML} is always added to the array, and the array itself is returned. Otherwise, an error in parsing will return null.
-		*	@return Array of new objects of the specified type, cast to IParsable, or null if parsing returned false
+		*	@return Array of new objects of the specified type, cast to IParsable, or null if parsing returned false.
 		*/
-		public static function parseList (inList:XMLList, inClass:Class, ignoreError:Boolean = false) : Array {
+		public static function parseList (inList:XMLList,
+										  inClass:Class,
+										  ignoreError:Boolean = false) : Array {
 			var a:Array = new Array();
 			
 			var len:Number = inList.length();
@@ -83,10 +86,12 @@ package org.asaplibrary.data.xml {
 		*	Parse XML into the specified class instance by calling its parseXML function
 		*	@param inXML: XML document or node
 		*	@param inClass: classname to be instanced; class must implement IParsable
-		*	@param ignoreError: if true, the return value of {@link IParsable#parseXML} is ignored, and the newly created object is always returned.
-		*	@return a new object of the specified type, cast to IParsable, or null if parsing returned false
+		*	@param ignoreError: if true, the return value of {@link IParsable#parseXML} is ignored, and the newly created object is always returned
+		*	@return a new object of the specified type, cast to {@link IParsable}, or null if parsing returned false.
 		*/
-		public static function parseXML (inXML:XML, inClass:Class, ignoreError:Boolean = false) : IParsable {
+		public static function parseXML (inXML:XML,
+										 inClass:Class,
+										 ignoreError:Boolean = false) : IParsable {
 			var ipa:IParsable = new inClass();
 			if (ipa.parseXML(inXML) || ignoreError) {
 				return ipa;

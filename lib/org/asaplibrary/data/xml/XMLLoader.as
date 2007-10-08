@@ -53,7 +53,6 @@ package org.asaplibrary.data.xml {
 		private var mLoaderCount:int;
 		
 		/**
-		* Constructor
 		* @param	inLoaderCount: number of parallel loaders
 		*/
 		public function XMLLoader (inLoaderCount:int = 1) {
@@ -62,9 +61,9 @@ package org.asaplibrary.data.xml {
 		
 		/**
 		* Load XML
-		* @param	inURL: source url of the xml
+		* @param	inURL: source url of the XML
 		* @param	inName: unique identifying name
-		* @param	inVariables: (optional) URLVariables object to be sent to the server
+		* @param	inVariables: (optional) {@link URLVariables} object to be sent to the server
 		*/
 		public function loadXML (inURL:String,
 								 inName:String = "",
@@ -87,7 +86,7 @@ package org.asaplibrary.data.xml {
 		}
 
 		/**
-		* Load next xml if the waiting stack isn't empty
+		* Load next xml while the waiting stack is not empty.
 		*/
 		private function loadNext () : void {
 			// quit if all loaders taken
