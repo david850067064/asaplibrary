@@ -39,6 +39,10 @@ package org.asaplibrary.management.movie {
 			subtype = inSubtype;
 			name = inName;
 		}
+		
+		public override function toString ():String {
+			return "org.asaplibrary.management.movie.MovieManagerEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; controller=" + controller + "; container=" + container;
+		}
 	}
 	
 }
