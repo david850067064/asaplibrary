@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
+
 	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	import org.asaplibrary.util.loader.AssetLoader;
@@ -25,6 +26,7 @@ package org.asaplibrary.management.movie {
 	
 
 	public class MovieManager extends EventDispatcher {
+	
 		/** MovieData */
 		private var mMovies:Array = new Array();
 		private var mLoader:AssetLoader;
@@ -57,7 +59,9 @@ package org.asaplibrary.management.movie {
 		@param inIsVisible: visibility of movie when loaded, default = true
 		@return: false if the loader cannot load the movie, or the movie could not be added to the list (usually because another or the same movie with the same name exists already), otherwise true
 		*/
-		public function loadMovie (inURL:String, inName:String, inIsVisible:Boolean = true) : Boolean {
+		public function loadMovie (inURL:String,
+								   inName:String,
+								   inIsVisible:Boolean = true) : Boolean {
 			// try adding
 			if (!addMovie(inURL, inName)) {
 				return false;
@@ -259,7 +263,7 @@ package org.asaplibrary.management.movie {
 			// dispatch event
 			var evt:MovieManagerEvent = new MovieManagerEvent(MovieManagerEvent.MOVIE_LOADED, e.name);
 			evt.container = e.asset;
-			dispatchEvent(e);
+			dispatchEvent(evt);
 			
 			// check if all done
 			checkLoadProgress(md);
