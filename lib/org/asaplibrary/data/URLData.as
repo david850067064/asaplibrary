@@ -20,7 +20,7 @@ package org.asaplibrary.data {
 	import org.asaplibrary.data.xml.IParsable;
 
 	/**
-	DataValueObject class to hold information about urls.
+	Data value object class to hold information about urls.
 	Can get its information through the {@link Parser} since it implements {@link IParsable}.
 	*/
 
@@ -38,7 +38,9 @@ package org.asaplibrary.data {
 		*	Constructor
 		*	NB: This will be called without parameters by the Parser
 		*/
-		public function URLData (inName:String = null, inURL:String = null, inTarget:String = null) {
+		public function URLData (inName:String = null,
+								 inURL:String = null,
+								 inTarget:String = null) {
 			if (inName) name = inName;
 			if (inURL) url = inURL;
 			if (inTarget) target = inTarget;
