@@ -27,6 +27,7 @@
 			
 			// management
 			addTest(new LocalControllerTestCase());
+			addTest(new MovieManagerTestCase());
 			
 			// util
 			//addTest(new BooleanUtilsTestCase());

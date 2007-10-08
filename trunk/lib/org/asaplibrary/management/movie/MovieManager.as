@@ -23,7 +23,6 @@ package org.asaplibrary.management.movie {
 	import org.asaplibrary.util.loader.AssetLoaderEvent;
 	import org.asaplibrary.management.movie.LocalController;
 	import org.asaplibrary.util.debug.Log;
-	
 
 	public class MovieManager extends EventDispatcher {
 	
@@ -146,7 +145,6 @@ package org.asaplibrary.management.movie {
 				md = new MovieData("");
 				mMovies.push(md);
 			}
-			
 			// store controller only if not stored during handleMovieLoaded
 			if (md.controller == null) {
 				storeLocalController(inController, md);
@@ -274,7 +272,8 @@ package org.asaplibrary.management.movie {
 		* @param	inController
 		* @param	inData
 		*/
-		private function storeLocalController (inController:LocalController, inData:MovieData) : void {
+		private function storeLocalController (inController:LocalController, 
+											   inData:MovieData) : void {
 			// set name of local controller
 			inController.setName(inData.name);
 
