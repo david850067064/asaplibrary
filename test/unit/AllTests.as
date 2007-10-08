@@ -15,7 +15,7 @@
 			super();
 			//addTest(new BaseEnumeratorTestCase());
 			
-			//addTest(new URLDataTestCase());
+			addTest(new URLDataTestCase());
 			addTest(new XMLLoaderTestCase());
 			
 			//addTest(new ArrayEnumeratorTestCase());

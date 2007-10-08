@@ -9,34 +9,19 @@ package org.asaplibrary.data {
 			var instance:URLData = new URLData();
 			assertTrue("URLData testConstructor", instance);
 			
-			instance = new URLData("NAME", "http://asaplibrary.org", 
+			var name:String = "NAME";
+			var url:String = "http://asaplibrary.org";
+			var target:String = "new";
+			
+			instance = new URLData(name, url, target);
+			assertTrue("URLData testConstructor name", instance.name == name);
+			assertTrue("URLData testConstructor url", instance.url == url);
+			assertTrue("URLData testConstructor name", instance.target == target);
 		}
 		
-		public function testGetCurrentObject () : void {
-			var be:BaseEnumerator = new BaseEnumerator();
-			assertTrue("BaseEnumerator testGetCurrentObject", be.getCurrentObject() == null);
-		}
-		
-		public function testGetNextObject () : void {
-			var be:BaseEnumerator = new BaseEnumerator();
-			assertTrue("BaseEnumerator testGetNextObject", be.getNextObject() == null);
-		}
-		
-		public function testGetAllObjects () : void {
-			var be:BaseEnumerator = new BaseEnumerator();
-			assertTrue("BaseEnumerator testGetAllObjects", be.getAllObjects() == null);
+		public function testParseXML() : void {
+			// cannot be tested yet
 		}
 		
 	}
 }
-
-/*
-	<?xml version="1.0" encoding="UTF-8"?>
-		<settings>
-			<urls>
-				<url name="addressform" url="../xml/address.xml" />
-				<url name="entries" url="../xml/entries.xml" />
-			</urls>
-		</settings>
-	</code>
-*/
