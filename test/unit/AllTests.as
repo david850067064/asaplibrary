@@ -8,6 +8,7 @@
 	import org.asaplibrary.data.xml.*;
 	import org.asaplibrary.util.*;
 	import org.asaplibrary.util.actionqueue.*;
+	import org.asaplibrary.util.loader.*;
 	
 	public class AllTests extends TestSuite {
 
@@ -25,6 +26,7 @@
 			//addTest(new FrameDelayTestCase());
 			//addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
 			//addTest(new NumberUtilsTestCase());
+			addTest(new AssetLoaderTestCase());
 		}
 	}
 	
