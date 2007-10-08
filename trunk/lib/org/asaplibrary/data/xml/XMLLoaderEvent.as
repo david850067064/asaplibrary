@@ -19,6 +19,22 @@ package org.asaplibrary.data.xml {
 	
 	import flash.events.Event;
 	
+	/**
+	Passes events for {@link XMLLoader}. Subscribe to type <code>_EVENT</code>.
+	@example
+	<code>
+	xmlLoader.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
+	</code>
+	Listen for loader events:
+	<code>
+	private function handleXMLLoaded (e:XMLLoaderEvent) : void {
+		switch (e.subtype) {
+			case XMLLoaderEvent.COMPLETE: handleXmlComplete(); break;
+			case XMLLoaderEvent.ERROR: handleXmlError(); break;
+		}
+	}
+	</code>
+	*/
 	public class XMLLoaderEvent extends Event {
 	
 		public static const _EVENT:String = "onXMLLoaderEvent";
@@ -35,7 +51,12 @@ package org.asaplibrary.data.xml {
 		public var bytesLoaded:uint;
 		public var bytesTotal:uint;
 
-		
+		/**
+		@param inSubtype: either <code>_EVENT</code>, <code>COMPLETE</code>, <code>ERROR</code> or <code>PROGRESS</code>
+		@param inName: identifier name
+		@param inData: the XML data object (only at COMPLETE)
+		@param inSource: the sending XMLLoader
+		*/
 		public function XMLLoaderEvent (inSubtype:String,
 										inName:String,
 										inData:XML,

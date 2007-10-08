@@ -21,7 +21,7 @@ package org.asaplibrary.data {
 
 	/**
 	Data object class to hold information about urls.
-	Can get its information through the {@link Parser} since it implements {@link IParsable}.
+	Can get its information through the {@link Parser} since it implements {@link IParsable}. 
 	{@link #parseXML} can be used to to test if the XML has valid data.
 	*/
 	public class URLData implements IParsable {
