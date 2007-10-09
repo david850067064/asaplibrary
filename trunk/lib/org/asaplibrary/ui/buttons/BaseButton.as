@@ -16,14 +16,13 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
+
 	import flash.display.MovieClip;
 	
 	public class BaseButton extends MovieClip {
+	
 		public var hitArea_mc:MovieClip;
 		
-		/**
-		* Constructor
-		*/
 		public function BaseButton () {
 			// act as button
 			buttonMode = true;

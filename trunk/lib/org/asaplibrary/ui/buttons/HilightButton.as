@@ -16,12 +16,14 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
+
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import org.asaplibrary.util.FramePulse;
 	
 	public class HilightButton extends BaseButton {
+	
 		private static var LABEL_UP : String = "up";
 		private static var LABEL_OVER : String = "over";
 		private static var LABEL_ON : String = "on";
@@ -30,11 +32,7 @@ package org.asaplibrary.ui.buttons {
 		private var mIsAnimating : Boolean;
 		private var mDoOutAnimation : Boolean;
 		private var mForceHilightAnimate : Boolean;
-		
-		
-		/**
-		 * Constructor
-		 */
+
 		public function HilightButton () {
 			super();
 			
