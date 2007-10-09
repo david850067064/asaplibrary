@@ -25,7 +25,7 @@ package org.asaplibrary.data.array {
 	A TraverseArrayEnumerator can be used with a paging controller to navigate through a list of thumbs or search result pages.
 	*/
 	
-	class TraverseArrayEnumerator extends ArrayEnumerator {
+	public class TraverseArrayEnumerator extends ArrayEnumerator {
 	
 		private var mTraverseOptions:uint = TraverseArrayOptions.NONE;
 		/** List of type ITraverseArrayDelegate */

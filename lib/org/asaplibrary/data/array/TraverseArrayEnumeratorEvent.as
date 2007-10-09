@@ -35,7 +35,7 @@ package org.asaplibrary.data.array {
 	}
 	</code>
 	*/
-	class TraverseArrayEnumeratorEvent extends Event {
+	public class TraverseArrayEnumeratorEvent extends Event {
 	
 		public static var UPDATE:String = "onTraverseArrayEnumeratorUpdate";
 		
