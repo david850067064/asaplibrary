@@ -1,9 +1,9 @@
 ﻿package org.asaplibrary.data.array {
 	
 	import asunit.framework.TestCase;
-	import org.asaplibrary.data.array.ArrayEnumerator;
+	import org.asaplibrary.data.array.*;
 		
-	public class TraverseArrayEnumeratorTestCase extends TestCase {
+	public class TraverseArrayEnumeratorTestCase extends TestCase implements ITraverseArrayDelegate {
 	
 		private static var DELEGATE_TEST_VALUE = "e";
 	
@@ -142,7 +142,7 @@
 			enumerator.setLoop(true);
 		
 			mReceivedOnArrayTraverseEvent = false;
-			enumerator.addDelegate(this, checkIsCorrectLetter);
+			enumerator.addDelegate(this);
 			// evaluate received events with delegate
 			enumerator.reset();	
 			enumerator.getNextObject(); // b?
@@ -165,7 +165,7 @@
 			mReceivedOnArrayTraverseEvent = true;
 		}
 		
-		private function checkIsCorrectLetter (inObjects:Array, inLocation:Number) : Boolean {
+		public function validateObjectAtLocation (inObjects:Array, inLocation:Number) : Boolean {
 			return (inObjects[inLocation] == DELEGATE_TEST_VALUE);
 		}
 	}
