@@ -74,7 +74,7 @@ package org.asaplibrary.ui.buttons {
 		 * @param	e
 		 * @return
 		 */
-		private function handleAdded (e : Event) : void {
+		protected function handleAdded (e : Event) : void {
 			if (mForceHilight) {
 				mForceHilight = false;
 				hilight(mForceHilightAnimate);
@@ -84,7 +84,7 @@ package org.asaplibrary.ui.buttons {
 		/**
 		 * Handle rollover event.
 		 */
-		private function handleRollOver (e : MouseEvent = null) : void {
+		protected function handleRollOver (e : MouseEvent = null) : void {
 			gotoAndPlay(LABEL_OVER);
 
 			mIsAnimating = true;
@@ -97,7 +97,7 @@ package org.asaplibrary.ui.buttons {
 		 * @param	e
 		 * @return
 		 */
-		private function handleRollOut (e : MouseEvent = null) : void {
+		protected function handleRollOut (e : MouseEvent = null) : void {
 			if (mIsAnimating) {
 				mDoOutAnimation = true;
 			} else {
@@ -108,7 +108,7 @@ package org.asaplibrary.ui.buttons {
 		/**
 		 * enterFrame handler that checks if animation has to continue
 		 */
-		private function checkAnimation (e : Event) : void {
+		protected function checkAnimation (e : Event) : void {
 			if (currentLabel == LABEL_ON) {
 				mIsAnimating = false;
 				FramePulse.removeEnterFrameListener(checkAnimation);
