@@ -21,10 +21,9 @@ Array traverse options used by {@link TraverseArrayEnumerator}.
 
 package org.asaplibrary.data.array {
 
-	public class TraverseArrayOptions {
+	public interface ITraverseArrayDelegate {
 	
-		public static var NONE:uint = (1<<0); /**< The enumerator does nothing. */
-		public static var LOOP:uint = (1<<1); /**< The enumerator loops past the last item. */
+		function validateObjectAtLocation (inObjects:Array, inLocation:Number) : Boolean;
 		
 	}
 }

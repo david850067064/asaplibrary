@@ -19,7 +19,7 @@
 			// data
 			//addTest(new BaseEnumeratorTestCase());
 			//addTest(new ArrayEnumeratorTestCase());
-			//addTest(new TraverseArrayEnumeratorTestCase());
+			addTest(new TraverseArrayEnumeratorTestCase());
 
 			//addTest(new URLDataTestCase());
 			//addTest(new XMLLoaderTestCase());

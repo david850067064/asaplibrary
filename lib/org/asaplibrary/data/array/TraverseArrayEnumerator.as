@@ -28,7 +28,8 @@ package org.asaplibrary.data.array {
 	class TraverseArrayEnumerator extends ArrayEnumerator {
 	
 		private var mTraverseOptions:uint = TraverseArrayOptions.NONE;
-		private var mDelegates:Array;
+		/** List of type ITraverseArrayDelegate */
+		private var mDelegates:Array; 
 		
 		/**
 		Creates a new array enumerator. Optionally stores a pointer to array inArray.
@@ -60,14 +61,11 @@ package org.asaplibrary.data.array {
 		}
 		
 		/**
-		Adds a delegate method to validate the current object. Each delegate method is called in {@link #update} when a delegate object is set. The delegate's validation method is called to evaluate the new node before it is set.
-		@param inDelegateObject: the owner of the delegate method
-		@param inDelegateMethod: validation method. This method should accept an Object as parameter and return a Boolean to indicate the item's validity.
+		Adds a delegate object that implements {@link ITraverseArrayDelegate} to validate the current object. Each delegate method is called in {@link #update} when a delegate object is set. The delegate's validation method is called to evaluate the new node before it is set.	
+		@param inDelegateObject: the object a class that implements ITraverseArrayDelegate
 		*/
-		public function addDelegate (inDelegateObject:Object,
-									 inDelegateMethod:Function) : void {
-			var delegate:DelegateData = new DelegateData(inDelegateObject, inDelegateMethod);
-			mDelegates.push(delegate);
+		public function addDelegate (inDelegateObject:ITraverseArrayDelegate) : void {
+			mDelegates.push(inDelegateObject);
 		}
 		
 		/**
@@ -179,8 +177,9 @@ package org.asaplibrary.data.array {
 			
 			var i:uint, ilen:uint = mDelegates.length;
 			for (i=0; i<ilen; ++i) {
-				var delegate:DelegateData = mDelegates[i] as DelegateData;
-				var approved:Boolean =  Boolean(delegate.method.apply(delegate.object, [mObjects, inLocation]));
+				var delegate:ITraverseArrayDelegate = mDelegates[i] as ITraverseArrayDelegate;				
+				var method:Function = delegate["validateObjectAtLocation"];
+				var approved:Boolean =  Boolean(method.apply(delegate, [mObjects, inLocation]));
 				if (!approved) {
 					isValid = false;
 				}
@@ -197,16 +196,3 @@ package org.asaplibrary.data.array {
 	}
 }
 
-/**
-Data holder for delegate object / method.
-*/
-class DelegateData {
-
-	public var object:Object;
-	public var method:Function;
-	
-	function DelegateData (inObject:Object, inMethod:Function) {
-		object = inObject;
-		method = inMethod;
-	}
-}
