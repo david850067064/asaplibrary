@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -26,18 +26,17 @@ package org.asaplibrary.data.array {
 
 	public class ArrayEnumerator extends BaseEnumerator {
 
-		private var mArray:Array; /**< Pointer to external array. */
-		private var mLocation:int;
+		protected var mObjects:Array; /**< Pointer to external array. */
+		protected var mLocation:int;
 	
 		/**
 		Creates a new array enumerator. Optionally stores a pointer to array inArray.
 		@param inArray : (optional) the array to enumerate
 		*/
-		public function ArrayEnumerator (inArray:Array = null) {
+		public function ArrayEnumerator (inObjects:Array = null) {
 			super();
-			if (inArray) {
-				mArray = inArray;
-				reset();
+			if (inObjects) {
+				setObjects(inObjects);
 			}
 		}
 		
@@ -45,8 +44,8 @@ package org.asaplibrary.data.array {
 		Stores a pointer to array inArray.
 		@param inArray : the array to enumerate
 		*/
-		public function setArray (inArray:Array) : void {
-			mArray = inArray;
+		public function setObjects (inObjects:Array) : void {
+			mObjects = inObjects;
 			reset();
 		}
 		
@@ -58,7 +57,7 @@ package org.asaplibrary.data.array {
 			if (mLocation == -1) {
 				return null;
 			}
-			return mArray[mLocation];
+			return mObjects[mLocation];
 		}
 		
 		/**
@@ -67,7 +66,7 @@ package org.asaplibrary.data.array {
 		@implementationNote Calls {@link #update}.
 		*/
 		public override function getNextObject () : * {
-			if (mLocation < mArray.length) {
+			if (mLocation < mObjects.length) {
 				return update(mLocation + 1);
 			}
 			return null;
@@ -75,10 +74,10 @@ package org.asaplibrary.data.array {
 		
 		/**
 		Retrieves all objects.
-		@return The array as set in the constructor or in {@link #setArray}.
+		@return The array as set in the constructor or in {@link #setObjects}.
 		*/
 		public override function getAllObjects () : Array {
-			return mArray;
+			return mObjects;
 		}
 		
 		/**
@@ -104,7 +103,7 @@ package org.asaplibrary.data.array {
 		@implementationNote Calls {@link #update}.
 		*/
 		public function setCurrentObject (inObject:Object) : void {
-			var index:int = findLocationForObject(inObject);
+			var index:int = mObjects.indexOf(inObject);
 			if (index != -1) {
 				update(index);
 			}
@@ -113,12 +112,10 @@ package org.asaplibrary.data.array {
 		/**
 		@exclude
 		*/
-		public function toString () : String {
-			return "ArrayEnumerator; array " + mArray;
+		public override function toString () : String {
+			return "org.asaplibrary.data.array.ArrayEnumerator; objects " + mObjects;
 		}
-		
-		// PRIVATE METHODS
-		
+				
 		/**
 		Updates the location pointer to a new index location.
 		@param inLocation : the new index location
@@ -127,21 +124,6 @@ package org.asaplibrary.data.array {
 		private function update (inLocation:int) : * {
 			mLocation = inLocation;
 			return getCurrentObject();
-		}
-		
-		/**
-		Retrieves the array index location of item inObject.
-		@param inObject : the object to be found
-		@return The array index location of item inObject. Returns -1 when the object is not found.
-		*/
-		private function findLocationForObject (inObject:Object) : int {
-			var i:int = mArray.length;
-			while (i--) {
-				if (mArray[i] == inObject) {
-					return i;
-				}
-			}
-			return -1;
 		}
 		
 	}

@@ -19,7 +19,7 @@ package org.asaplibrary.data.array {
 		public function testSetArray () : void {
 			var chars:Array = ["a", "b", "c", "d", "e"];
 			var enumerator:ArrayEnumerator = new ArrayEnumerator();
-			enumerator.setArray(chars);
+			enumerator.setObjects(chars);
 			assertTrue("ArrayEnumerator getAllObjects", (enumerator.getAllObjects() == chars));
 		}
 		
