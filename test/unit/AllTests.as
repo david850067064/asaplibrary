@@ -18,16 +18,18 @@
 			
 			// data
 			//addTest(new BaseEnumeratorTestCase());
+			//addTest(new ArrayEnumeratorTestCase());
+			//addTest(new TraverseArrayEnumeratorTestCase());
+
 			//addTest(new URLDataTestCase());
 			//addTest(new XMLLoaderTestCase());
 			//addTest(new ParserTestCase());
-			//addTest(new ArrayEnumeratorTestCase());
 			//addTest(new TreeTestCase());
 			//addTest(new TreeEnumeratorTestCase());
 			
 			// management
-			addTest(new LocalControllerTestCase());
-			addTest(new MovieManagerTestCase());
+			//addTest(new LocalControllerTestCase());
+			//addTest(new MovieManagerTestCase());
 			
 			// util
 			//addTest(new BooleanUtilsTestCase());

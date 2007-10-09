@@ -16,13 +16,14 @@ limitations under the License.
 */
 
 /**
-Virtual base class for enumerator objects.
-@author Arthur Clemens
+Base class for enumerator objects.
 */
 
 package org.asaplibrary.data {
 
-	public class BaseEnumerator {
+	import flash.events.EventDispatcher;
+
+	public class BaseEnumerator extends EventDispatcher {
 		
 		/**
 		Retrieves the object at the current pointer position.
