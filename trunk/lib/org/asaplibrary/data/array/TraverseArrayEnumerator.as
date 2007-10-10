@@ -69,6 +69,14 @@ package org.asaplibrary.data.array {
 		}
 		
 		/**
+		@sends TraverseArrayEnumeratorEvent#UPDATE
+		*/
+		public override function setCurrentObject (inObject:Object) : void {
+			super.setCurrentObject(inObject);
+			dispatchEvent(new TraverseArrayEnumeratorEvent(TraverseArrayEnumeratorEvent.UPDATE, inObject, this));
+		}
+		
+		/**
 		Increments the location pointer by one and returns the object from the array at that location.
 		@return (Deliberately untyped) The object at the new location. Returns null if the location pointer has moved past the end of the array and inTraverseOptions is not set to {@link TraverseArrayOptions#LOOP}.
 		@implementationNote Calls {@link #update}.
