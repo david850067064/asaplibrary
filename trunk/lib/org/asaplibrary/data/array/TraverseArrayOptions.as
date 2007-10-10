@@ -23,8 +23,8 @@ package org.asaplibrary.data.array {
 
 	public class TraverseArrayOptions {
 	
-		public static var NONE:uint = (1<<0); /**< The enumerator does nothing. */
-		public static var LOOP:uint = (1<<1); /**< The enumerator loops past the last item. */
+		public static const NONE:uint = (1<<0); /**< The enumerator does nothing. */
+		public static const LOOP:uint = (1<<1); /**< The enumerator loops past the last item. */
 		
 	}
 }
