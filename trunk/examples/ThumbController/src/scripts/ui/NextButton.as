@@ -3,8 +3,7 @@ package ui {
 
 	import flash.display.MovieClip;
 	
-	import org.asaplibrary.ui.buttons.ButtonStateDelegate;
-	import org.asaplibrary.ui.buttons.ButtonStateDelegateEvent;
+	import org.asaplibrary.ui.buttons.*;
 	
 	/**
 	Class used for "previous" and "next" buttons.
@@ -12,7 +11,7 @@ package ui {
 	public class NextButton extends MovieClip {
 	
 		private var mDelegate:ButtonStateDelegate;
-		private static const D:Class = ButtonStateDelegate;
+		private static const S:Class = ButtonStates;
 		
 		/**
 		
@@ -37,16 +36,16 @@ package ui {
 			var frame:String;
 
 			switch (e.state) {
-				case D.OVER:
+				case S.OVER:
 					frame = "over";
 					break;
-				case D.OUT:
+				case S.OUT:
 					frame = "out";
 					break;
-				case D.NORMAL:
+				case S.NORMAL:
 					frame = "normal";
 					break;
-				case D.DISABLED:
+				case S.DISABLED:
 					frame = "disabled";
 					break;
 				default:
