@@ -15,14 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 package org.asaplibrary.data.array {
 
 	import flash.events.Event;
 	import org.asaplibrary.data.array.TraverseArrayEnumerator;
 	
 	/**
-	Passes events for {@link TraverseArrayEnumerator}. Subscribe to type <code>_EVENT</code>.
+	Passes events for {@link TraverseArrayEnumerator}. Subscribe to type <code>UPDATE</code>.
 	@example
 	<code>
 	var enumerator:TraverseArrayEnumerator = new TraverseArrayEnumerator(objects);
@@ -44,7 +43,7 @@ package org.asaplibrary.data.array {
 		
 		/**
 		@param inSubtype: name of event (and name of handler function when no Delegate is used)
-		@param inObject: the object at the TraverseArrayEnumerator pointer position
+		@param inValue: the object at the TraverseArrayEnumerator pointer position
 		@param inEnumerator : the TraverseArrayEnumerator object
 		*/
 		public function TraverseArrayEnumeratorEvent (inSubtype:String, 	  		  

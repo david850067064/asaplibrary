@@ -15,12 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Array traverse options used by {@link TraverseArrayEnumerator}.
-*/
-
 package org.asaplibrary.data.array {
 
+	/**
+	Array traverse options used by {@link TraverseArrayEnumerator}. The state options use bitwise operators, see {@link ButtonStates} for an example.
+	*/
 	public class TraverseArrayOptions {
 	
 		public static const NONE:uint = (1<<0); /**< The enumerator does nothing. */

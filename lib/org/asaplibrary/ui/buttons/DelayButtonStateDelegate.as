@@ -25,17 +25,51 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.TimerEvent;
 	
 	import org.asaplibrary.ui.buttons.ButtonStateDelegate;
+	import org.asaplibrary.ui.buttons.ButtonStates;
+	
+	/**
+	Helper class to manage timing control over mouse over and mouse out events. This is useful for navigation menus where the menu items should "remember" its state for a brief moment even when the mouse has moved out of its click region. In interface design this effect is called hysteresis - see also <a href="http://www.mackido.com/Interface/hysteresis.html">time delay in hierarchical menus</a>.
+	
+	Another use is to prevent buttons to activate when the mouse moves very quickly over them. A activation delay will cause the button to activate only when the mouse stays for a little bit longer.
+
+	3 timing properties that can be set:
+	<ul>
+	<li>{@link #indelay} : the number of seconds between the mouse having rolled over and the button activation</li>
+	<li>{@link #outdelay} : the number of seconds between the mouse having moved out and the clip performing its mouse out activation</li>
+	<li>{@link #afterdelay} : the number of seconds a button is momentarily inactive after mouse out</li>
+	</ul>
+	@example
+	<code>
+	import org.asaplibrary.ui.buttons.*;
+	
+	public class MyButton extends MovieClip {
 		
+		private var mDelegate:DelayButtonStateDelegate;
+				
+		public function MyButton () {		
+			mDelegate = new DelayButtonStateDelegate(this);
+			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
+
+			// set the timing:
+			indelay = .1;
+			outdelay = .5;
+		}
+		
+		private function update (e:ButtonStateDelegateEvent) : void {
+			if (e.state == ButtonStates.OVER) grow();
+			if (e.state == ButtonStates.OUT) shrink();
+		}
+	}
+	</code>
+	*/
 	public class DelayButtonStateDelegate extends ButtonStateDelegate {
 	
-		protected var mRollOverState:Boolean; /**< Indicates if the button has a rollover, defined by the delay variables. */
-		
 		// Delay variables
-		protected var mInDelay:Number = 0;		/**< Delay before rollOver action is performed, in seconds. */
-		protected var mOutDelay:Number = 0;		/**< (Hysteresis) delay before rollOut action is performed, in seconds. */
-		protected var mAfterDelay:Number = 0; /**< Delay after onRollOut until the button is activated (enabled) again, in seconds. */
+		protected var mInDelay:Number = 0;		/**< Delay before mouse over is performed, in seconds. */
+		protected var mOutDelay:Number = 0;		/**< (Hysteresis) delay before mouse out action is performed, in seconds. */
+		protected var mAfterDelay:Number = 0; /**< Delay after mouse out until the button is activated (enabled) again, in seconds. */
 	
-		protected var mReEnabledTime:Number; /**< Set the time from where the button will be active again (in milliseconds); value is calculated. */
+		protected var mReEnabledTime:uint; /**< Set the time from where the button will be active again (in milliseconds); value is calculated. */
 		
 		protected var mInDelayTimer:Timer;
 		protected var mOutDelayTimer:Timer;
@@ -43,12 +77,11 @@ package org.asaplibrary.ui.buttons {
 		
 		/**
 		Creates a new DelayButtonStateDelegate.
+		@param inButton: the owner button
 		*/
 		public function DelayButtonStateDelegate (inButton:MovieClip) {
 
 			super(inButton);
-			
-			mRollOverState = false;
 			
 			mInDelayTimer = new Timer(0);
 			mInDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, processRollOver);
@@ -58,7 +91,6 @@ package org.asaplibrary.ui.buttons {
 			
 			mAfterDelayTimer = new Timer(0);
 			mAfterDelayTimer.addEventListener(TimerEvent.TIMER_COMPLETE, processAfterDelay);
-	
 		}
 		
 		/**
@@ -69,7 +101,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		
+		Delay before mouse over is performed, in seconds.
 		*/
 		public function get indelay () : Number {
 			return mInDelay;
@@ -79,7 +111,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		
+		(Hysteresis) delay before mouse out action is performed, in seconds.
 		*/
 		public function get outdelay () : Number {
 			return mOutDelay;
@@ -89,7 +121,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		
+		Delay after mouse out until the button is activated (enabled) again, in seconds.
 		*/
 		public function get afterdelay () : Number {
 			return mAfterDelay;
@@ -99,7 +131,8 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		Handle rollover event.
+		Called at MouseEvent.MOUSE_OVER.
+		@param e: the mouse event
 		*/
 		override protected function mouseOverHandler (e:MouseEvent = null) : void {
 			mOutDelayTimer.reset();
@@ -109,8 +142,8 @@ package org.asaplibrary.ui.buttons {
 			
 			mInDelayTimer.reset();
 			if (mInDelay == 0) {
-				mRollOverState = true;
-				update(null, OVER);
+				mMouseOver = true;
+				update(null, ButtonStates.OVER);
 			} else {
 				mInDelayTimer.delay = mInDelay * 1000;
 				mInDelayTimer.repeatCount = 1;
@@ -120,18 +153,19 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		Handle rollout event
+		Called at MouseEvent.MOUSE_OUT.
+		@param e: the mouse event
 		@param	e
 		*/
 		override protected function mouseOutHandler (e:MouseEvent = null) : void {	
 			resetTimers();
 	
 			if (mOutDelay == 0) {
-				mRollOverState = false;
+				mMouseOver = false;
 				doAfterDelay();
-				update(null, OUT); //rollOut();
+				update(null, ButtonStates.OUT);
 			} else {
-				var tempTime:Number = getTimer() + mOutDelay * 1000;
+				var tempTime:uint = getTimer() + mOutDelay * 1000;
 				if (mReEnabledTime < tempTime) {
 					mReEnabledTime = tempTime;
 				}
@@ -142,29 +176,30 @@ package org.asaplibrary.ui.buttons {
 		}
 
 		/**
-		
+		Called by the roll over timer.
+		@param e: the timer event
 		*/
 		protected function processRollOver (e:TimerEvent) : void {
-			mRollOverState = true;
-			mRollOver = true;
+			mMouseOver = true;
 			if (mSelected || !mEnabled) return;
-			update(null, OVER);
+			update(null, ButtonStates.OVER);
 		}
 		
 		/**
-		
+		Called by the roll out timer.
+		@param e: the timer event
 		*/
 		protected function processRollOut (e:TimerEvent) : void {
-			mRollOverState = false;
+			mMouseOver = false;
 			doAfterDelay();
 			mPressed = false;
-			mRollOver = false;
+			mMouseOver = false;
 			if (mSelected || !mEnabled) return;
-			update(null, OUT);
+			update(null, ButtonStates.OUT);
 		}
 		
 		/**
-		
+		If {@link afterdelay} has been set, starts the timer.
 		*/
 		protected function doAfterDelay () : void {
 			if (mAfterDelay > 0) {
@@ -178,7 +213,8 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		
+		Called by the after delay out timer.
+		@param e: the timer event
 		*/
 		protected function processAfterDelay (e:TimerEvent) : void {
 			mAfterDelayTimer.reset();
@@ -186,7 +222,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		
+		Resets all timers.
 		*/
 		protected function resetTimers () : void {
 			mInDelayTimer.reset();

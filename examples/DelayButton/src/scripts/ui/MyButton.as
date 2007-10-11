@@ -4,14 +4,11 @@
 	import fl.transitions.easing.*;
 	import org.asaplibrary.util.actionqueue.*;
 	
-	import org.asaplibrary.ui.buttons.ButtonStateDelegate;
-	import org.asaplibrary.ui.buttons.DelayButtonStateDelegate;
-	import org.asaplibrary.ui.buttons.ButtonStateDelegateEvent;
+	import org.asaplibrary.ui.buttons.*;
 	
 	public class MyButton extends MovieClip {
 		
 		private var mDelegate:DelayButtonStateDelegate;
-		private static const D:Class = ButtonStateDelegate;
 		
 		public var tHitarea:MovieClip;
 		public var tPulseRing:MovieClip;
@@ -56,8 +53,8 @@
 		}
 		
 		private function update (e:ButtonStateDelegateEvent) : void {
-			if (e.state == ButtonStateDelegate.OVER) grow();
-			if (e.state == ButtonStateDelegate.OUT) shrink();
+			if (e.state == ButtonStates.OVER) grow();
+			if (e.state == ButtonStates.OUT) shrink();
 		}
 		
 		private function grow () : void {
