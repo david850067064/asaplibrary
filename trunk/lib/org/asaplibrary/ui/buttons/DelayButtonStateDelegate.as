@@ -155,7 +155,6 @@ package org.asaplibrary.ui.buttons {
 		/**
 		Called at MouseEvent.MOUSE_OUT.
 		@param e: the mouse event
-		@param	e
 		*/
 		override protected function mouseOutHandler (e:MouseEvent = null) : void {	
 			resetTimers();
