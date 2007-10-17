@@ -25,7 +25,7 @@ package org.asaplibrary.util.actionqueue {
 	/**
 		
 	*/
-	public class ActionQueueContoller extends EventDispatcher {
+	public class ActionQueueController extends EventDispatcher {
 		
 		/**
 		List of ActionQueueData objects
