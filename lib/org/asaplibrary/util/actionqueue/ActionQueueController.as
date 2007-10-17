@@ -30,16 +30,17 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		List of ActionQueueData objects
 		*/
-		private var mQueues:Array = new Array();
-		private var mConditions:Array = new Array();
-		private var mConditionsToDelete:Array = new Array();
-		
-		private var DEBUG:Boolean = false;
+		private var mQueues:Array;
+		private var mConditions:Array;
+		private var mConditionsToDelete:Array;
 		
 		/**
 		
 		*/
-		function ActionQueueContoller() {
+		function ActionQueueController() {
+			mQueues = new Array();
+			mConditions = new Array();
+			mConditionsToDelete = new Array();
 			FramePulse.addEnterFrameListener(step);
 		}
 		
@@ -88,6 +89,13 @@ package org.asaplibrary.util.actionqueue {
 		public function removeCondition (inCondition:Condition) : void {
 			// do not delete immediately or we get problems in loops
 			mConditionsToDelete.push(inCondition);
+		}
+		
+		/**
+		
+		*/
+		override public function toString () : String {
+			return "; org.asaplibrary.util.actionqueue.ActionQueueController";
 		}
 		
 		/**

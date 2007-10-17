@@ -24,7 +24,7 @@ package org.asaplibrary.util.actionqueue {
 	
 	public class ActionQueue extends EventDispatcher {
 
-		private var mActionQueueController:ActionQueueContoller;
+		private var mActionQueueController:ActionQueueController;
 		private var mName:String;
   		private var mRegistered:Boolean = false;
   		private var mIsPaused:Boolean;
@@ -69,7 +69,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		function ActionQueue (inName:String = "Anonymous ActionQueue",
-							  inController:ActionQueueContoller = null ) {
+							  inController:ActionQueueController = null ) {
 
 			mName = inName;
 			mActionQueueController = inController;			
@@ -84,7 +84,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Should be set before run is called.
 		*/
-		public function setController (inController:ActionQueueContoller) : void {
+		public function setController (inController:ActionQueueController) : void {
 			mActionQueueController = inController;	
 		}
 		
