@@ -122,7 +122,7 @@
 			queue.run();
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 3
 			queue.run();
-			assertTrue("ActionQueueTestCase addActionBeforeAndAfter", queue.isBusy());
+			assertTrue("ActionQueueTestCase addActionBeforeAndAfter", queue.isRunning());
 			queue.addAction( mInstance, "performTestaddAction2" ); // want to increment to 4, but this will fail so the total amount is still 3
 			queue.run();
 		}
