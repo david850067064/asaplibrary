@@ -22,7 +22,7 @@ package org.asaplibrary.util.actionqueue {
 	import org.asaplibrary.util.FramePulse;
 	import org.asaplibrary.util.actionqueue.Action;
 	
-	public class ActionQueue extends EventDispatcher {
+	public class ActionQueue extends EventDispatcher implements IAction {
 
 		private var mActionQueueController:ActionQueueController;
 		private var mName:String;
@@ -108,7 +108,7 @@ package org.asaplibrary.util.actionqueue {
 			var firstParam:* = inArgs[0];
 			if (firstParam is Action) {
 				action = firstParam;
-			} else if (firstParam is FrameAction) {
+			} else if (firstParam is DuringAction) {
 				action = firstParam;
 			} else if (firstParam is Function) {
 				action = createActionFromFunction(inArgs);
@@ -157,7 +157,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function isBusy () : Boolean {
+		public function isRunning () : Boolean {
 			return mRegistered;
 		}
 		
@@ -192,8 +192,8 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		protected function doWait (inOwner:Object,
-								 inDuration:Number) : FrameAction {
-			return new FrameAction(inOwner, idle, inDuration);
+								 inDuration:Number) : DuringAction {
+			return new DuringAction(inOwner, idle, inDuration);
 		}
 		
 		/**
@@ -439,11 +439,12 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function run () : void {
+		public function run () : * {
 			register();
 			mainActionRunner().setActions(mActions);
 			mHasFinished = false;
 			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_STARTED, mName));
+			return this;
 		}
 		
 		/**
@@ -631,7 +632,7 @@ class ActionRunner {
 	*/
 	public function step (e:Event) : void {
 		mFrameActionRunner.step();
-		if (mFrameActionRunner.isBusy()) return;
+		if (mFrameActionRunner.isRunning()) return;
 				
 		if (mCurrentStep == mStepCount) {
 			// no actions left
@@ -704,11 +705,11 @@ class ActionRunner {
 	protected function applyAction (inAction:Action) : Boolean {
 		var result:* = inAction.run();
 		
-		if (result && (result is FrameAction)) {
+		if (result && (result is DuringAction)) {
 			mFrameActionRunner.startFrameAction(result);
 			return true;
 		}
-		// function has not returned an FrameAction object so is not frame based
+		// function has not returned an DuringAction object so is not frame based
 		return false;
 	}
 	
@@ -732,7 +733,7 @@ class FrameActionRunner {
 	
 	private var mName:String; // for debugging
 	private var mEndTime:Number;
-	private var mFrameAction:FrameAction;
+	private var mFrameAction:DuringAction;
 	private var mWaitDuration:Number;
 	private var mIsActive:Boolean;
 	private var mDurationLeft:Number;
@@ -757,7 +758,7 @@ class FrameActionRunner {
 	/**
 		
 	*/
-	public function isBusy () : Boolean {
+	public function isRunning () : Boolean {
 		return isActive();
 	}
 	
@@ -843,7 +844,7 @@ class FrameActionRunner {
 	/**
 	
 	*/
-	public function startFrameAction (inFrameAction:FrameAction) : void {
+	public function startFrameAction (inFrameAction:DuringAction) : void {
 //		if (DEBUG) trace(getTimer() + " ; startFrameAction called; " + toString());
 		mFrameAction = inFrameAction;	
 		var duration:Number = mFrameAction.duration * 1000; // translate to milliseconds

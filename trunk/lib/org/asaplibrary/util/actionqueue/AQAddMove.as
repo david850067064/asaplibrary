@@ -50,10 +50,10 @@ package org.asaplibrary.util.actionqueue {
 			return initAddMove;
 		}
 		
-		protected function initAddMove() : FrameAction {
+		protected function initAddMove() : DuringAction {
 			mTravelledX = 0;
 			mTravelledY = 0;
-			return new FrameAction(this, doAddMove, mDuration, mEffect);
+			return new DuringAction(this, doAddMove, mDuration, mEffect);
 		}
 		
 		/**

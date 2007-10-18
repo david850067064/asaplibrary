@@ -70,13 +70,13 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoScale () : FrameAction {
+		protected function initDoScale () : DuringAction {
 			mStartScaleX = (!isNaN(mParamStartScaleX)) ? mParamStartScaleX : mDO.scaleX;
 			mStartScaleY = (!isNaN(mParamStartScaleY)) ? mParamStartScaleY : mDO.scaleY;
 			mEndScaleX = (!isNaN(mParamEndScaleX)) ? mParamEndScaleX : mDO.scaleX;
 			mEndScaleY = (!isNaN(mParamEndScaleY)) ? mParamEndScaleY : mDO.scaleY;
 			
-			return new FrameAction(this, doScale, mDuration, mEffect);
+			return new DuringAction(this, doScale, mDuration, mEffect);
 		}
 		
 		/**

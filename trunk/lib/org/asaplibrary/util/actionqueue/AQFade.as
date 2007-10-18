@@ -54,10 +54,10 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoFade () : FrameAction {
+		protected function initDoFade () : DuringAction {
 			mStartAlpha = (!isNaN(mParamStartAlpha)) ? mParamStartAlpha : mDO.alpha;
 			mEndAlpha = (!isNaN(mParamEndAlpha)) ? mParamEndAlpha : mDO.alpha;
-			return new FrameAction(this, doFade, mDuration, mEffect);
+			return new DuringAction(this, doFade, mDuration, mEffect);
 		}
 
 		/**

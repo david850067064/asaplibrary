@@ -62,12 +62,12 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoMove () : FrameAction {
+		protected function initDoMove () : DuringAction {
 			mStartX = (!isNaN(mParamStartX)) ? mParamStartX : mDO.x;
 			mStartY = (!isNaN(mParamStartY)) ? mParamStartY : mDO.y;
 			mEndX = (!isNaN(mParamEndX)) ? mParamEndX : mDO.x; 
 			mEndY = (!isNaN(mParamEndY)) ? mParamEndY : mDO.y;
-			return new FrameAction(this, doMove, mDuration, mEffect);
+			return new DuringAction(this, doMove, mDuration, mEffect);
 		}
 		
 		/**

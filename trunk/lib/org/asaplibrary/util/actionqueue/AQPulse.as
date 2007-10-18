@@ -51,7 +51,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoFade () : FrameAction {
+		protected function initDoFade () : DuringAction {
 			mMaxValue = (!isNaN(mParamMaxValue)) ? mParamMaxValue : mDO.alpha;
 			mMinValue = (!isNaN(mParamMinValue)) ? mParamMinValue : mDO.alpha;
 			return super.init();
@@ -97,7 +97,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoScale () : FrameAction {
+		protected function initDoScale () : DuringAction {
 			mMaxValue = (!isNaN(mParamMaxValue)) ? mParamMaxValue : mDO.scaleX;
 			mMinValue = (!isNaN(mParamMinValue)) ? mParamMinValue : mDO.scaleX;
 			return super.init();

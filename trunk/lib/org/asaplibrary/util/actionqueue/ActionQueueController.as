@@ -99,14 +99,14 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Finally deletes conditions from the 'to delete list'.
 		*/
 		private function doMaintenance () : void {
 			mConditionsToDelete.forEach(deleteCondition);
 		}
 		
 		/**
-		
+		Performs deletion of a condition from the 'to delete list'.
 		*/
 		public function deleteCondition (inCondition:Condition, index:int, arr:Array) : void {
 			var index:int = mConditions.indexOf(inCondition);
