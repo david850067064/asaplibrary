@@ -1,4 +1,4 @@
-package org.asaplibrary.data.tree {
+﻿package org.asaplibrary.data.tree {
 	
 	import asunit.framework.TestCase;
 	import org.asaplibrary.data.tree.Tree;
@@ -25,12 +25,20 @@ package org.asaplibrary.data.tree {
 		
 		public function testAddChild() : void {
 			var root:Tree = new Tree("root");
+
 			var child:Tree = root.addChild("A");
 			child.data = -1;
 			assertTrue("Tree child", child);
 			assertTrue("Tree child name", child.name == "A");
 			assertTrue("Tree child data", child.data == -1);
 			assertTrue("Tree child parent", child.parent == root);
+		
+			var data:Number = 10;
+			var child2:Tree = child.addChild("B", data);
+			assertTrue("Tree child", child2);
+			assertTrue("Tree child name", child2.name == "B");
+			assertTrue("Tree child data", child2.data == 10);
+			assertTrue("Tree child parent", child2.parent == child);
 		}
 		
 		public function testParent() : void {
