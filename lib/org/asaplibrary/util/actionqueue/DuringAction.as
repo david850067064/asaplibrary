@@ -17,7 +17,10 @@ limitations under the License.
 
 package org.asaplibrary.util.actionqueue {
 
-	public class FrameAction extends Action {
+	/**
+	A DuringAction is an Action that performs a function during a set time period. The duration may be set to 0 - the action will then last indefinite.
+	*/
+	public class DuringAction extends Action {
 	
 		public var duration:Number; /**< Duration of the animation in seconds. */
 		public var effect:Function; /**< An effect function, for instance one of the fl.motion.easing methods. */ 
@@ -35,7 +38,7 @@ package org.asaplibrary.util.actionqueue {
 		public var loopCount:int;
 		protected var loopCounter:int = 0;
 		
-		public function FrameAction (inOwner:Object,
+		public function DuringAction (inOwner:Object,
 									 inMethod:Function,
 									 inDuration:Number = Number.NaN,
 									 inEffect:Function = null) {

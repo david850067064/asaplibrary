@@ -17,7 +17,9 @@ limitations under the License.
 
 package org.asaplibrary.util.actionqueue {
 	
-	public class Action {
+	import org.asaplibrary.util.actionqueue.IAction;
+	
+	public class Action implements IAction {
 		
 		public var method:Function;
 		public var owner:Object;
@@ -34,6 +36,10 @@ package org.asaplibrary.util.actionqueue {
 		
 		public function run () : * {
 			return method.apply(owner, args);
+		}
+		
+		public function isRunning () : Boolean {
+			return false;
 		}
 
 	}
