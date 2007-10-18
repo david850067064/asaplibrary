@@ -702,7 +702,7 @@ class ActionRunner {
 	@return The called method's return value: in case of an AQMethod, the called function will return true if it has an onEnterFrame. If so, ActionQueue must pass an onEnterFrame itself.
 	*/
 	protected function applyAction (inAction:Action) : Boolean {
-		var result:* = inAction.method.apply(inAction.owner, inAction.args);
+		var result:* = inAction.run();
 		
 		if (result && (result is FrameAction)) {
 			mFrameActionRunner.startFrameAction(result);
