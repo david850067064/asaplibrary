@@ -18,7 +18,6 @@ limitations under the License.
 package org.asaplibrary.data.tree {
 
 	import org.asaplibrary.data.BaseEnumerator;
-	import flash.geom.Point;
 	
 	public class TreeEnumerator extends BaseEnumerator {
 	
@@ -89,16 +88,14 @@ package org.asaplibrary.data.tree {
 		/**
 		@exclude
 		*/
-		public function toString () : String {
+		public override function toString () : String {
 			return "(TreeEnumerator) - root node = " + mRootNode;
 		}
-		
-		// PRIVATE METHODS
 		
 		/**
 		Finds the last child (of the last child recursively) of node inNode.
 		*/
-		private function getLastNode (inNode:Tree) : Tree {
+		protected function getLastNode (inNode:Tree) : Tree {
 			if (!inNode.children) { // terminate condition
 				return inNode;
 			}
@@ -109,7 +106,7 @@ package org.asaplibrary.data.tree {
 		/**
 
 		*/
-		private function update (inNewNode:Tree) : Tree {
+		protected function update (inNewNode:Tree) : Tree {
 			mCurrentNode = inNewNode;
 			mIsEnumerating = (inNewNode != null);
 			return mCurrentNode;
@@ -118,7 +115,7 @@ package org.asaplibrary.data.tree {
 		/**
 
 		*/
-		private function performGetNextObject () : Tree {
+		protected function performGetNextObject () : Tree {
 			if (!mIsEnumerating) {
 				// before iterating
 				mIsEnumerating = true;
@@ -141,7 +138,7 @@ package org.asaplibrary.data.tree {
 		Gets the first child of the current node.
 		@return The found node; if no node found, returns null.
 		*/
-		private function getFirstChildFW () : Tree {
+		protected function getFirstChildFW () : Tree {
 			var nextNode:Tree = mCurrentNode.children[0];
 			if (nextNode == null) {
 				return null;
@@ -168,7 +165,7 @@ package org.asaplibrary.data.tree {
 		
 		</code>
 		*/
-		private function getNextSiblingFW (inFindSameDepth:Boolean) : Tree {
+		protected function getNextSiblingFW (inFindSameDepth:Boolean) : Tree {
 			var nextNode:Tree = getForwardNode(mCurrentNode, inFindSameDepth);
 			if (nextNode == null) {
 				return null;
@@ -182,7 +179,7 @@ package org.asaplibrary.data.tree {
 		@param inFindSameDepth : (true or false) true: the found node must match the current node's depth; default false
 		@return The found node; if no node found, returns null.
 		*/
-		private function getForwardNode (inTempNode:Tree,
+		protected function getForwardNode (inTempNode:Tree,
 										 inFindSameDepth:Boolean) : Tree {
 			if (!inTempNode) return null;
 			if (!inTempNode.parent) return null;
@@ -209,7 +206,8 @@ package org.asaplibrary.data.tree {
 		/**
 		
 		*/
-		private static function getArrayItemIndex(inNode:Tree, inArray:Array) : int {
+		protected function getArrayItemIndex(inNode:Tree,
+													inArray:Array) : int {
 			var i:int, ilen:int = inArray.length;
 			for (i=0; i<ilen; ++i) {
 				if (inNode == inArray[i]) {

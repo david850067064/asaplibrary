@@ -21,7 +21,7 @@ package org.asaplibrary.data.tree {
 	
 		private var mName:String; /**< Tree identifier. */
 		private var mParent:Tree = null; /**< Parent node. */
-		private var mChildren:Array; /*< Child nodes (typical of a position tree). */
+		private var mChildren:Array; /*< List of child nodes (typical of a position tree). */
 		
 		private var mData:Object = null; /**< Contents of this node. */
 				
@@ -36,58 +36,56 @@ package org.asaplibrary.data.tree {
 		/**
 		
 		*/
-		public function addChild (inName:String) : Tree {
+		public function addChild (inName:String,
+								  inData:Object = null) : Tree {
 		
 			var childNode = new Tree(inName, this);
 			if (mChildren == null) mChildren = new Array();
 			mChildren.push(childNode);
+			
+			if (inData != null) {
+				childNode.data = inData;
+			}
+			
 			return childNode;
 		}
 		
 		/**
 		The identifier name; this name should be unique and without spaces.
 		*/
-		public function get name () : String
-		{
+		public function get name () : String {
 			return mName;
 		}
 		
-		public function set name (inName:String) : void
-		{
+		public function set name (inName:String) : void {
 			mName = inName;
 		}
 				
 		/**
 		The node's parent node.
 		*/
-		public function get parent () : Tree
-		{
+		public function get parent () : Tree {
 			return mParent;
 		}
 		
-		public function set parent (inParent:Tree) : void
-		{
+		public function set parent (inParent:Tree) : void {
 			mParent = inParent;
 		}
 				
 		/**
 		The array of child nodes.
 		*/
-		public function get children () : Array
-		{
+		public function get children () : Array {
 			return mChildren;
 		}
 		
 		/**
-		Generic data container, used to store {@code key/value} objects.
+		Generic data container.
 		*/
-		public function get data () : Object
-		{
+		public function get data () : Object {
 			return mData;
 		}
-		
-		public function set data (inData:Object) : void
-		{
+		public function set data (inData:Object) : void {
 			mData = inData;
 		}
 		
@@ -95,8 +93,8 @@ package org.asaplibrary.data.tree {
 		@exclude
 		*/
 		public function toString () : String {
-	
-			return "Tree " + name + "; data=" + data;
+			var dataStr:String = data ? data.toString() : "";
+			return "Tree " + name + "; data=" + dataStr;
 		}
 		
 		/**
