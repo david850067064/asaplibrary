@@ -31,6 +31,10 @@ package org.asaplibrary.util.actionqueue {
 			owner = inOwner;
 			args = inArgs;
 		}
+		
+		public function run () : * {
+			return method.apply(owner, args);
+		}
 
 	}
 
