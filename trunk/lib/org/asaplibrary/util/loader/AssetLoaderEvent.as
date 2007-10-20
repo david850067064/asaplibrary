@@ -16,24 +16,26 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
+
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
 	
 	public class AssetLoaderEvent extends Event {
+
 		/** Generic event type */
-		public static var _EVENT:String = "onLoaderStackEvent";
+		public static const _EVENT:String = "onLoaderStackEvent";
 	
 		/** event sent when a single object starts being loaded */
-		public static var START:String = "loadStart";
+		public static const START:String = "loadStart";
 		/** event sent during loading */
-		public static var PROGRESS:String = "loadProgress";
+		public static const PROGRESS:String = "loadProgress";
 		/** event sent when loading is done */
-		public static var COMPLETE:String = "loadDone";
+		public static const COMPLETE:String = "loadDone";
 		/** event sent when all objects have been loaded */
-		public static var ALL_LOADED:String = "allLoadFinished";
+		public static const ALL_LOADED:String = "allLoadFinished";
 		/** event sent when there's an error */
-		public static var ERROR:String = "loadError";
+		public static const ERROR:String = "loadError";
 
 		public var subtype : String;
 		public var name : String;
@@ -53,5 +55,9 @@ package org.asaplibrary.util.loader {
 		public override function toString ():String {
 			return "org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
 		}
+		
+		public override function clone() : Event {
+			return new AssetLoaderEvent(subtype, name);
+		} 
 	}
 }

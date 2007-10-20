@@ -20,12 +20,13 @@ package org.asaplibrary.management.movie {
 	import flash.events.Event;
 
 	public class MovieManagerEvent extends Event {
-		public static var _EVENT:String = "onMovieManagerEvent";
+
+		public static const _EVENT:String = "onMovieManagerEvent";
 		
-		public static var MOVIE_LOADED:String = "movieLoaded";
-		public static var CONTROLLER_INITIALIZED:String = "controllerInitialized";
-		public static var MOVIE_READY:String = "movieReady";
-		public static var ERROR:String = "error";
+		public static const MOVIE_LOADED:String = "movieLoaded";
+		public static const CONTROLLER_INITIALIZED:String = "controllerInitialized";
+		public static const MOVIE_READY:String = "movieReady";
+		public static const ERROR:String = "error";
 		
 		public var subtype:String;
 		public var name:String;
@@ -43,6 +44,10 @@ package org.asaplibrary.management.movie {
 		public override function toString ():String {
 			return "org.asaplibrary.management.movie.MovieManagerEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; controller=" + controller + "; container=" + container;
 		}
+		
+		public override function clone() : Event {
+			return new MovieManagerEvent(subtype, name);
+		} 
 	}
 	
 }

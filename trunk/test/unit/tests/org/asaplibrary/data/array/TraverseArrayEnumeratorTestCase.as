@@ -127,7 +127,7 @@
 			
 			var letters:Array = ["a", "b", "c", "d", "e"];
 			var enumerator:TraverseArrayEnumerator = new TraverseArrayEnumerator(letters);
-			enumerator.addEventListener(TraverseArrayEnumeratorEvent.UPDATE, handleTraverseUpdate);
+			enumerator.addEventListener(TraverseArrayEnumeratorEvent._EVENT, handleTraverseUpdate);
 			enumerator.getNextObject();
 			
 			// evaluate received events without delegate

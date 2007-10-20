@@ -36,11 +36,13 @@ package org.asaplibrary.data.array {
 	*/
 	public class TraverseArrayEnumeratorEvent extends Event {
 	
-		public static var UPDATE:String = "onTraverseArrayEnumeratorUpdate";
+		public static const _EVENT:String = "onTraverseArrayEnumeratorEvent";
+		public static const UPDATE:String = "onTraverseArrayEnumeratorUpdate";
 		
-		public var enumerator:TraverseArrayEnumerator;
+		public var subtype:String;
 		public var value:Object;
-		
+		public var enumerator:TraverseArrayEnumerator;
+
 		/**
 		@param inSubtype: name of event (and name of handler function when no Delegate is used)
 		@param inValue: the object at the TraverseArrayEnumerator pointer position
@@ -48,10 +50,15 @@ package org.asaplibrary.data.array {
 		*/
 		public function TraverseArrayEnumeratorEvent (inSubtype:String, 	  		  
 													  inValue:Object, inEnumerator:TraverseArrayEnumerator) {
-			super(inSubtype);
+			super(_EVENT);
+			subtype = inSubtype;
 			value = inValue;
 			enumerator = inEnumerator;
 		}
+		
+		public override function clone() : Event {
+			return new TraverseArrayEnumeratorEvent(subtype, value, enumerator);
+		} 
 	
 	}
 }
