@@ -8,7 +8,7 @@
 	
 	public class MyButton extends MovieClip {
 		
-		private var mDelegate:DelayButtonStateDelegate;
+		private var mDelegate:DelayButtonBehaviorDelegate;
 		
 		public var tHitarea:MovieClip;
 		public var tPulseRing:MovieClip;
@@ -23,8 +23,8 @@
 
 		public function MyButton () {
 		
-			mDelegate = new DelayButtonStateDelegate(this);
-			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
+			mDelegate = new DelayButtonBehaviorDelegate(this);
+			mDelegate.addEventListener(ButtonBehaviorDelegateEvent._EVENT, update);
 			
 			// don't handle mouse events on children
 			mouseChildren = false;
@@ -52,7 +52,7 @@
 			mDelegate.afterdelay = inValue;
 		}
 		
-		private function update (e:ButtonStateDelegateEvent) : void {
+		private function update (e:ButtonBehaviorDelegateEvent) : void {
 			if (e.state == ButtonStates.OVER) grow();
 			if (e.state == ButtonStates.OUT) shrink();
 		}
