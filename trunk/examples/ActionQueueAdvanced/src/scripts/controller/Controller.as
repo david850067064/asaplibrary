@@ -277,45 +277,41 @@
 			var duration:Number = .5;
 			var numFadeDuration:Number = 1;
 			
-			
 			eventsQueue = new ActionQueue("eventsQueue");
 			eventsQueue.addStartLoop("L");
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker1_mc.x, e_marker1_mc.y));
 
 			eventsQueue.addMarker("M1");
-			eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_1_mc, numFadeDuration, CURRENT, 0));
+			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_1_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker2_mc.x, e_marker2_mc.y));
 			eventsQueue.addMarker("M2");
-			eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_2_mc, numFadeDuration, CURRENT, 0));
+			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_2_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker3_mc.x, e_marker3_mc.y));
 			eventsQueue.addMarker("M3");
-			eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_3_mc, numFadeDuration, CURRENT, 0));
+			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_3_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker4_mc.x, e_marker4_mc.y));
 			eventsQueue.addMarker("M4");
-			eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_4_mc, numFadeDuration, CURRENT, 0));
+			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_4_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker5_mc.x, e_marker5_mc.y));
 			eventsQueue.addMarker("M5");
-			eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_5_mc, numFadeDuration, CURRENT, 0));
+			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_5_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQSet().setLoc(event_mc, 16, CURRENT));
 			eventsQueue.addEndLoop("L");
 
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_STARTED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_FINISHED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_QUIT, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_PAUSED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_RESUMED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_STOPPED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_STOPPED, onActionQueueEvent);
-			eventsQueue.addEventListener(ActionQueueEvent.QUEUE_MARKER_PASSED, onMarkerPassed);
+			eventsQueue.addEventListener(ActionEvent._EVENT, onActionEvent);
 
 			eventsQueue.run();
 		}
 		
-		public function onActionQueueEvent (e:ActionQueueEvent) : void {
-			//trace("Queue event: " + e.type + " : name=" + e.name + "; marker=" + e.markerName);
+		public function onActionEvent (e:ActionEvent) : void {
+			switch (e.subtype) {
+				case ActionEvent.MARKER_PASSED:
+					onMarkerPassed(e);
+					break;
+			}
 		}
 		
-		public function onMarkerPassed (e:ActionQueueEvent) : void {
+		public function onMarkerPassed (e:ActionEvent) : void {
 			createParticles(event_mc.x, event_mc.y);
 		}
 		
