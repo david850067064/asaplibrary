@@ -72,5 +72,9 @@ package org.asaplibrary.data.xml {
 		public override function toString ():String {
 			return "org.asaplibrary.data.xml.XMLLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; bytesLoaded=" + bytesLoaded + "; bytesTotal=" + bytesTotal;
 		}
+		
+		public override function clone() : Event {
+			return new XMLLoaderEvent(subtype, name, data, source);
+		} 
 	}	
 }

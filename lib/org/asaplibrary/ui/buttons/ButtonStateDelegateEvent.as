@@ -36,7 +36,8 @@ package org.asaplibrary.ui.buttons {
 	*/
 	public class ButtonStateDelegateEvent extends Event {
 	
-		public static const UPDATE:String = "update";
+		public static const _EVENT:String = "onButtonStateDelegateEvent";
+		public static const UPDATE:String = "onButtonStateDelegateUpdate";
 		
 		public var state:uint;
 		public var selected:Boolean;

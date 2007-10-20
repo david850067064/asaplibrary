@@ -17,22 +17,27 @@ limitations under the License.
 
 package org.asaplibrary.util.debug {
 
-import flash.events.Event;
-
-public class LogEvent extends Event {
-	public static var EVENT_LOG:String = "onLogEvent";
-
-	public var level:String;
-	public var text:String;
-	public var sender:String;
+	import flash.events.Event;
 	
-	function LogEvent (inLevel:String, inText:String, inSender:String) {
-		super(EVENT_LOG);
+	public class LogEvent extends Event {
+	
+		public static const EVENT_LOG:String = "onLogEvent";
+	
+		public var level:String;
+		public var text:String;
+		public var sender:String;
 		
-		level = inLevel;
-		text = inText;
-		sender = inSender;
-	}
+		function LogEvent (inLevel:String, inText:String, inSender:String) {
+			super(EVENT_LOG);
+			
+			level = inLevel;
+			text = inText;
+			sender = inSender;
+		}
+		
+		public override function clone() : Event {
+			return new LogEvent(level, text, sender);
+		} 
 
-}
+	}
 }
