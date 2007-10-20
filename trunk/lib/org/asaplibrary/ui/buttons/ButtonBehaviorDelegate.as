@@ -21,12 +21,12 @@ package org.asaplibrary.ui.buttons {
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	
-	import org.asaplibrary.ui.buttons.ButtonStateDelegateEvent;
+	import org.asaplibrary.ui.buttons.ButtonBehaviorDelegateEvent;
 	import org.asaplibrary.ui.buttons.ButtonStates;
 	
 	/**
 	Helper class to manage button states (mouse over, selected, enabled, etcetera) so the button class can be freed from state management. This lets the button just do the drawing of its mouse states.
-	This also makes mouse behaviour pluggable - see for instance {@link DelayButtonStateDelegate} for a time-oriented delegate.
+	This also makes mouse behaviour pluggable - see for instance {@link DelayButtonBehaviorDelegate} for a time-oriented delegate.
 	@example
 	This example shows how to set up a button class that receives its update changes from its delegate:
 	<code>
@@ -36,15 +36,15 @@ package org.asaplibrary.ui.buttons {
 	public class MyButton extends MovieClip {
 	
 		private static const S:Class = ButtonStates; // shorthand
-		private var mDelegate:DelayButtonStateDelegate;
+		private var mDelegate:DelayButtonBehaviorDelegate;
 		
 		public var tBorder:MovieClip; // a border clip shows the button state
 
 		public function MyButton () {
-			mDelegate = new DelayButtonStateDelegate(this);
+			mDelegate = new DelayButtonBehaviorDelegate(this);
 			// listen for changes
 			// button updates will be redirected to method 'update':
-			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
+			mDelegate.addEventListener(ButtonBehaviorDelegateEvent.UPDATE, update);
 		}
 		
 		// pass any button change setter state to the delegate
@@ -52,7 +52,7 @@ package org.asaplibrary.ui.buttons {
 			mDelegate.select(inState);
 		}
 		
-		private function update (e:ButtonStateDelegateEvent) : void {
+		private function update (e:ButtonBehaviorDelegateEvent) : void {
 			switch (e.state) {
 				case S.SELECTED:
 				case S.OVER:
@@ -71,7 +71,7 @@ package org.asaplibrary.ui.buttons {
 	}
 	</code>
 	*/
-	public class ButtonStateDelegate extends EventDispatcher {
+	public class ButtonBehaviorDelegate extends EventDispatcher {
 		
 		/**
 		The selected button state. Usually this means the button will be highlighted and not clickable.
@@ -104,7 +104,7 @@ package org.asaplibrary.ui.buttons {
 		@param inButton: the owner button
 		@todo Implement CLICK, DOUBLE_CLICK, MOUSE_WHEEL (if necessary)
 		*/
-		public function ButtonStateDelegate (inButton:MovieClip) {
+		public function ButtonBehaviorDelegate (inButton:MovieClip) {
 			inButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			inButton.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			inButton.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
@@ -120,7 +120,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.ButtonStateDelegate";
+			return ";org.asaplibrary.ui.buttons.ButtonBehaviorDelegate";
 		}
 		
 		/**
@@ -193,7 +193,7 @@ package org.asaplibrary.ui.buttons {
 		Sends out the updated state to listeners (the owner button). A change event is only sent at a change.
 		@param e: (optional) the mouse event - will not always be present
 		@param inState: (optional) the button state
-		@sends ButtonStateDelegateEvent#UPDATE - in case the new state differs from the previous one
+		@sends ButtonBehaviorDelegateEvent#_EVENT - in case the new state differs from the previous one
 		*/
 		protected function update (e:MouseEvent = null, inState:uint = ButtonStates.NONE) : void {
 			var drawState:uint = inState;
@@ -203,8 +203,8 @@ package org.asaplibrary.ui.buttons {
 			
 			if (mState == drawState) return;
 		
-			dispatchEvent(new ButtonStateDelegateEvent(
-				ButtonStateDelegateEvent.UPDATE,
+			dispatchEvent(new ButtonBehaviorDelegateEvent(
+				ButtonBehaviorDelegateEvent._EVENT,
 				drawState,
 				mSelected,
 				mEnabled,
