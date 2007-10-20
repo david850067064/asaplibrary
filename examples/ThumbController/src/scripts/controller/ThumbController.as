@@ -61,7 +61,7 @@ package controller {
 			mThumbPager = new TraverseArrayEnumerator(createThumbs());
 	
 			// listen for update events
-			mThumbPager.addEventListener(TraverseArrayEnumeratorEvent.UPDATE, handleThumbUpdate);
+			mThumbPager.addEventListener(TraverseArrayEnumeratorEvent._EVENT, handleThumbUpdate);
 			
 			tNext.addEventListener(MouseEvent.CLICK, handleNextClick);
 			tPrevious.addEventListener(MouseEvent.CLICK, handleNextClick);

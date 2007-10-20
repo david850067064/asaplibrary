@@ -10,15 +10,15 @@ package ui {
 	*/
 	public class NextButton extends MovieClip {
 	
-		private var mDelegate:ButtonStateDelegate;
+		private var mDelegate:ButtonBehaviorDelegate;
 		private static const S:Class = ButtonStates;
 		
 		/**
 		
 		*/
 		public function NextButton () {
-			mDelegate = new ButtonStateDelegate(this);
-			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
+			mDelegate = new ButtonBehaviorDelegate(this);
+			mDelegate.addEventListener(ButtonBehaviorDelegateEvent._EVENT, update);
 		}
 		
 		/**
@@ -31,7 +31,7 @@ package ui {
 		/**
 		
 		*/
-		private function update (e:ButtonStateDelegateEvent) : void {
+		private function update (e:ButtonBehaviorDelegateEvent) : void {
 		
 			var frame:String;
 
