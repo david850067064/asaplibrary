@@ -24,7 +24,7 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	
-	import org.asaplibrary.ui.buttons.ButtonStateDelegate;
+	import org.asaplibrary.ui.buttons.ButtonBehaviorDelegate;
 	import org.asaplibrary.ui.buttons.ButtonStates;
 	
 	/**
@@ -44,10 +44,10 @@ package org.asaplibrary.ui.buttons {
 	
 	public class MyButton extends MovieClip {
 		
-		private var mDelegate:DelayButtonStateDelegate;
+		private var mDelegate:DelayButtonBehaviorDelegate;
 				
 		public function MyButton () {		
-			mDelegate = new DelayButtonStateDelegate(this);
+			mDelegate = new DelayButtonBehaviorDelegate(this);
 			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
 
 			// set the timing:
@@ -62,7 +62,7 @@ package org.asaplibrary.ui.buttons {
 	}
 	</code>
 	*/
-	public class DelayButtonStateDelegate extends ButtonStateDelegate {
+	public class DelayButtonBehaviorDelegate extends ButtonBehaviorDelegate {
 	
 		// Delay variables
 		protected var mInDelay:Number = 0;		/**< Delay before mouse over is performed, in seconds. */
@@ -76,10 +76,10 @@ package org.asaplibrary.ui.buttons {
 		protected var mAfterDelayTimer:Timer;
 		
 		/**
-		Creates a new DelayButtonStateDelegate.
+		Creates a new DelayButtonBehaviorDelegate.
 		@param inButton: the owner button
 		*/
-		public function DelayButtonStateDelegate (inButton:MovieClip) {
+		public function DelayButtonBehaviorDelegate (inButton:MovieClip) {
 
 			super(inButton);
 			
@@ -97,7 +97,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.DelayButtonStateDelegate";
+			return ";org.asaplibrary.ui.buttons.DelayButtonBehaviorDelegate";
 		}
 		
 		/**
