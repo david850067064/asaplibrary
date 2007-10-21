@@ -114,5 +114,22 @@ package org.asaplibrary.util {
 									  inDy:Number) : Number {
 			return Math.atan2(inDy, inDx) * 180/Math.PI;
 		}
+		
+		/**
+		Calculates the value of a continuum between start and end given a percentage position.
+		@param inStart: start value
+		@param inEnd: end value
+		@param inPercentage: current percentage (from 0.0 to 1.0)
+		@use
+		<code>
+		protected function performMoveToActualPosition (inPercentage:Number) : void {
+			clip.x = NumberUtils.percentageValue( startX, endX, inPercentage );
+			clip.y = NumberUtils.percentageValue( startY, endY, inPercentage );
+		}
+		</code>
+		*/
+		public static function percentageValue (inStart:Number, inEnd:Number, inPercentage:Number) : Number {
+			return inStart + (inPercentage * (inEnd - inStart));
+		}
 	}	
 }
