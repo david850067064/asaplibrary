@@ -109,5 +109,24 @@
 			assertTrue("angle 1 0", (r == 135));
 		}
 		
+		public function testPercentageValue () : void {
+			var r:Number;
+			
+			r = NumberUtils.percentageValue(0, 0, 0);
+			assertTrue("percentageValue 0 0 0", (r == 0));
+			
+			r = NumberUtils.percentageValue(0, 100, 0);
+			assertTrue("percentageValue 0 100 0", (r == 0));
+			
+			r = NumberUtils.percentageValue(0, 100, .5);
+			assertTrue("percentageValue 0 100 .5", (r == 50));
+			
+			r = NumberUtils.percentageValue(0, -100, .5);
+			assertTrue("percentageValue 0 -100 .5", (r == -50));
+			
+			r = NumberUtils.percentageValue(100, 0, .5);
+			assertTrue("percentageValue 100 0 .5", (r == 50));
+		}
+		
 	}
 }
