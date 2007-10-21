@@ -120,7 +120,10 @@ package org.asaplibrary.util {
 		@param inStart: start value
 		@param inEnd: end value
 		@param inPercentage: current percentage (from 0.0 to 1.0)
-		@use
+		@example
+		<code>
+		var v:Number = NumberUtils.percentageValue(0, 100, .1); // 10
+		</code>	
 		<code>
 		protected function performMoveToActualPosition (inPercentage:Number) : void {
 			clip.x = NumberUtils.percentageValue( startX, endX, inPercentage );
