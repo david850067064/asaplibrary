@@ -126,6 +126,9 @@
 			
 			r = NumberUtils.percentageValue(100, 0, .5);
 			assertTrue("percentageValue 100 0 .5", (r == 50));
+			
+			r = NumberUtils.percentageValue(0, 100, .1);
+			assertTrue("percentageValue 0 100 .1", (r == 10));
 		}
 		
 	}
