@@ -45,9 +45,8 @@
 					break;
 				default:
 					tBorder.visible = false;
-			}	
-			
-			buttonMode = e.enabled;
+			}
+			buttonMode = !e.selected;
 		}
 
 	}
