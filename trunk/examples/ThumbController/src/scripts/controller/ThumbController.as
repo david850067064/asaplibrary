@@ -208,6 +208,7 @@ package controller {
 		private function handleThumbClick (e:MouseEvent) : void {
 			var thumb:ThumbImage = e.currentTarget as ThumbImage;
 			var oldThumb:ThumbImage = mThumbPager.getCurrentObject();
+			if (thumb == oldThumb) return;
 			mThumbPager.setCurrentObject(thumb); // will update the enumerator			
 			activateThumb(thumb, oldThumb);
 		}
