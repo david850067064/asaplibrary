@@ -11,10 +11,13 @@
 	import org.asaplibrary.util.FrameDelay;
 	import org.asaplibrary.util.debug.Log;
 	
+	/**
+	@todo Markers, Looping
+	*/
 	public class ActionQueueTestCase extends TestCase {
 		
-		private static var sMethodsCalledCount:int = 0;
-		private static const EXPECTED_METHODS_CALLED_COUNT:int = 1;
+		private static var sAddActionCalled:int = 0;
+		private static const EXPECTED_ADD_ACTION_CALLED_COUNT:int = 2;
 		private static var sAddActionParams:String = "";
 		private static const EXPECTED_ADD_ACTIONS_PARAMS:String = "A";
 		private static var sTestInsertQueueParams:String = "";
@@ -24,9 +27,25 @@
 		private static var sTestInsertQueueActionsString:String = "";
 		private static const EXPECTED_INSERT_QUEUE_ACTIONS:String = "ABCDE";
 		private static var sTestSkipValue:int = 0;
-		private static const EXPECTED_SKIP_VALUE:int = 3;
-		private static var sClearQueueValue:Number = 2;
-		private static const EXPECTED_CLEAR_QUEUE_VALUE:Number = 1;
+		private static const EXPECTED_SKIP_VALUE:int = 1;
+		private static var sResetQueueValue:Number = 0;
+		private static const EXPECTED_RESET_QUEUE_VALUE:Number = 1;
+		
+		private static var sEventSTARTEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_STARTED_CALLED:uint = 1;
+		private static var sEventFINISHEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_FINISHED_CALLED:uint = 1;
+		private static var sEventQUITCalled:uint = 0;
+		private static const EXPECTED_EVENT_QUIT_CALLED:uint = 1;
+		private static var sEventPAUSEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_PAUSED_CALLED:uint = 1;
+		private static var sEventRESUMEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_RESUMED_CALLED:uint = 1;
+		private static var sEventSTOPPEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_STOPPED_CALLED:uint = 1;
+		// Not tested yet
+		private static var sEventMARKER_PASSEDCalled:uint = 0;
+		private static const EXPECTED_EVENT_MARKER_PASSED_CALLED:uint = 0;
 		
 		private static const TEST_DELAY:Number = 31;
 		private static const CURRENT:Number = Number.NaN;
@@ -42,76 +61,82 @@
 		}
 		
 		/**
-		Override run to pause test, add AQ actions and start test
+		List tests that should be run first - before any function starting with 'test'.
 		*/
 		public override function run() : void {
 			
 			doTestAddAction();
 			doTestAddActionBeforeAndAfter();
-			doTestClear();
+			doTestReset();
 			//doTestQuit();
+			doTestIsFinished();
 			doTestPauseAndContinue();
-			// TODO: togglePlay
+			doTestTogglePlay();
 			doTestSkip();
 
 			doTestFade();
 			doTestMove();
 			doTestScale();
-			doTestScaleAndInstantAction();
+			doTestAddAsynchronousAction();
 			doTestSet();
 			doTestAddMove();
 			doTestFollowMouse();
 			doTestBlink();
 			doTestPulse();
+			doTestEvents();
 			
-			/*
-			doTestInsertQueue();
-			doTestInsertQueueActions();
-			*/
 			new FrameDelay(startTests, TEST_DELAY);
 		}
 		
+		/**
+		Now call each public function starting with 'test'.
+		*/
 		public function startTests () : void {
 			super.run();
 		}
 		
 		public function testEvaluateResult () : void {
-			/*
-			trace("sMethodsCalledCount=" + sMethodsCalledCount);
-			trace("sAddActionParams=" + sAddActionParams);
-			trace("sTestInsertQueueParams=" + sTestInsertQueueParams);
-			trace("sTestaddActionCount=" + sTestaddActionCount);
-			trace("sTestInsertQueueActionsString=" + sTestInsertQueueActionsString);
-			//trace("sTestPauseAndSkipParams=" + sTestPauseAndSkipParams);
-			*/
 			
-			assertTrue("ActionQueueTestCase sMethodsCalledCount", sMethodsCalledCount == EXPECTED_METHODS_CALLED_COUNT);
+			assertTrue("ActionQueueTestCase sAddActionCalled", sAddActionCalled == EXPECTED_ADD_ACTION_CALLED_COUNT);
 
 			assertTrue("ActionQueueTestCase sAddActionParams", sAddActionParams == EXPECTED_ADD_ACTIONS_PARAMS);
 			
 			assertTrue("ActionQueueTestCase sTestaddActionCount", sTestaddActionCount == EXPECTED_ADD_METHOD_COUNT);
 
-			assertTrue("ActionQueueTestCase sClearQueueValue", sClearQueueValue == EXPECTED_CLEAR_QUEUE_VALUE);
+			assertTrue("ActionQueueTestCase sResetQueueValue", sResetQueueValue == EXPECTED_RESET_QUEUE_VALUE);
 
-			assertTrue("ActionQueueTestCase sTestSkipValue", sTestSkipValue == EXPECTED_SKIP_VALUE);	
-
-/*
-			assertTrue("ActionQueueTestCase sTestInsertQueueParams", sTestInsertQueueParams == EXPECTED_INSERT_QUEUE_PARAMS);
-
+			assertTrue("ActionQueueTestCase sTestSkipValue", sTestSkipValue == EXPECTED_SKIP_VALUE);
 			
-			assertTrue("ActionQueueTestCase sTestInsertQueueActionsString", sTestInsertQueueActionsString == EXPECTED_INSERT_QUEUE_ACTIONS);
-*/
+			// Events
+			assertTrue("ActionRunner EXPECTED_EVENT_STARTED_CALLED", (sEventSTARTEDCalled == EXPECTED_EVENT_STARTED_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_FINISHED_CALLED", (sEventFINISHEDCalled == EXPECTED_EVENT_FINISHED_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_QUIT_CALLED", (sEventQUITCalled == EXPECTED_EVENT_QUIT_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_PAUSED_CALLED", (sEventPAUSEDCalled == EXPECTED_EVENT_PAUSED_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_RESUMED_CALLED", (sEventRESUMEDCalled == EXPECTED_EVENT_RESUMED_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_STOPPED_CALLED", (sEventSTOPPEDCalled == EXPECTED_EVENT_STOPPED_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sEventMARKER_PASSEDCalled == EXPECTED_EVENT_MARKER_PASSED_CALLED));
+
 		}
 		
 		private function doTestAddAction () : void {
 			var queueAddAction:ActionQueue = new ActionQueue("ActionQueueTestCase addAction");
 			queueAddAction.addAction( performAddAction, "A" );
+			
+			var action:Action = new Action(this, performAddAction);
+			queueAddAction.addAction(action);
+			
 			queueAddAction.run();
 		}
 
-		private function performAddAction (inValue:String) : void {
+		private function performAddAction (inValue:String = "") : void {
 			sAddActionParams += inValue;
-			sMethodsCalledCount++;
+			sAddActionCalled++;
 		}
 		
 		private function doTestAddActionBeforeAndAfter () : void {
@@ -119,72 +144,43 @@
 			var queue:ActionQueue = new ActionQueue("ActionQueueTestCase addActionBeforeAndAfter");
 			queue.addAction( mInstance, performTestaddAction2 ); // increment by to 1
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 2
-			queue.run();
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 3
 			queue.run();
-			assertTrue("ActionQueueTestCase addActionBeforeAndAfter", queue.isRunning());
-			queue.addAction( mInstance, "performTestaddAction2" ); // want to increment to 4, but this will fail so the total amount is still 3
+			queue.addAction( mInstance, "performTestaddAction2" );
 			queue.run();
 		}
 		
 		public function performTestaddAction2 () : void {
 			sTestaddActionCount++;
 		}
-		/*
-		private function doTestInsertQueue () : void {
-			var queue1:ActionQueue = new ActionQueue("ActionQueueTestCase insertQueue outer queue");
-			queue1.addAction( mInstance, "addToTestInsertQueueString", "A" );
-			queue1.addAction( mInstance, "addToTestInsertQueueString", "B" );
-			
-			var queue2:ActionQueue = new ActionQueue("ActionQueueTestCase insertQueue inserting queue").addAction( mInstance, "addToTestInsertQueueString", "C" ).addAction( mInstance, "addToTestInsertQueueString", "D" );
-			
-			queue1.insertQueue( queue2 );
-			queue1.addAction( mInstance, "addToTestInsertQueueString", "E" );
-			queue1.run();
-		}
 		
-		public function addToTestInsertQueueString (inString:String) : void {
-			sTestInsertQueueParams += inString;
-		}
-		
-		private function doTestInsertQueueActions () : void {
-			var queue1:ActionQueue = new ActionQueue("ActionQueueTestCase insertQueueActions first");
-			queue1.addAction( mInstance, "addToTestInsertQueueActionsString", "A" );
-			queue1.addAction( mInstance, "addToTestInsertQueueActionsString", "B" );
-			
-			var queue2:ActionQueue = new ActionQueue("ActionQueueTestCase insertQueueActions second").addPause(.01).addAction( mInstance, "addToTestInsertQueueActionsString", "C" ).addAction( mInstance, "addToTestInsertQueueActionsString", "D" );
-			
-			queue1.insertQueueActions( queue2 );
-			queue1.addAction( mInstance, "addToTestInsertQueueActionsString", "E" );
-			queue1.run();
-		}
-		
-		public function addToTestInsertQueueActionsString (inString:String) : void {	
-			sTestInsertQueueActionsString += inString;
-		}
-		*/
-		
-		private function doTestClear () : void {
-			var queue:ActionQueue = new ActionQueue("clear queue");
-			queue.addAction( this, "funcClearQueueValue" );
-			queue.clear();
-			queue.addAction( this, "funcClearQueueValue" );
+		private function doTestReset () : void {
+			var queue:ActionQueue = new ActionQueue("reset queue");
+			queue.addAction( this, "funcResetValue" );
+			queue.reset();
+			queue.addAction( this, "funcResetValue" );
 			queue.run();
 		}
 		
-		public function funcClearQueueValue () : void {
-			sClearQueueValue--;
+		public function funcResetValue () : void {
+			sResetQueueValue++;
 		}
 		
 		public function dummyFunc () : void {
 			//
 		}
-		
 
 		private function doTestQuit () : void {
 			var queue:ActionQueue = new ActionQueue("quit queue");
 			queue.addAction( this, "dummyFunc" );
 			queue.quit();
+		}
+		
+		private function doTestIsFinished () : void {
+			var queue:ActionQueue = new ActionQueue("finished queue");
+			queue.addAction( this, "dummyFunc" );
+			queue.run();
+			assertTrue("ActionQueueTestCase doTestIsFinished", queue.isFinished());
 		}
 		
 		private function doTestPauseAndContinue () : void {
@@ -193,24 +189,33 @@
 			assertTrue("ActionQueueTestCase test pause and continue is paused", pauseQueue.isPaused());
 			pauseQueue.run();
 			assertTrue("ActionQueueTestCase test pause and continue is paused 2", pauseQueue.isPaused());
-			pauseQueue.play();
+			pauseQueue.resume();
 			assertFalse("ActionQueueTestCase test pause and continue is paused 3", pauseQueue.isPaused());
+		}
+		
+		private function doTestTogglePlay () : void {
+			var queue = new ActionQueue("toggle play");
+			queue.pause();
+			assertTrue("ActionQueueTestCase toggle play 1", queue.isPaused());
+			queue.togglePlay();
+			assertFalse("ActionQueueTestCase toggle play 2", queue.isPaused());
+			queue.togglePlay();
+			assertTrue("ActionQueueTestCase toggle play 1", queue.isPaused());
 		}
 		
 		private function doTestSkip () : void {
 			var skipQueue = new ActionQueue("skip");
 			skipQueue.addAction( this, addToSkip );
+			//skipQueue.addWait(.1);
 			skipQueue.addAction( this, addToSkip );
-			skipQueue.addAction( this, addToSkip );
-			skipQueue.addAction( this, addToSkip );
-			skipQueue.run();
 			skipQueue.skip();
+			skipQueue.run();
+			
 		}
 		
 		public function addToSkip () : void {
 			sTestSkipValue++;
-		}
-		
+		}		
 
 		public function doTestFade () : void {
 			var shape:Shape = createRectShape(0xff0000, 50, 50);
@@ -240,11 +245,11 @@
 			new FrameDelay(evaluateShapeProperty, TEST_DELAY, [shape, 'scaleX', 2.5]);
 		}
 		
-		public function doTestScaleAndInstantAction () : void {
+		public function doTestAddAsynchronousAction () : void {
 			var shape:Shape = createRectShape(0xff00ff, 350, 50);	
 			
 			var queue:ActionQueue = new ActionQueue("scale");
-			queue.addActionDoNotWaitForMe( new AQFade().fade(shape, .3, CURRENT, .5 ));
+			queue.addAsynchronousAction( new AQFade().fade(shape, .3, CURRENT, .5 ));
 			queue.addAction( new AQScale().scale(shape, .3, CURRENT, CURRENT, 2.5, 2.5 ));
 			queue.run();
 			new FrameDelay(evaluateShapeProperty, TEST_DELAY, [shape, 'scaleX', 2.5]);
@@ -465,7 +470,36 @@
 			assertTrue("ActionQueueTestCase evaluateTestFollowMouse", Math.round(s.y) == Math.round(mCanvas.mouseY));
 		}
 		
-
+		private function doTestEvents () : void {
+			var queue:ActionQueue = new ActionQueue();
+			queue.addAction(new Action(this, dummyFunc));
+			queue.addEventListener(ActionEvent._EVENT, onActionEvent);
+			queue.run();
+			queue.pause();
+			queue.resume();
+			queue.stop();
+			queue.quit();
+		}
+		
+		private function onActionEvent (e:ActionEvent) : void {
+			switch (e.subtype) {
+				case ActionEvent.STARTED: sEventSTARTEDCalled++;
+					break;
+				case ActionEvent.FINISHED: sEventFINISHEDCalled++; 
+					break;
+				case ActionEvent.QUIT: sEventQUITCalled++; 
+					break;
+				case ActionEvent.PAUSED: sEventPAUSEDCalled++; 
+					break;
+				case ActionEvent.RESUMED: sEventRESUMEDCalled++; 
+					break;
+				case ActionEvent.STOPPED: sEventSTOPPEDCalled++; 
+					break;
+				case ActionEvent.MARKER_VISITED: sEventMARKER_PASSEDCalled++; 
+					break;
+			}
+		}
+		
 		private function createRectShape (inColor:int, inX:int, inY:int) : Shape {
 			var s:Shape = new Shape();
 			mCanvas.addChild(s);
