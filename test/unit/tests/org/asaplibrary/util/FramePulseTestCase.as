@@ -11,9 +11,13 @@
 
 		
 		/**
-		Override run to pause test
+		List tests that should be run first - before any function starting with 'test'.
 		*/
 		public override function run() : void {
+			doTestAddEnterFrameListener();
+		}
+		
+		private function doTestAddEnterFrameListener () : void {
 			FramePulse.addEnterFrameListener(callTest);
 		}
 		
