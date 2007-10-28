@@ -18,63 +18,63 @@ limitations under the License.
 package org.asaplibrary.util.actionqueue {
 		
 	import flash.events.*;
-	import flash.utils.getTimer; // temp
-	import org.asaplibrary.util.FramePulse;
-	import org.asaplibrary.util.actionqueue.Action;
 	
-	public class ActionQueue extends EventDispatcher implements IAction {
+	import org.asaplibrary.util.actionqueue.*;
+	
+	/**
+	Creates a series of sequential animation/function calls, or "actions". Each action is performed one after the other.
+	
+	Actions are objects of type {@link Action}, {@link IAction}, {@link TimedAction} or {@link ITimedAction} or any subclass thereof.
+	
+	The actual function calling is done by {@link ActionRunner}. Use ActionQueue  to {@link #addAction create the action objects from input arguments}, and to add ready-made elements like {@link #addMarker markers}, {@link #addStartLoop loops} {@link #addPause pause} and {@link #addCondition condition} functions.
+	
+	<b>What's new compared to the previous version in ASAP Framework (AS2)?</b>
+	<ul>
+	<li>Total rewrite of the code</li>
+	<li>ActionQueue now runs generic Action objects (Command pattern)</li>
+	<li>ActionQueue actions can be ActionQueues in itself</li>
+	<li>Because of a (relatively small) syntax change, any call to a ready-made animation class like AQFade is now compile checked</li>
+	<li>Integrated looping from ExtendedActionQueue (now defunct)</li>
+	<li>Added markers and events from markers</li>
+	<li>Added conditions</li>
+	<li>Markers and conditions combined make it possible to synchronize separate queues</li>
+	<li>Method "addInAction" has been replaced with "addAsynchronousAction"; asynchronous actions still run in their own thread, but can be paused, stopped and quit by the main queue</li>
+	</ul>
+	@example
+	This ActionQueue moves a MovieClip, then lets it fade out to alpha 0 in .5 seconds:
+	<code>
+	my_mc.alpha = 0;
+	var queue:ActionQueue  = new ActionQueue();
+	var CURRENT:Number = Number.NaN;
+	queue.addAction(new AQMove().move(
+		my_mc, 1.0, CURRENT, CURRENT, 800, CURRENT, Cubic.easeOut
+	));
+	queue.addAction(new AQFade().fade(
+		my_mc, .5, CURRENT, 0
+	));
+	</code>
+	*/
+	public class ActionQueue extends EventDispatcher implements ITimedAction {
 
-		private var mActionQueueController:ActionQueueController;
 		private var mName:String;
-  		private var mRegistered:Boolean = false;
-  		private var mIsPaused:Boolean;
+  		private var mMainActionRunner:ActionRunner;
 		private var mActionRunners:Array; // of type ActionRunner
 		private var mActions:Array; // of type Action
   		private var mMarkerHash:Object; // quick lookup for occurrence of markers; objects of type Marker
   		private var mVisitedMarkerHash:Object; // quick lookup for occurrence of visited markers
   		private var mCurrentMarker:Marker;
   		private var mLoopHash:Object; // quick lookup for occurrence of loops; objects of type Loop
-		private var mHasFinished:Boolean;
-  		private var mIsWaitingForCondition:Boolean;
+		private var mFinished:Boolean;
+		private var mPaused:Boolean;
 
-  		private var DEBUG:Boolean = false;
-  		
-  		/**
-		Calculates the relative value between start and end of a function at moment inPercentage in time. For instance with a movieclip that is moved by a function from A to B, <code>relativeValue</code> calculates the position of the movieclip at moment inPercentage.
-		@param inStart : the start value of the object that is changing, for instance the start x position
-		@param inEnd : the end value of the object that is changing, for instance the end x position
-		@param inPercentage: the current moment in time expressed as a percentage value
-		@return The relative value between inStart and inEnd at moment inPercentage.
-		@implementationNote: The used calculation is <code>inStart + (inPercentage * (inEnd - inStart))</code>
-		@example
-		<code>
-		public function moveToActualPosition () : void {
-			mStartIntroPosition = new Point(x, y);
-			mStartIntroScale = scaleX;
-			var duration:Number = 2.0;
-			var queue:ActionQueue = new ActionQueue();
-			queue.addAction( AQReturnValue.returnValue, this, "performMoveToActualPosition", duration, 0, 1);
-			queue.run();
-		}
-		
-		protected function performMoveToActualPosition (inPercentage:Number) : void {
-			x = ActionQueue.relativeValue( mStartIntroPosition.x, mPosition.x, inPercentage );
-			y = ActionQueue.relativeValue( mStartIntroPosition.y, mPosition.y, inPercentage );
-			scaleX = scaleY = ActionQueue.relativeValue( mStartIntroScale, mScale, inPercentage );
-		}
-		</code>
+		/**
+		Creates a new ActionQueue.
+		@param inName: (optional) identifier name of this queue - used for debugging
 		*/
-		public static function relativeValue (inStart:Number, inEnd:Number, inPercentage:Number) : Number {
-			return inStart + (inPercentage * (inEnd - inStart));
-		}
-		
-		function ActionQueue (inName:String = "Anonymous ActionQueue",
-							  inController:ActionQueueController = null ) {
+		function ActionQueue (inName:String = "Anonymous ActionQueue") {
 
 			mName = inName;
-			mActionQueueController = inController;			
 			mActions = new Array();
-			mActionRunners = new Array();
 			mVisitedMarkerHash = new Object();
 			mMarkerHash = new Object();
 			mLoopHash = new Object();
@@ -82,33 +82,121 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Should be set before run is called.
-		*/
-		public function setController (inController:ActionQueueController) : void {
-			mActionQueueController = inController;	
+		Creates an Action from input arguments and adds it to the queue.
+		This method accepts a number of argument configurations that are translated into an Action object. You can also directly add an {@link Action} or {@link TimedAction} object.
+
+		<b>Adding an Action object</b>
+		You can add any object of type {@link Action}, {@link IAction}, {@link TimedAction} and {@link ITimedAction} - including complete ActionQueues!
+		<code>public function addAction ( inAction:IAction ) : void</code>
+		
+		Example:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		var action:Action = new Action(this, createShapes, 10);
+		queue.addAction(action);	
+		queue.run();
+		</code>
+		
+		<b>Adding a local function</b>
+		Will be called in local scope.
+		<code>public function addAction ( inFunction:Function, argument1, argument2, ... ) : void</code>
+	
+		Example:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		queue.addAction(createShapes, 10);	
+		queue.run();
+		</code>
+		
+		<b>Adding a object's method</b>
+		Will be called in the object's scope.
+		<code>public function addAction ( inMethodObject:Object, inMethod:Function, argument1, argument2, ... ) : void</code>
+		
+		Example:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		queue.addAction(mShapeCreator, mShapeCreator.createShapes, 10);	
+		queue.run();
+		</code>
+		
+		<b>Adding a object's method by name</b>
+		Will be called in the object's scope.
+		<code>public function addAction ( inMethodObject:Object, inMethodName:String, argument1, argument2, ... ) : void</code>
+		
+		Example:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		queue.addAction(mShapeCreator, "createShapes", 10);	
+		queue.run();
+		</code>
+		
+		<b>Using ready-made animation methods</b>
+		You can use any function that returns a {@link TimedAction}, or use one of the ready made class metods from these classes:
+		{@link AQAddMove}
+		{@link AQBlink}
+		{@link AQColor}
+		{@link AQFade}
+		{@link AQFollowMouse}
+		{@link AQMove}
+		{@link AQMoveRel}
+		{@link AQPulse}
+		{@link AQReturnValue}
+		{@link AQScale}
+		{@link AQSet}
+		{@link AQSpring}
+		{@link AQTimeline}
+		
+		Example:
+		This example will fade out a MovieClip from the current alpha to 0 in 0.5 seconds:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		var CURRENT:Number = Number.NaN;
+		queue.addAction(new AQFade().fade(my_mc, .5, CURRENT, 0));
+		queue.run();
+		</code>
+		
+		<b>Custom timed actions</b>
+		Similar to "Adding an Action": add a {@link TimedAction} object.
+		
+		Example:
+		<code>
+		var action:TimedAction = new TimedAction(this, doMoveAndScale, duration, effect);
+		queue.addAction(action);
+		</code>
+		... where function <code>doMoveAndScale</code> performs the animation based on the percentage value it receives:
+		<code>
+		protected function doMoveAndScale (inValue:Number) : Boolean {
+			
+			var percentage:Number = 1-inValue; // end of animation: inValue == 0
+			
+			tClip.x = NumberUtils.percentageValue(initX, mClipData.endx, percentage);
+			tClip.y = NumberUtils.percentageValue(initY, mClipData.endy, percentage);
+			tClip.scaleX = tClip.scaleY = NumberUtils.percentageValue(1, mClipData.endscale, percentage);
+			
+			return true; // if false the action will stop
 		}
-		
-		/**
-		
+		</code>
+		@param args: argument list
 		*/
 		public function addAction (...args:Array) : void {
 	
-			var action:Action = createAction(args);
+			var action:IAction = createAction(args);
 			if (action != null) {
 				mActions.push(action);
+				mMainActionRunner.addAction(action);
 			}
 		}
 		
 		/**
-		
+		Creates an Action object from the argument list (see {@link #action}).
 		*/
-		protected function createAction (inArgs:Array) : Action {
+		protected function createAction (inArgs:Array) : IAction {
 
-			var action:Action;
+			var action:IAction;
 			var firstParam:* = inArgs[0];
-			if (firstParam is Action) {
+			if (firstParam is ITimedAction) {
 				action = firstParam;
-			} else if (firstParam is DuringAction) {
+			} else if (firstParam is IAction) {
 				action = firstParam;
 			} else if (firstParam is Function) {
 				action = createActionFromFunction(inArgs);
@@ -124,205 +212,282 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Adds an Action that is run asynchronously: other actions will follow right after and will not wait for this action to finish. Asynchronous actions can be paused and stopped with {@link #pause} and {@link #stop}.
+		@param args: argument list; see {@link #addAction}
 		*/
-		public function addActionDoNotWaitForMe (...args:Array) : void {
-			
-			var action:Action = createAction(args);
+		public function addAsynchronousAction (...args:Array) : void {
+			var action:IAction = createAction(args);
 
 			var f:Function = function () : void {
 				var runner:ActionRunner = addActionRunner();
 				runner.setActions(new Array(action));
+				runner.run();
 			};
 			addAction(f);
 		}
 		
 		/**
-		
+		@return The list of queued actions (including already run actions).
+		*/
+		public function getActions () : Array {
+			return mActions;		
+		}
+
+		/**
+		Creates a new list of ActionRunners.
+		Creates the main {@link ActionRunner} and adds it to the list of ActionRunners.
 		*/
 		protected function initActionRunners () : void {
 			mActionRunners = new Array();
-			addActionRunner();
+			mMainActionRunner = createActionRunner();
+			mActionRunners.push(mMainActionRunner);
 		}
 		
 		/**
-		
+		Creates an ActionRunner and adds it to the list of ActionRunners.
+		@return The newly added ActionRunner.
 		*/
 		protected function addActionRunner () : ActionRunner {
-			var runner:ActionRunner = new ActionRunner(mActionRunners.length + " " + mName);
+			var runner:ActionRunner = createActionRunner();
 			mActionRunners.push(runner);
+			return runner;
+		}
+		
+		/**
+		Creates an ActionRunner.
+		@return The newly created ActionRunner.
+		*/
+		protected function createActionRunner () : ActionRunner {
+			var runner:ActionRunner = new ActionRunner(mActionRunners.length + " " + mName);
+			runner.addEventListener(ActionEvent._EVENT, onActionEvent);
 			return runner;
 		}
 				
 		/**
-		
+		@return True if the main ActionRunner is (still) running; false if it is stopped or finished. A paused but running queue will return true.
 		*/
 		public function isRunning () : Boolean {
-			return mRegistered;
+			return mMainActionRunner.isRunning();
 		}
 		
 		/**
-		
+		Stops the queue.
+		@implementationNote Stops all {@link ActionRunner ActionRunners}.
+		@sends ActionEvent#STOPPED
 		*/
 		public function stop () : void {
-			unRegister();
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_STOPPED, mName));
+			stopActionRunners();
+			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, mName));
 		}
 		
 		/**
-		
+		Adds a waiting action to the queue.
+		@param inDuration: waiting time in seconds
 		*/
 		public function addWait (inDuration:Number) : void {
 			addAction(this, doWait, this, inDuration);
 		}
 		
 		/**
-		
+		Adds a {@link Condition} to the queue. A running queue is automatically halted as long as the condition is not met. The condition will be checked on each frame update (using {@link FramePulse} events.
+		@param inCondition: the condition to add
+		@implementationNote Conditions are run by {@link ConditionManager}.
 		*/
-		public function addWaitForCondition () : void {
-			addAction(doWaitForCondition);
-		}
-		
-		public function continueAfterCondition () : void {
-			mIsWaitingForCondition = false;
-			play();
+		public function addCondition (inCondition:Condition) : void {
+			addAction(inCondition);
 		}
 		
 		/**
-		
+		Internal function, called by {@link #addWait}.
 		*/
-		protected function doWait (inOwner:Object,
-								 inDuration:Number) : DuringAction {
-			return new DuringAction(inOwner, idle, inDuration);
+		protected function doWait (inOwner:Object, inDuration:Number) : TimedAction {
+			return new TimedAction(inOwner, idle, inDuration);
 		}
 		
 		/**
-		
+		Internal function, called by {@link #doWait}.
+		@param inValue: not used
+		@return True.
 		*/
-		protected function idle (p:Number) : Boolean {
+		protected function idle (inValue:Number) : Boolean {
 			return true;
 		}
 		
 		/**
-		
+		Adds a paused state to the queue. When this action is run the queue is paused until {@link #resume} is called on it.
 		*/
 		public function addPause () : void {
 			addAction(doPause);
 		}
 		
 		/**
-		
+		Internal function, called by {@link #addPause}.
 		*/
 		protected function doPause () : void {
 			pause();
 		}
 		
 		/**
-		
-		*/
-		protected function doWaitForCondition () : void {
-			pause();
-			mIsWaitingForCondition = true;
-		}
-		
-		/**
-		
-		*/
-		public function play () : void {
-			if (mIsWaitingForCondition) return;
-			register();
-			if (mIsPaused) {
-				mIsPaused = false;
-				resumeActionRunners();
-				dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_RESUMED, mName));
-			}
-		}
-
-		/**
-		
+		Toggles the playing/paused state of the queue.
 		*/
 		public function togglePlay () : void {
-			if (!mIsPaused) {
-				pause(true);
+			if (!mPaused) {
+				pause();
 			} else {
-				play();
+				resume();
 			}
 		}
 		
 		/**
-		
+		Pauses the current running action and all asynchronous actions.
+		@param inContinueWhereLeftOff: (optional) whether the running Action should continue where it left off when the queue is resumed
+		@sends ActionEvent#PAUSED
 		*/
-		public function pause (inPreserveRemainingTime:Boolean = true) : void {
-			unRegister();
-			mIsPaused = true;
-			pauseActionRunners(inPreserveRemainingTime);
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_PAUSED, mName));
+		public function pause (inContinueWhereLeftOff:Boolean = true) : void {
+			mPaused = true;
+			pauseActionRunners(inContinueWhereLeftOff);
+			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, mName));
 		}
 		
 		/**
+		Resumes a paused queue.
+		@sends ActionEvent#RESUMED
+		*/
+		public function resume () : void {
+			mPaused = false;
+			resumeActionRunners();
+			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, mName));
+
+		}
 		
+		/**
+		Quits the queue.
+		@sends ActionEvent#QUIT
 		*/
 		public function quit () : void {
-			unRegister();
-			clear();
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_QUIT, mName));
+			quitActionRunners();
+			reset();
+			dispatchEvent(new ActionEvent(ActionEvent.QUIT, mName));
 		}
 		
 		/**
-		
+		Pauses all ActionRunners.
 		*/
-		protected function pauseActionRunners (inPreserveRemainingTime:Boolean) : void {
-			var i:int, ilen:int = mActionRunners.length;
+		protected function pauseActionRunners (inContinueWhereLeftOff:Boolean) : void {
+			callOnAllActionRunners("pause", [inContinueWhereLeftOff]);
+		}
+		
+		protected function callOnAllActionRunners (inMethodName:String, inArgs:Array = null) : void {
+			var i:uint, ilen:uint = mActionRunners.length;
 			for (i=0; i<ilen; ++i) {
-				mActionRunners[i].pause(inPreserveRemainingTime);
+				var method:Function = mActionRunners[i][inMethodName];
+				method.apply(mActionRunners[i], inArgs);
 			}
 		}
 		
 		/**
-		
+		Resumes all ActionRunners.
 		*/
 		protected function resumeActionRunners () : void {
-			var i:int, ilen:int = mActionRunners.length;
-			for (i=0; i<ilen; ++i) {
-				mActionRunners[i].resume();
-			}
+			callOnAllActionRunners("resume");
 		}
 		
 		/**
+		Quits all ActionRunners.
+		*/
+		protected function quitActionRunners () : void {
+			callOnAllActionRunners("quit");
+		}
 		
+		/**
+		Skips all ActionRunners.
+		*/
+		protected function skipActionRunners () : void {
+			callOnAllActionRunners("skip");
+		}
+		
+		/**
+		Resets all ActionRunners.
+		*/
+		protected function resetActionRunners () : void {
+			callOnAllActionRunners("reset");
+		}
+		
+		/**
+		Stops all ActionRunners.
+		*/
+		protected function stopActionRunners () : void {
+			callOnAllActionRunners("stop");
+		}
+		
+		/**
+		Skips to the next action (if any). If the queue is paused, skip will resume the queue.
+		also skips paused state
 		*/
 		public function skip () : void {
-			// also skips paused state
-			if (mIsPaused) {
-				play();
+			skipActionRunners();
+			if (mMainActionRunner.isPaused()) {
+				resume();
 			}
-			mainActionRunner().skip();
 		}
 		
 		/**
-		
+		Jumps the action pointer to a marker.
+		@param inMarkerName: name of the marker
 		*/
 		public function goToMarker (inMarkerName:String) : void {
 			doGoToMarker(inMarkerName);
 		}
 		
 		/**
-		
+		Adds a "go to marker" action to the queue.
+		@param inMarkerName: name of the marker
 		*/
 		public function addGoToMarker (inMarkerName:String) : void {
 			addAction(doGoToMarker, inMarkerName);
 		}
 		
 		/**
-		
+		Used by {@link #addGoToMarker}.
+		@param inMarkerName: name of the marker
 		*/
 		protected function doGoToMarker (inMarkerName:String) : void {
 			var index:int = mMarkerHash[inMarkerName].index;
-			mainActionRunner().setStep(index);
+			mMainActionRunner.gotoStep(index);
 		}
 		
 		/**
+		Adds a marker to the queue. Markers can be used to receive an event when the queue passes a marker, or to jump to a specific point in the queue.
+		@param inMarkerName: name of the marker
+		@example
+		This example shows how to listen for marker events:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		var CURRENT:Number = Number.NaN;
+		queue.addAction(new AQMove().move(my_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y));
+		queue.addMarker("MARKER_1");
+		queue.addAction(new AQMove().move(my_mc, duration, CURRENT, CURRENT, marker2_mc.x, marker2_mc.y));
+		queue.addMarker("MARKER_2");
+		</code>
+		Add a listener:
+		<code>
+		queue.addEventListener(ActionEvent._EVENT, onActionEvent);
+		queue.run();
+		</code>
 		
+		<code>
+		public function onActionEvent (e:ActionEvent) : void {
+			switch (e.subtype) {
+				case ActionEvent.MARKER_VISITED:
+					handleMarkerPassed(e);
+					break;
+			}
+		}
+		
+		public function handleMarkerPassed (e:ActionEvent) : void {
+			// do something
+		}
+		</code>
 		*/
 		public function addMarker (inMarkerName:String) : void {
 			// store current position in queue
@@ -334,7 +499,21 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Adds a "start of loop" marker to the queue.
+		@param inLoopName: name of the loop (should be unique for this queue)
+		@see #addEndLoop
+		@example
+		This example shows how to set loop markers:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y));
+		queue.addStartLoop("MY_LOOP");
+		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker2_mc.x, marker2_mc.y));
+		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker3_mc.x, marker3_mc.y));
+		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y));
+		queue.addEndLoop("MY_LOOP");
+		queue.run();
+		</code>
 		*/
 		public function addStartLoop (inLoopName:String) : void {
 			var index:int = mActions.length;
@@ -343,7 +522,9 @@ package org.asaplibrary.util.actionqueue {
 		}
 
 		/**
-		
+		Adds a "end of loop" marker to the queue.
+		@param inLoopName: name of the loop (should be unique for this queue)
+		@see #addStartLoop
 		*/
 		public function addEndLoop (inLoopName:String) : void {
 			// find stored Loop and set end index to it
@@ -352,69 +533,79 @@ package org.asaplibrary.util.actionqueue {
 			addGoToLoopStart(inLoopName);
 		}
 		
-		public function endLoop (inLoopName:String,
-								 inFinishLoopFirst:Boolean = true) : void {
+		/**
+		Ends a current running loop.
+		@param inLoopName: name of the loop (should be unique for this queue)
+		@param inFinishLoopFirst: true if the loop should be run to the end; false if the loop should be aborted - the action pointer jumps to the first action after the "end of loop" marker; any currently running action will be finished first
+		*/
+		public function endLoop (inLoopName:String, inAbortLoop:Boolean = false) : void {
 			var loop:Loop = mLoopHash[inLoopName];
 			loop.isLooping = false;
-			if (!inFinishLoopFirst) {
+			if (inAbortLoop) {
 				var endIndex:int = mLoopHash[inLoopName].endIndex;
-				mainActionRunner().setStep(endIndex);
+				mMainActionRunner.gotoStep(endIndex);
 			}
 		}
 		
 		/**
-		
+		Used by {@link #addEndLoop}.
 		*/
 		protected function addGoToLoopStart (inLoopName:String) : void {
 			addAction(doGoToLoopStart, inLoopName);
 		}
 		
 		/**
-		TODO: clear passed markers
+		Used by {@link #addGoToLoopStart}.
+		@todo Clear passed markers
 		*/
 		protected function doGoToLoopStart (inLoopName:String) : void {
 			var loop:Loop = mLoopHash[inLoopName];
 			if (loop.isLooping) {
-				mainActionRunner().setStep(loop.startIndex);
+				mMainActionRunner.gotoStep(loop.startIndex);
 			}
 		}
 		
 		/**
-		Called at queue runtime
+		Called by {@link #addMarker} when the queue is running. Stored the visited marker for lookup by {@link #didVisitMarker}.
+		@param inMarker: Marker
+		@sends ActionEvent#MARKER_VISITED
 		*/
 		protected function doAddVisitedMarker (inMarker:Marker) : void {
 			mCurrentMarker = inMarker;
 			if (mVisitedMarkerHash[inMarker.name] == null) {
 				mVisitedMarkerHash[inMarker.name] = inMarker.index;
 			}
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_MARKER_PASSED, mName, mCurrentMarker.name));
+			dispatchEvent(new ActionEvent(ActionEvent.MARKER_VISITED, mName, mCurrentMarker.name));
 		}
 		
 		/**
 		Name of the last visited marker.
 		*/
-		public function lastPassedMarker () : String {
+		public function lastVisitedMarker () : String {
 			return mCurrentMarker.name;
 		}
 		
 		/**
-		@returns True if the marker action with name inMarkerName has been run.
+		Check whether the queue did pass a marker. The marker has to be 'run' - any jumps over in-between markers will not mark it as 'passed'.
+		@param inMarkerName: name of the marker
+		@return True if the marker action with name was visited; otherwise false.
 		*/
-		public function didPassMarker (inMarkerName:String) : Boolean {
+		public function didVisitMarker (inMarkerName:String) : Boolean {
 			return mVisitedMarkerHash[inMarkerName] != null;
 		}
 		
 		/**
-		
+		@return True when all Actions (including asynchronous actions) are finished.
 		*/
-		public function hasFinished () : Boolean {
-			return mHasFinished;
+		public function isFinished () : Boolean {
+			return mMainActionRunner.isFinished();
 		}
 		
 		/**
-	
+		Resets the queue: stops current ActionRunners, removes all actions, clears the "visited markers" history.
 		*/
-		public function clear () : void {
+		public function reset () : void {
+			resetActionRunners();
 			initActionRunners();
 			mActions = new Array();
 			mVisitedMarkerHash = new Object();
@@ -423,112 +614,56 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		@return True when the main runner is paused.
 		*/
 		public function isPaused () : Boolean {
-			return mIsPaused;
+			return mMainActionRunner.isPaused();
 		}
 		
 		/**
-		
+		@exclude
 		*/
 		public override function toString () : String {
 			return "ActionQueue: " + mName;
 		}
 		
 		/**
-		
+		Starts the queue.
+		@sends ActionEvent#STARTED
 		*/
 		public function run () : * {
-			register();
-			mainActionRunner().setActions(mActions);
-			mHasFinished = false;
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_STARTED, mName));
-			return this;
+			mMainActionRunner.run();
+			dispatchEvent(new ActionEvent(ActionEvent.STARTED, mName));
+			return null;
 		}
-		
+				
 		/**
-		
+		Received by ActionRunners. 
+		@sends ActionEvent#FINISHED - if the main ActionRunner has finished
 		*/
-		protected function mainActionRunner () : ActionRunner {
-			return mActionRunners[0];
-		}
-		
-		/**
-		
-		*/
-		public function step (e:Event) : void {
-
-			if (mIsPaused) return;
-			
-			var i:int, ilen:int = mActionRunners.length;
-			for (i=0; i<ilen; ++i) {
-				mActionRunners[i].step(e);
-			}
-			checkRunnersFinished();
-		}
-		
-		/**
-		
-		*/
-		protected function checkRunnersFinished () : void {
-			var i:int, ilen:int = mActionRunners.length;
-			var runningRunners:int = ilen;
-			for (i=0; i<ilen; ++i) {
-				if (mActionRunners[i].hasFinished()) {
-					runningRunners--;
-				}
-			}
-			if (runningRunners == 0) {
-				finish();
+		protected function onActionEvent (e:ActionEvent) : void {
+			switch (e.subtype) {
+				case ActionEvent.FINISHED:
+					dispatchEvent(new ActionEvent(ActionEvent.FINISHED, mName));
+					break;
 			}
 		}
 		
 		/**
-		
-		*/
-		protected function finish () : void {
-			unRegister();
-			mHasFinished = true;
-			dispatchEvent(new ActionQueueEvent(ActionQueueEvent.QUEUE_FINISHED, mName));
-		}
-		
-		/**
-		
-		*/
-		protected function register () : void {
-			if (mRegistered) return;
-			if (mActionQueueController) {
-				mActionQueueController.register(this, step);
-			} else {
-				FramePulse.addEnterFrameListener(step);
-			}
-			mRegistered = true;
-		}
-		
-		/**
-		
-		*/
-		protected function unRegister () : void {
-			if (mActionQueueController) {
-				mActionQueueController.unRegister(this);
-			} else {
-				FramePulse.removeEnterFrameListener(step);
-			}
-			mRegistered = false;
-		}
-		
-		/**
-		
+		Creates an {@link Action} object from an argument list where the first item is a function.
+		@param inArgs: arguments
+		@return A new Action object.
 		*/
 		protected function createActionFromFunction (inArgs:Array) : Action {
 			var method:Function = inArgs.shift();
-			var owner:Object = mainActionRunner();
+			var owner:Object = mMainActionRunner;
 			return new Action(owner, method, inArgs);
 		}
 		
 		/**
-		
+		Creates an {@link Action} object from an argument list where the first item is an object and the second a method name.
+		@param inArgs: arguments
+		@return A new Action object.
 		*/
 		protected function createActionFromMethodName (inArgs:Array) : Action {
 		
@@ -540,10 +675,13 @@ package org.asaplibrary.util.actionqueue {
 		}
 				
 		/**
-		
+		Creates an {@link Action} object from an argument list where the first item is a method reference.
+		@param inOwner: method owner
+		@param inArgs: arguments
+		@return A new Action object.
 		*/
 		protected function createActionFromObjectMethod (inOwner:Object,
-											inArgs:Array) : Action {
+														 inArgs:Array) : Action {
 			var method:Function = inArgs.shift();
 			return new Action(inOwner, method, inArgs);
 		}
@@ -591,286 +729,3 @@ class Loop {
 	}
 }
 
-
-import flash.events.Event;
-import flash.utils.getTimer;
-import org.asaplibrary.util.FramePulse;
-import org.asaplibrary.util.actionqueue.*;
-
-class ActionRunner {
-
-	private var mName:String; // for debugging
-	private var mFrameActionRunner:FrameActionRunner;
-	private var mActions:Array;
-	private var mStepCount:int;
-	private var mCurrentStep:int;
-	private var mFinished:Boolean;
-	private var mIsPaused:Boolean = false;
-	
-	private var DEBUG:Boolean = false;
-
-	/**
-	
-	*/
-	function ActionRunner (inName:String) {
-		mName = inName;
-		mFrameActionRunner = new FrameActionRunner(mName); // TODO: defer?
-		mCurrentStep = 0;
-	}
-	
-	/**
-	
-	*/
-	public function setActions(inActions:Array) : void {
-		mActions = inActions;
-		mStepCount = mActions.length;
-		start();
-	}
-	
-	/**
-	
-	*/
-	public function step (e:Event) : void {
-		mFrameActionRunner.step();
-		if (mFrameActionRunner.isRunning()) return;
-				
-		if (mCurrentStep == mStepCount) {
-			// no actions left
-			stop();
-			mFrameActionRunner.stop();
-			return;
-		}
-		// else		
-		var action:Action = mActions[mCurrentStep++];
-		next(action);
-	}
-
-	/**
-	
-	*/
-	public function hasFinished () : Boolean {
-		return mFinished;
-	}
-	
-	/**
-	
-	*/
-	public function pause (inPreserveRemainingTime:Boolean) : void {
-		mFrameActionRunner.pause(inPreserveRemainingTime);
-		mIsPaused = true;
-	}
-	
-	/**
-	
-	*/
-	public function resume () : void {
-		mFrameActionRunner.resume();
-		mIsPaused = false;
-	}
-	
-	/**
-		
-	*/
-	public function toString () : String {
-		return "ActionRunner " + mName;
-	}
-	
-	/**
-	
-	*/
-	public function skip () : void {
-		mCurrentStep++;
-	}
-	
-	public function setStep (inIndex:int) : void {
-		mCurrentStep = inIndex;
-	}
-	
-	/**
-	Try to loop through the action list as long as possible
-	*/
-	protected function next (a:Action) : void {
-		while ( (a != null) && (!applyAction(a)) ) {
-			if (mStepCount != mCurrentStep && !mIsPaused) {
-				a = mActions[mCurrentStep++];
-			} else {
-				break;
-			}
-		}
-	}
-	
-	/**
-	@return The called method's return value: in case of an AQMethod, the called function will return true if it has an onEnterFrame. If so, ActionQueue must pass an onEnterFrame itself.
-	*/
-	protected function applyAction (inAction:Action) : Boolean {
-		var result:* = inAction.run();
-		
-		if (result && (result is DuringAction)) {
-			mFrameActionRunner.startFrameAction(result);
-			return true;
-		}
-		// function has not returned an DuringAction object so is not frame based
-		return false;
-	}
-	
-	/**
-	
-	*/
-	protected function start () : void {
-		mFinished = false;
-	}
-	
-	/**
-	
-	*/
-	protected function stop () : void {
-		mFinished = true;
-	}
-	
-}
-
-class FrameActionRunner {
-	
-	private var mName:String; // for debugging
-	private var mEndTime:Number;
-	private var mFrameAction:DuringAction;
-	private var mWaitDuration:Number;
-	private var mIsActive:Boolean;
-	private var mDurationLeft:Number;
-
-	private var DEBUG:Boolean = false;
-	
-	/**
-		
-	*/
-	function FrameActionRunner (inName:String) {
-		mName = inName;
-		setActive(false);
-	}
-	
-	/**
-		
-	*/
-	public function toString () : String {
-		return "FrameActionRunner " + mName;
-	}
-	
-	/**
-		
-	*/
-	public function isRunning () : Boolean {
-		return isActive();
-	}
-	
-	/**
-		
-	*/
-	public function stop () : void {
-		setActive(false);
-	}
-	
-	/**
-		
-	*/
-	public function start () : void {
-		setActive(true);
-	}
-	
-	/**
-	
-	*/
-	public function pause (inPreserveRemainingTime:Boolean) : void {
-		if (inPreserveRemainingTime) {
-			mDurationLeft = mEndTime - now();
-		} else {
-			// remove old value
-			mDurationLeft = Number.NaN;
-		}
-	}
-	
-	/**
-	
-	*/
-	public function resume () : void {
-		if (!isNaN(mDurationLeft)) {
-			mEndTime = now() + mDurationLeft;
-		}
-	}
-	
-	/**
-		
-	*/
-	public function step () : void {
-
-		if (!isActive()) return;
-
-		if (mFrameAction.duration != 0) {
-			// calculate percentage (1 to 0)
-			var msNow:Number = now();
-			if (msNow < mEndTime) {
-				mFrameAction.percentage = (mEndTime - msNow) * (.001 / mFrameAction.duration);
-			} else { 
-				mFrameAction.percentage = 0;
-			}
-			if (mFrameAction.effect != null) {
-				var params:Array = new Array(1 - mFrameAction.percentage, mFrameAction.start, mFrameAction.range, 1);
-				mFrameAction.value = Number(mFrameAction.effect.apply(null, params));
-			} else {
-				mFrameAction.value = mFrameAction.end - (mFrameAction.percentage * mFrameAction.range);
-			}
-						
-			if (msNow >= mEndTime) {
-				mFrameAction.setActionDone();
-				if (mFrameAction.doesLoop()) {
-					startFrameAction(mFrameAction);
-				} else {
-					stop();
-				}
-			}
-		}
-		callFrameActionMethod();
-	}
-	
-	/**
-	
-	*/
-	protected function callFrameActionMethod () : void {
-		var result:Boolean = mFrameAction.method.call(mFrameAction.owner, mFrameAction.value);
-		if (!result) {
-			stop();
-		}
-	}
-	
-	/**
-	
-	*/
-	public function startFrameAction (inFrameAction:DuringAction) : void {
-//		if (DEBUG) trace(getTimer() + " ; startFrameAction called; " + toString());
-		mFrameAction = inFrameAction;	
-		var duration:Number = mFrameAction.duration * 1000; // translate to milliseconds
-		mEndTime = now() + duration;
-		start();
-	}
-	
-	/**
-	
-	*/
-	protected function setActive(inState:Boolean) : void {
-		mIsActive = inState;
-	}
-	
-	/**
-	
-	*/
-	public function isActive() : Boolean {
-		return mIsActive;
-	}
-	
-	/**
-	
-	*/
-	protected function now () : Number {
-		return getTimer();
-	}
-	
-}

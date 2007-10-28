@@ -20,36 +20,44 @@ package org.asaplibrary.util.actionqueue {
 	import flash.events.Event;
 	
 	/**
-	Event objects that are dispatched by {@link ActionQueue}.
+	Event objects that are dispatched by {@link Action} objects.
 	*/
 	
 	public class ActionEvent extends Event {
 	
 		public static const _EVENT:String = "onActionEvent";
+		
 		public static const STARTED:String = "onActionStarted";
 		public static const FINISHED:String = "onActionFinished";
 		public static const QUIT:String = "onActionQuit";
 		public static const PAUSED:String = "onActionPaused";
 		public static const RESUMED:String = "onActionResumed";
 		public static const STOPPED:String = "onActionStopped";
-		public static const MARKER_PASSED:String = "onActionMarkerPassed";
+		public static const MARKER_VISITED:String = "onActionMarkerVisited";
+		public static const CONDITION_MARKER:String = "onActionConditionMarker";
 		
 		public var name:String;
 		public var subtype:String;
 		public var markerName:String;
 	
 		/**
-		@param inName : name of the ActionQueue
-		@param inMarkerName : (optional) the marker name
+
 		*/
 		public function ActionEvent (inSubtype:String,
-									 inName:String,
+									 inName:String = null,
 									 inMarkerName:String = null) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
 			name = inName;
 			markerName = inMarkerName;
+		}
+		
+		/**
+		@exclude
+		*/
+		public override function toString () : String {
+			return ";ActionEvent: subtype=" + subtype + "; name=" + name;
 		}
 		
 		public override function clone() : Event {

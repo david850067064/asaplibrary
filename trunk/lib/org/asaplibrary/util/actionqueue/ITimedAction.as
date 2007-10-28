@@ -20,12 +20,13 @@ package org.asaplibrary.util.actionqueue {
 	import flash.events.*;
 
 	/**
-	Abstract type for Actions. An Action is a "Command Pattern" object that holds data of an object's method. See http://en.wikipedia.org/wiki/Command_pattern
+	Abstract type for timed Actions.
 	*/
-	public interface IAction extends IEventDispatcher {
+	public interface ITimedAction extends IAction {
 		
-		function run () : *;
-		function isRunning() : Boolean;
+		function stop () : void;
+		function pause (inContinueWhereLeftOff:Boolean = true) : void;
+		function resume () : void;
 		
 	}
 

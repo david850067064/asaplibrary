@@ -45,7 +45,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function init () : DuringAction {
+		protected function init () : TimedAction {
 			mMaxValue = (!isNaN(mParamMaxValue)) ? mParamMaxValue : mDO.alpha;
 			mMinValue = (!isNaN(mParamMinValue)) ? mParamMinValue : mDO.alpha;
 			
@@ -58,9 +58,10 @@ package org.asaplibrary.util.actionqueue {
 			
 			var cycleDuration:Number = 1.0 / mFrequency;
 			
-			var frameAction:DuringAction = new DuringAction(this, mPerformFunction, cycleDuration, mEffect);
-			frameAction.loop = true; // loops loopCount or infinite if mDuration == 0
-			frameAction.loopCount = calculateLoopCount(mCount, mDuration, cycleDuration);
+			var frameAction:TimedAction = new TimedAction(this, mPerformFunction, cycleDuration, mEffect);
+			var loopCount:uint = calculateLoopCount(mCount, mDuration, cycleDuration);
+			frameAction.setLoop(true); // loops loopCount or infinite if mDuration == 0
+			frameAction.setLoopCount(loopCount);
 			
 			return frameAction;
 		}
@@ -70,7 +71,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function calculateLoopCount (inCount:int,
 											   inDuration:Number,
-											   inCycleDuration:Number) : int {
+											   inCycleDuration:Number) : uint {
 			if (inDuration == 0) {
 				return 0;
 			} else if (inDuration > 0) {
