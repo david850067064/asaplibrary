@@ -9,7 +9,6 @@
 	// ASAP classes
 	import org.asaplibrary.management.movie.LocalController;
 	import org.asaplibrary.util.actionqueue.*;
-	import org.asaplibrary.util.actionqueue.ActionQueueController;
 	
 	import ui.Particle;
 	
@@ -85,10 +84,10 @@
 		}
 		
 		private function initSynchronizeMarkers () : void {
-			if (q1) q1.quit();
-			if (q2) q2.quit();
-			if (q3) q3.quit();
-			if (fadeLinesQueue) fadeLinesQueue.quit();
+			if (q1) q1.reset();
+			if (q2) q2.reset();
+			if (q3) q3.reset();
+			if (fadeLinesQueue) fadeLinesQueue.reset();
 			mFadeLinesQueuePaused = false;
 			bar1_mc.alpha = bar2_mc.alpha = bar3_mc.alpha = 1;
 			movable1_mc.x = movable2_mc.x = movable3_mc.x = 16;
@@ -99,10 +98,9 @@
 			
 			initSynchronizeMarkers();
 			
-			var aqController:ActionQueueController = new ActionQueueController();
+			//var aqController:ActionQueueController = new ActionQueueController();
 
 			var MAX_DURATION:Number = 1.0; 
-			var duration:Number;
 			
 			var spriteWidth:Number = 12;
 			
@@ -113,123 +111,109 @@
 			var CURRENT:Number = Number.NaN;
 			var effect:Function = null; //Cubic.easeOut;
 			
-			q1 = new ActionQueue("movequeue1", aqController);
+			q1 = new ActionQueue("movequeue1");
+			q2 = new ActionQueue("movequeue2");
+			q3 = new ActionQueue("movequeue3");
 			
-			duration = .2 + Math.random() * MAX_DURATION;
+			
+			var bar1Condition:Function = function () : Boolean {
+				return (q1.didVisitMarker("BAR1")
+					 && q2.didVisitMarker("BAR1")
+					 && q3.didVisitMarker("BAR1"));
+			}
+			var condition1:Condition = new Condition (this, bar1Condition, null);
+				
+			var bar2Condition:Function = function () : Boolean {
+				return (q1.didVisitMarker("BAR2")
+					 && q2.didVisitMarker("BAR2")
+					 && q3.didVisitMarker("BAR2"));
+			}
+			var condition2:Condition = new Condition (this, bar2Condition, null);
+				
+			var bar3Condition:Function = function () : Boolean {
+				return (q1.didVisitMarker("BAR3")
+					 && q2.didVisitMarker("BAR3")
+					 && q3.didVisitMarker("BAR3"));
+			}
+			var condition3:Condition = new Condition (this, bar3Condition, null);
+			
+			var duration1:Number = .4 + Math.random() * MAX_DURATION;
+			var duration2:Number = .4 + Math.random() * MAX_DURATION;
+			var duration3:Number = .4 + Math.random() * MAX_DURATION;
+			
 			q1.addAction(new AQSet().setEnabled(movable1_mc, false));
-			q1.addAction(new AQMove().move(movable1_mc, duration, CURRENT, CURRENT, max1, CURRENT, effect));
+			q1.addAction(new AQMove().move(movable1_mc, duration1, CURRENT, CURRENT, max1, CURRENT, effect));
 			q1.addMarker("BAR1");
-			q1.addWaitForCondition();
+			q1.addCondition(condition1);
 			// ---
-			duration = .2 + Math.random() * MAX_DURATION;
-			q1.addAction(new AQMove().move(movable1_mc, duration, CURRENT, CURRENT, max2, CURRENT, effect));
+			q1.addAction(new AQMove().move(movable1_mc, duration1, CURRENT, CURRENT, max2, CURRENT, effect));
 			q1.addMarker("BAR2");
-			q1.addWaitForCondition();
+			q1.addCondition(condition2);
 			// ---
-			duration = .2 + Math.random() * MAX_DURATION;
-			q1.addAction(new AQMove().move(movable1_mc, duration, CURRENT, CURRENT, max3, CURRENT, effect));
+			q1.addAction(new AQMove().move(movable1_mc, duration1, CURRENT, CURRENT, max3, CURRENT, effect));
 			// ---
 			q1.addMarker("BAR3");
-			q1.addWaitForCondition();
+			q1.addCondition(condition3);
 			// ---
 			q1.addAction(new AQFade().fade(movable1_mc, 1, CURRENT, 0));
 			
-			
-			q2 = new ActionQueue("movequeue2", aqController);
-			duration = MAX_DURATION / 2;
-			q2.addAction(new AQMove().move(movable2_mc, duration, CURRENT, CURRENT, max1, CURRENT, effect));
+
+			q2.addAction(new AQMove().move(movable2_mc, duration2, CURRENT, CURRENT, max1, CURRENT, effect));
 			q2.addMarker("BAR1");
-			q2.addWaitForCondition();
+			q2.addCondition(condition1);
 			// ---
-			q2.addAction(new AQMove().move(movable2_mc, duration, CURRENT, CURRENT, max2, CURRENT, effect));
+			q2.addAction(new AQMove().move(movable2_mc, duration2, CURRENT, CURRENT, max2, CURRENT, effect));
 			q2.addMarker("BAR2");
-			q2.addWaitForCondition();
+			q2.addCondition(condition2);
 			// ---
-			q2.addAction(new AQMove().move(movable2_mc, duration, CURRENT, CURRENT, max3, CURRENT, effect));
+			q2.addAction(new AQMove().move(movable2_mc, duration2, CURRENT, CURRENT, max3, CURRENT, effect));
 			// ---
 			q2.addMarker("BAR3");
-			q2.addWaitForCondition();
+			q2.addCondition(condition3);
 			// ---
 			q2.addAction(new AQFade().fade(movable2_mc, 1, CURRENT, 0));
 			
 			
-			q3 = new ActionQueue("movequeue3", aqController);
-			duration = MAX_DURATION / 3;
-			q3.addAction(new AQMove().move(movable3_mc, duration, CURRENT, CURRENT, max1, CURRENT, effect));
+			q3.addAction(new AQMove().move(movable3_mc, duration3, CURRENT, CURRENT, max1, CURRENT, effect));
 			q3.addMarker("BAR1");
-			q3.addWaitForCondition();
+			q3.addCondition(condition1);
 			// ---
-			q3.addAction(new AQMove().move(movable3_mc, duration, CURRENT, CURRENT, max2, CURRENT, effect));
+			q3.addAction(new AQMove().move(movable3_mc, duration3, CURRENT, CURRENT, max2, CURRENT, effect));
 			q3.addMarker("BAR2");
-			q3.addWaitForCondition();
+			q3.addCondition(condition2);
 			// ---
-			q3.addAction(new AQMove().move(movable3_mc, duration, CURRENT, CURRENT, max3, CURRENT, effect));
+			q3.addAction(new AQMove().move(movable3_mc, duration3, CURRENT, CURRENT, max3, CURRENT, effect));
 			// ---
 			q3.addMarker("BAR3");
-			q3.addWaitForCondition();
+			q3.addCondition(condition3);
 			// ---
 			q3.addAction(new AQFade().fade(movable3_mc, 1, CURRENT, 0));
-
-			var condition:Condition;
 			
-			var bar1Condition:Function = function () : Boolean {
-				return (q1.didPassMarker("BAR1")
-					 && q2.didPassMarker("BAR1")
-					 && q3.didPassMarker("BAR1"));
+			var fadeConditionCheck:Function = function () : Boolean {
+				return (q1.isFinished()
+					 && q2.isFinished()
+					 && q3.isFinished());
 			}
-			condition = new Condition (
-				bar1Condition, 
-				[q1.continueAfterCondition, q2.continueAfterCondition, q3.continueAfterCondition]
-			);
-			aqController.addCondition(condition);
-			
-			condition = new Condition (
-				function () {
-					return (q1.didPassMarker("BAR2")
-						 && q2.didPassMarker("BAR2")
-						 && q3.didPassMarker("BAR2"));
-				},		
-				[q1.continueAfterCondition, q2.continueAfterCondition, q3.continueAfterCondition]
-			);
-			aqController.addCondition(condition);
-			
-			condition = new Condition (
-				function () {
-					return (q1.didPassMarker("BAR3")
-						 && q2.didPassMarker("BAR3")
-						 && q3.didPassMarker("BAR3"));
-				},		
-				[q1.continueAfterCondition, q2.continueAfterCondition, q3.continueAfterCondition]
-			);
-			aqController.addCondition(condition);
-			
-			fadeLinesQueue = new ActionQueue("lines queue");
-			fadeLinesQueue.addWaitForCondition();
-			duration = 2.0;
-			fadeLinesQueue.addActionDoNotWaitForMe(new AQFade().fade(bar1_mc, duration, CURRENT, 0));
-			fadeLinesQueue.addActionDoNotWaitForMe(new AQFade().fade(bar2_mc, duration, CURRENT, 0));
-			fadeLinesQueue.addActionDoNotWaitForMe(new AQFade().fade(bar3_mc, duration, CURRENT, 0));
-			
-			condition = new Condition (
-				function () {
-					return (q1.hasFinished()
-						 && q2.hasFinished()
-						 && q3.hasFinished());
-				},				
-				[fadeLinesQueue.continueAfterCondition]
-			);
-			aqController.addCondition(condition);
+			var fadeCondition:Condition = new Condition (this, fadeConditionCheck);
 
+			fadeLinesQueue = new ActionQueue("lines queue");
+			fadeLinesQueue.addCondition(fadeCondition);
+			var duration:Number = 2.0;
+			
+			fadeLinesQueue.addAsynchronousAction(new AQFade().fade(bar1_mc, duration, CURRENT, 0));
+			fadeLinesQueue.addAsynchronousAction(new AQFade().fade(bar2_mc, duration, CURRENT, 0));
+			fadeLinesQueue.addAsynchronousAction(new AQFade().fade(bar3_mc, duration, CURRENT, 0));
+			
 			q1.run();
 			q2.run();
 			q3.run();
 			fadeLinesQueue.run();
-
 		}
 		
 		private function initLoop () : void {
-			if (loopQueue) loopQueue.quit();
+			if (loopQueue) loopQueue.reset();
 			loop_mc.x = 16;
+			loop_mc.y = 236;
 			loop_mc.scaleX = loop_mc.scaleY = 1;
 			loop_mc.alpha = num1_mc.alpha = num2_mc.alpha = num3_mc.alpha = 1;
 		}
@@ -246,17 +230,17 @@
 
 			loopQueue = new ActionQueue("loopQueue");
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y, effect));
-			loopQueue.addActionDoNotWaitForMe(new AQFade().fade(num1_mc, numFadeDuration, CURRENT, 0));
+			loopQueue.addAsynchronousAction(new AQFade().fade(num1_mc, numFadeDuration, CURRENT, 0));
 			loopQueue.addStartLoop("L");
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker2_mc.x, marker2_mc.y, effect));
-			loopQueue.addActionDoNotWaitForMe(new AQFade().fade(num2_mc, numFadeDuration, CURRENT, 0));
+			loopQueue.addAsynchronousAction(new AQFade().fade(num2_mc, numFadeDuration, CURRENT, 0));
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker3_mc.x, marker3_mc.y, effect));
-			loopQueue.addActionDoNotWaitForMe(new AQFade().fade(num3_mc, numFadeDuration, CURRENT, 0));
+			loopQueue.addAsynchronousAction(new AQFade().fade(num3_mc, numFadeDuration, CURRENT, 0));
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y, effect));
 			loopQueue.addEndLoop("L");
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker4_mc.x, marker4_mc.y, effect));
 			var fadeDuration:Number = 2;
-			loopQueue.addActionDoNotWaitForMe(new AQScale().scale(loop_mc, fadeDuration, CURRENT, CURRENT, 4, 4, effect));
+			loopQueue.addAsynchronousAction(new AQScale().scale(loop_mc, fadeDuration, CURRENT, CURRENT, 4, 4, effect));
 			loopQueue.addAction(new AQFade().fade(loop_mc, fadeDuration, CURRENT, 0, effect));
 
 			loopQueue.run();
@@ -264,7 +248,7 @@
 		}
 		
 		private function initEvents () : void {
-			if (eventsQueue) eventsQueue.quit();
+			if (eventsQueue) eventsQueue.reset();
 			event_mc.x = 16;
 			event_mc.alpha = 100;
 			num_e_1_mc.alpha = num_e_2_mc.alpha = num_e_3_mc.alpha = num_e_4_mc.alpha = num_e_5_mc.alpha = 1;
@@ -282,19 +266,19 @@
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker1_mc.x, e_marker1_mc.y));
 
 			eventsQueue.addMarker("M1");
-			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_1_mc, numFadeDuration, CURRENT, 0));
+			eventsQueue.addAsynchronousAction(new AQFade().fade(num_e_1_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker2_mc.x, e_marker2_mc.y));
 			eventsQueue.addMarker("M2");
-			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_2_mc, numFadeDuration, CURRENT, 0));
+			eventsQueue.addAsynchronousAction(new AQFade().fade(num_e_2_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker3_mc.x, e_marker3_mc.y));
 			eventsQueue.addMarker("M3");
-			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_3_mc, numFadeDuration, CURRENT, 0));
+			eventsQueue.addAsynchronousAction(new AQFade().fade(num_e_3_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker4_mc.x, e_marker4_mc.y));
 			eventsQueue.addMarker("M4");
-			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_4_mc, numFadeDuration, CURRENT, 0));
+			eventsQueue.addAsynchronousAction(new AQFade().fade(num_e_4_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQMove().move(event_mc, duration, CURRENT, CURRENT, e_marker5_mc.x, e_marker5_mc.y));
 			eventsQueue.addMarker("M5");
-			//eventsQueue.addActionDoNotWaitForMe(new AQFade().fade(num_e_5_mc, numFadeDuration, CURRENT, 0));
+			eventsQueue.addAsynchronousAction(new AQFade().fade(num_e_5_mc, numFadeDuration, CURRENT, 0));
 			eventsQueue.addAction(new AQSet().setLoc(event_mc, 16, CURRENT));
 			eventsQueue.addEndLoop("L");
 
@@ -305,13 +289,13 @@
 		
 		public function onActionEvent (e:ActionEvent) : void {
 			switch (e.subtype) {
-				case ActionEvent.MARKER_PASSED:
-					onMarkerPassed(e);
+				case ActionEvent.MARKER_VISITED:
+					handleMarkerPassed(e);
 					break;
 			}
 		}
 		
-		public function onMarkerPassed (e:ActionEvent) : void {
+		public function handleMarkerPassed (e:ActionEvent) : void {
 			createParticles(event_mc.x, event_mc.y);
 		}
 		
@@ -345,7 +329,7 @@
 		}
 		
 		public function handleQuitLoop(event:MouseEvent) : void {
-			loopQueue.endLoop("L", false);
+			loopQueue.endLoop("L", true);
 		}
 		
 		public function handleFinishLoop(event:MouseEvent) : void {
