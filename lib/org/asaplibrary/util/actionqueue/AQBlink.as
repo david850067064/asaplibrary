@@ -60,7 +60,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoBlink () : DuringAction {
+		protected function initDoBlink () : TimedAction {
 			mMaxValue = (!isNaN(mParamMaxValue)) ? mParamMaxValue : mDO.alpha;
 			mMinValue = (!isNaN(mParamMinValue)) ? mParamMinValue : mDO.alpha;
 			return super.init();
@@ -101,7 +101,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoMaskBlink () : DuringAction {
+		protected function initDoMaskBlink () : TimedAction {
 			
 			mPIOffset = 0;
 			if (mHideAtStart) {
@@ -110,9 +110,10 @@ package org.asaplibrary.util.actionqueue {
 			
 			var cycleDuration:Number = 1.0 / mFrequency; // in seconds
 			
-			var frameAction:DuringAction = new DuringAction(this, doMaskBlink, cycleDuration, mEffect);
-			frameAction.loop = true; // loops loopCount or infinite if mDuration == 0
-			frameAction.loopCount = calculateLoopCount(mCount, mDuration, cycleDuration);
+			var frameAction:TimedAction = new TimedAction(this, doMaskBlink, cycleDuration, mEffect);
+			var loopCount:uint = calculateLoopCount(mCount, mDuration, cycleDuration);
+			frameAction.setLoop(true); // loops loopCount or infinite if mDuration == 0
+			frameAction.setLoopCount(loopCount);
 			
 			return frameAction;
 		}

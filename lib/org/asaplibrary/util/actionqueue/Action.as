@@ -17,29 +17,65 @@ limitations under the License.
 
 package org.asaplibrary.util.actionqueue {
 	
+	import flash.events.*;
+
 	import org.asaplibrary.util.actionqueue.IAction;
 	
-	public class Action implements IAction {
+	/**
+	An Action is a "Command Pattern" object that holds data of an object's method. See http://en.wikipedia.org/wiki/Command_pattern
+	*/
+	public class Action extends EventDispatcher implements IAction {
 		
-		public var method:Function;
-		public var owner:Object;
-		public var args:Array;
-
+		protected var mMethod:Function;
+		protected var mOwner:Object;
+		protected var mArgs:Array;
+		
+		//protected var mUndoMethod:Function;
+		//protected var mUndoArgs:Array;
+		
+		/**
+		Creates a new Action.
+		@param inOwner: method owner (the method will be called in the owner's scope)
+		@param inMethod: function reference
+		@param inArgs: (optional) arguments to pass to the method
+		@param inUndoMethod: (optional) not implemented yet
+		@param inUndoArgs: (optional) not implemented yet
+		*/
 		function Action (inOwner:Object,
 						 inMethod:Function,
-						 inArgs:Array = null) {
+						 inArgs:Array = null,
+						 inUndoMethod:Function = null,
+						 inUndoArgs:Array = null) {
 						 
-			method = inMethod;
-			owner = inOwner;
-			args = inArgs;
+			mMethod = inMethod;
+			mOwner = inOwner;
+			mArgs = inArgs;
+			//mUndoMethod = inUndoMethod;
+			//mUndoArgs = inUndoArgs;
 		}
 		
+		/**
+		Invokes the Action method.
+		@return The result of the called method.
+		*/
 		public function run () : * {
-			return method.apply(owner, args);
+			var result:* = mMethod.apply(mOwner, mArgs);
+			dispatchEvent(new ActionEvent(ActionEvent.FINISHED));
+			return result;
 		}
 		
+		/**
+		@return False
+		*/
 		public function isRunning () : Boolean {
 			return false;
+		}
+		
+		/**
+		@exclude
+		*/
+		override public function toString() : String {
+			return ";org.asaplibrary.util.actionqueue.Action";
 		}
 
 	}

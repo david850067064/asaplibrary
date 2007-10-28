@@ -67,10 +67,10 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function initDoFollowMouse () : DuringAction {
+		protected function initDoFollowMouse () : TimedAction {
 			mX = mDO.x;
 			mY = mDO.y;
-			return new DuringAction(this, doFollowMouse, mDuration, null);
+			return new TimedAction(this, doFollowMouse, mDuration, null);
 		}
 		
 		/**
