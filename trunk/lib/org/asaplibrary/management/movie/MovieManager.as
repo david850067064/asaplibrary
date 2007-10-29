@@ -121,7 +121,7 @@ package org.asaplibrary.management.movie {
 		/**
 		Finds a local controller by name
 		@param inName: unique identifier for the loaded movie
-		@returns The controller for that movie, or null if none was found
+		@return The controller for that movie, or null if none was found
 		*/
 		public function getLocalControllerByName (inName:String) : LocalController {
 			var md:MovieData = getMovieDataByName(inName);
