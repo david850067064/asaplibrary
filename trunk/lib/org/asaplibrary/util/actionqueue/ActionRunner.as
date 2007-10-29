@@ -96,7 +96,7 @@ package org.asaplibrary.util.actionqueue {
 			if (mActions.length == 0) return null;
 			mFinished = false;
 			mRunning = true;
-			dispatchEvent(new ActionEvent(ActionEvent.STARTED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STARTED, this, mName));
 			step();
 			return null;
 		}
@@ -111,7 +111,7 @@ package org.asaplibrary.util.actionqueue {
 			if (mCurrentAction is ITimedAction) {
 				ITimedAction(mCurrentAction).pause(inContinueWhereLeftOff);
 			}
-			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, this, mName));
 		}
 		
 		/**
@@ -121,7 +121,7 @@ package org.asaplibrary.util.actionqueue {
 		public function stop () : void {
 			mRunning = false;
 			if (mCurrentAction is ITimedAction) ITimedAction(mCurrentAction).stop();
-			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this, mName));
 		}
 	
 		/**
@@ -151,7 +151,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function quit () : void {
 			reset();
-			dispatchEvent(new ActionEvent(ActionEvent.QUIT, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.QUIT, this, mName));
 		}
 		
 		/**
@@ -174,7 +174,7 @@ package org.asaplibrary.util.actionqueue {
 				ITimedAction(mCurrentAction).resume();
 			}
 			mPaused = false;
-			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this, mName));
 			if (!mCurrentAction) {
 				step();
 			}
@@ -325,7 +325,7 @@ package org.asaplibrary.util.actionqueue {
 		protected function finish () : void {
 			mFinished = true;
 			mRunning = false;
-			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this, mName));
 		}
 		
 	}

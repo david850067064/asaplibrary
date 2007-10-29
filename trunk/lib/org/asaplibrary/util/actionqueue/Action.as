@@ -60,7 +60,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function run () : * {
 			var result:* = mMethod.apply(mOwner, mArgs);
-			dispatchEvent(new ActionEvent(ActionEvent.FINISHED));
+			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this));
 			return result;
 		}
 		

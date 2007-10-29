@@ -277,7 +277,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function stop () : void {
 			stopActionRunners();
-			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this, mName));
 		}
 		
 		/**
@@ -346,7 +346,7 @@ package org.asaplibrary.util.actionqueue {
 		public function pause (inContinueWhereLeftOff:Boolean = true) : void {
 			mPaused = true;
 			pauseActionRunners(inContinueWhereLeftOff);
-			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, this, mName));
 		}
 		
 		/**
@@ -356,7 +356,7 @@ package org.asaplibrary.util.actionqueue {
 		public function resume () : void {
 			mPaused = false;
 			resumeActionRunners();
-			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this, mName));
 
 		}
 		
@@ -367,7 +367,7 @@ package org.asaplibrary.util.actionqueue {
 		public function quit () : void {
 			quitActionRunners();
 			reset();
-			dispatchEvent(new ActionEvent(ActionEvent.QUIT, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.QUIT, this, mName));
 		}
 		
 		/**
@@ -575,7 +575,7 @@ package org.asaplibrary.util.actionqueue {
 			if (mVisitedMarkerHash[inMarker.name] == null) {
 				mVisitedMarkerHash[inMarker.name] = inMarker.index;
 			}
-			dispatchEvent(new ActionEvent(ActionEvent.MARKER_VISITED, mName, mCurrentMarker.name));
+			dispatchEvent(new ActionEvent(ActionEvent.MARKER_VISITED, this, mName, mCurrentMarker.name));
 		}
 		
 		/**
@@ -633,7 +633,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function run () : * {
 			mMainActionRunner.run();
-			dispatchEvent(new ActionEvent(ActionEvent.STARTED, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STARTED, this, mName));
 			return null;
 		}
 				
@@ -644,7 +644,7 @@ package org.asaplibrary.util.actionqueue {
 		protected function onActionEvent (e:ActionEvent) : void {
 			switch (e.subtype) {
 				case ActionEvent.FINISHED:
-					dispatchEvent(new ActionEvent(ActionEvent.FINISHED, mName));
+					dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this, mName));
 					break;
 			}
 		}
