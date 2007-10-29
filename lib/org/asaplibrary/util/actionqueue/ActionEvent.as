@@ -38,17 +38,20 @@ package org.asaplibrary.util.actionqueue {
 		
 		public var name:String;
 		public var subtype:String;
+		public var action:IAction;
 		public var markerName:String;
 	
 		/**
 
 		*/
 		public function ActionEvent (inSubtype:String,
+									 inAction:IAction = null,
 									 inName:String = null,
 									 inMarkerName:String = null) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
+			action = inAction;
 			name = inName;
 			markerName = inMarkerName;
 		}
@@ -57,11 +60,11 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";ActionEvent: subtype=" + subtype + "; name=" + name;
+			return ";ActionEvent: subtype=" + subtype + "; name=" + name + "; action=" + action;
 		}
 		
 		public override function clone() : Event {
-			return new ActionEvent(subtype, name, markerName);
+			return new ActionEvent(subtype, action, name, markerName);
 		} 
 	}
 }

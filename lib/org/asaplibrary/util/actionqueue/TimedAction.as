@@ -77,7 +77,7 @@ package org.asaplibrary.util.actionqueue {
 		public function stop () : void {
 			unRegister();
 			mIsRunning = false;
-			dispatchEvent(new ActionEvent(ActionEvent.STOPPED));
+			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this));
 		}
 		
 		/**
@@ -87,7 +87,7 @@ package org.asaplibrary.util.actionqueue {
 		public function finish () : void {
 			unRegister();
 			mIsRunning = false;
-			dispatchEvent(new ActionEvent(ActionEvent.FINISHED));
+			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this));
 		}
 		
 		/**
@@ -102,11 +102,6 @@ package org.asaplibrary.util.actionqueue {
 		Sets the number of loops this action will perform.
 		*/
 		public function setLoopCount (inCount:uint) : void {
-			if (inCount == 0) {
-				mLoop = false;
-				return;
-			}
-			// else
 			mLoop = true;
 			mLoopCount = inCount;
 		}
