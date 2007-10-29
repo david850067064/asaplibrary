@@ -110,7 +110,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		<b>Adding a object's method</b>
 		Will be called in the object's scope.
-		<code>public function addAction ( inMethodObject:Object, inMethod:Function, argument1, argument2, ... ) : void</code>
+		<code>public function addAction ( inMethodOwner:Object, inMethod:Function, argument1, argument2, ... ) : void</code>
 		
 		Example:
 		<code>
@@ -120,8 +120,8 @@ package org.asaplibrary.util.actionqueue {
 		</code>
 		
 		<b>Adding a object's method by name</b>
-		Will be called in the object's scope.
-		<code>public function addAction ( inMethodObject:Object, inMethodName:String, argument1, argument2, ... ) : void</code>
+		Will be called in the object's scope. The method must have public access.
+		<code>public function addAction ( inMethodOwner:Object, inMethodName:String, argument1, argument2, ... ) : void</code>
 		
 		Example:
 		<code>
@@ -285,7 +285,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inDuration: waiting time in seconds
 		*/
 		public function addWait (inDuration:Number) : void {
-			addAction(this, doWait, this, inDuration);
+			addAction(doWait, this, inDuration);
 		}
 		
 		/**
