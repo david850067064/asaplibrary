@@ -100,10 +100,11 @@ package org.asaplibrary.util.actionqueue {
 		
 		/**
 		Sets the number of loops this action will perform.
+		@param inLoopCount: the number of loops this action will perform; use 0 to loop indefinitely
 		*/
-		public function setLoopCount (inCount:uint) : void {
+		public function setLoopCount (inLoopCount:uint) : void {
 			mLoop = true;
-			mLoopCount = inCount;
+			mLoopCount = inLoopCount;
 		}
 		
 		/**
