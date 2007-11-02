@@ -240,6 +240,7 @@ package org.asaplibrary.util.actionqueue {
 		protected function initActionRunners () : void {
 			mActionRunners = new Array();
 			mMainActionRunner = createActionRunner();
+			mMainActionRunner.addEventListener(ActionEvent._EVENT, onActionEvent);
 			mActionRunners.push(mMainActionRunner);
 		}
 		
@@ -259,7 +260,6 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function createActionRunner () : ActionRunner {
 			var runner:ActionRunner = new ActionRunner(mActionRunners.length + " " + mName);
-			runner.addEventListener(ActionEvent._EVENT, onActionEvent);
 			return runner;
 		}
 				
@@ -292,6 +292,33 @@ package org.asaplibrary.util.actionqueue {
 		Adds a {@link Condition} to the queue. A running queue is automatically halted as long as the condition is not met. The condition will be checked on each frame update (using {@link FramePulse} events.
 		@param inCondition: the condition to add
 		@implementationNote Conditions are run by {@link ConditionManager}.
+		@example
+		<code>
+		var q1:ActionQueue = new ActionQueue();
+		var q2:ActionQueue = new ActionQueue();
+		var q3:ActionQueue = new ActionQueue();
+		
+		var condition:Function = function () : Boolean {
+			return (q1.didVisitMarker("BAR1")
+				 && q2.didVisitMarker("BAR1")
+				 && q3.didVisitMarker("BAR1"));
+		}
+		var condition:Condition = new Condition (this, condition);
+
+		var rightPos:Number = 800;
+		var duration:Number = 4.0;
+		var CURRENT:Number = Number.NaN;
+		q1.addAction(new AQMove().move(my_mc1, duration1, CURRENT, CURRENT, rightPos, CURRENT));
+		q1.addMarker("BAR1");
+		q1.addCondition(condition1);
+		// q1 will continue here as soon as the condition is met
+		
+		// ... (similar for other queues)
+		
+		q1.run();
+		q2.run();
+		q3.run();
+		</code>
 		*/
 		public function addCondition (inCondition:Condition) : void {
 			addAction(inCondition);

@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -70,6 +70,7 @@ package org.asaplibrary.util.actionqueue {
 		Adds a list of actions to the existing list.
 		*/
 		public function addActions(inActions:Array) : void {
+			if (inActions == null) return;
 			mActions = mActions.concat(inActions);
 		}
 		
@@ -77,6 +78,7 @@ package org.asaplibrary.util.actionqueue {
 		Add an Action to the existing list of actions.
 		*/
 		public function addAction(inAction:IAction) : void {
+			if (inAction == null) return;
 			mActions.push(inAction);
 		}
 		
@@ -159,6 +161,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function reset () : void {
 			if (mCurrentAction is ITimedAction) ITimedAction(mCurrentAction).stop();
+			mRunning = false;
 			mActions = new Array();
 			if (mConditionManager != null) mConditionManager.reset();
 			mCurrentStep = 0;
@@ -169,13 +172,14 @@ package org.asaplibrary.util.actionqueue {
 		@sends ActionEvent#RESUMED
 		*/
 		public function resume () : void {
- 			if (mWaitingForCondition) return;
+			mPaused = false;
+			mRunning = true;
+			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this, mName));
 			if (mCurrentAction is ITimedAction) {
 				ITimedAction(mCurrentAction).resume();
+				return;
 			}
-			mPaused = false;
-			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this, mName));
-			if (!mCurrentAction) {
+			if (mCurrentAction == null && !mWaitingForCondition) {
 				step();
 			}
 		}
