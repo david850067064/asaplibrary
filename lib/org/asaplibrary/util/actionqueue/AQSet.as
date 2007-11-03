@@ -26,29 +26,18 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setLoc (inDO:DisplayObject,
 								inX:Number = Number.NaN,
-								inY:Number = Number.NaN) : Action {
-			return new Action(this, doSetLoc, [inDO, inX, inY]);
-		}
-		
-		protected function doSetLoc (inDO:DisplayObject,
-									 inX:Number = Number.NaN,
-									 inY:Number = Number.NaN) : void {
+								inY:Number = Number.NaN) : void {
 			var x:Number = (!isNaN(inX)) ? inX : inDO.x;
 			var y:Number = (!isNaN(inY)) ? inY : inDO.y;
 			inDO.x = x;
 			inDO.y = y;
 		}
-		
+
 		/**
 		
 		*/
 		public function setVisible (inDO:DisplayObject,
-									inFlag:Boolean) : Action {
-			return new Action(this, doSetVisible, [inDO, inFlag]);
-		}
-		
-		protected function doSetVisible (inDO:DisplayObject,
-										 inFlag:Boolean) : void {
+									inFlag:Boolean) : void {
 			inDO.visible = inFlag;
 		}
 		
@@ -56,12 +45,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		public function setAlpha (inDO:DisplayObject,
-								  inAlpha:Number) : Action {
-			return new Action(this, doSetAlpha, [inDO, inAlpha]);
-		}
-		
-		protected function doSetAlpha (inDO:DisplayObject,
-									   inAlpha:Number) : void {
+								  inAlpha:Number) : void {
 			inDO.alpha = inAlpha;
 		}
 		
@@ -70,13 +54,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setScale (inDO:DisplayObject,
 								  inScaleX:Number,
-								  inScaleY:Number) : Action {
-			return new Action(this, doSetScale, [inDO, inScaleX, inScaleY]);
-		}
-		
-		protected function doSetScale (inDO:DisplayObject,
-									   inScaleX:Number,
-									   inScaleY:Number) : void {
+								  inScaleY:Number) : void {
 			var scaleX:Number = (!isNaN(inScaleX)) ? inScaleX : inDO.scaleX;
 			var scaleY:Number = (!isNaN(inScaleY)) ? inScaleY : inDO.scaleY;
 			inDO.scaleX = scaleX;
@@ -86,27 +64,17 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function setToMouse (inDO:DisplayObject) : Action {
-			return new Action(this, doSetToMouse, [inDO]);
-		}
-		
-		protected function doSetToMouse (inDO:DisplayObject) : void {
+		public function setToMouse (inDO:DisplayObject) : void {
 			inDO.x = inDO.parent.mouseX;
 			inDO.y = inDO.parent.mouseY;
-		}
+		}			
 		
 		/**
 		
 		*/
 		public function centerOnStage (inDO:DisplayObject,
 								  	   inOffsetX:Number = Number.NaN,
-								   	   inOffsetY:Number = Number.NaN) : Action {
-			return new Action(this, doCenterOnStage, [inDO, inOffsetX, inOffsetY]);
-		}
-		
-		protected function doCenterOnStage (inDO:DisplayObject,
-								 			inOffsetX:Number = Number.NaN,
-											inOffsetY:Number = Number.NaN) : void {
+								   	   inOffsetY:Number = Number.NaN) : void {
 			var x:Number = inDO.stage.stageWidth / 2;
 			var y:Number = inDO.stage.stageHeight / 2;
 			
@@ -121,12 +89,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		public function setEnabled (inMC:MovieClip,
-									inState:Boolean) : Action {
-			return new Action(this, doSetEnabled, [inMC, inState]);
-		}
-		
-		protected function doSetEnabled (inMC:MovieClip,
-							  		 	 inState:Boolean) : void {
+									inState:Boolean) : void {
 			inMC.enabled = inState;
 		}
 		
