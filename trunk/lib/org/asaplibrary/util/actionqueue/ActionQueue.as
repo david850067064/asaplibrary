@@ -276,7 +276,6 @@ package org.asaplibrary.util.actionqueue {
 		@sends ActionEvent#STOPPED
 		*/
 		public function stop () : void {
-			trace("AQ stop");
 			stopActionRunners();
 			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this, mName));
 		}
