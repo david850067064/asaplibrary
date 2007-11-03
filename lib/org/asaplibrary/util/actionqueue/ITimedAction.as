@@ -25,6 +25,7 @@ package org.asaplibrary.util.actionqueue {
 	public interface ITimedAction extends IAction {
 		
 		function stop () : void;
+		function reset () : void;
 		function pause (inContinueWhereLeftOff:Boolean = true) : void;
 		function resume () : void;
 		

@@ -80,6 +80,10 @@ package org.asaplibrary.util.actionqueue {
 			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this));
 		}
 		
+		public function reset () : void {
+			stop();
+		}
+		
 		/**
 		Stops the running action and sends out a "finished" message.
 		@sends ActionEvent#FINISHED
