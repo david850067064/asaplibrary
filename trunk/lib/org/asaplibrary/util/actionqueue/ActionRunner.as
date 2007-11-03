@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -121,8 +121,15 @@ package org.asaplibrary.util.actionqueue {
 		@sends ActionEvent#STOPPED
 		*/
 		public function stop () : void {
+
+			if (mCurrentAction is ITimedAction) {
+				ITimedAction(mCurrentAction).stop();
+			}
+			if (mCurrentAction != null) {
+				mCurrentAction.removeEventListener(ActionEvent._EVENT, onActionEvent);
+			}
+			setCurrentAction(null);
 			mRunning = false;
-			if (mCurrentAction is ITimedAction) ITimedAction(mCurrentAction).stop();
 			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this, mName));
 		}
 	
@@ -160,11 +167,17 @@ package org.asaplibrary.util.actionqueue {
 		Clears the action list.
 		*/
 		public function reset () : void {
-			if (mCurrentAction is ITimedAction) ITimedAction(mCurrentAction).stop();
+			if (mCurrentAction is ITimedAction) {
+				ITimedAction(mCurrentAction).reset();
+			}
+			if (mCurrentAction != null) {
+				mCurrentAction.removeEventListener(ActionEvent._EVENT, onActionEvent);
+			}
+			setCurrentAction(null);
 			mRunning = false;
 			mActions = new Array();
-			if (mConditionManager != null) mConditionManager.reset();
 			mCurrentStep = 0;
+			if (mConditionManager != null) mConditionManager.reset();		
 		}
 		
 		/**
@@ -243,7 +256,6 @@ package org.asaplibrary.util.actionqueue {
 		protected function onActionEvent (e:ActionEvent) : void {
 			switch (e.subtype) {
 				case ActionEvent.FINISHED:
-					mCurrentAction = null;
 					if (mCurrentStep >= mActions.length) {
 						finish();
 						return;
@@ -265,6 +277,10 @@ package org.asaplibrary.util.actionqueue {
 		Runs the next action in the list.
 		*/
 		protected function step () : void {
+			if (mCurrentStep >= mActions.length) {
+				finish();
+				return;			
+			}
 			nextAction( mActions[mCurrentStep++] );
 		}
 		
@@ -275,7 +291,8 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function applyAction (inAction:IAction) : Boolean {
 
-			if (!inAction) return false;
+			if (inAction == null) return false;
+			setCurrentAction(inAction);
 
 			if (inAction is Condition) {
 				handleCondition(Condition(inAction));
@@ -290,7 +307,6 @@ package org.asaplibrary.util.actionqueue {
 			}
 			// else
 			var result:* = inAction.run();
-			mCurrentAction = inAction;
 			
 			if (result is ITimedAction) {
 				runTimedAction(ITimedAction(result));
@@ -301,11 +317,15 @@ package org.asaplibrary.util.actionqueue {
 			return false;
 		}
 		
+		protected function setCurrentAction (inAction:IAction) : void {
+			mCurrentAction = inAction;
+		}
+		
 		/**
 		Processes a {@link ITimedAction} object.
 		*/
 		protected function runTimedAction (inAction:ITimedAction) : void {
-			mCurrentAction = inAction;
+			setCurrentAction(inAction);
 			inAction.addEventListener(ActionEvent._EVENT, onActionEvent);
 			inAction.run();
 		}
