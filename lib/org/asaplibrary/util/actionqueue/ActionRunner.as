@@ -31,7 +31,8 @@ package org.asaplibrary.util.actionqueue {
 	
 		private var mName:String; // for debugging
 		private var mActions:Array;
-		private var mCurrentStep:int;
+		private var mCurrentStep:uint;
+		private var mNextStep:uint;
 		private var mRegistered:Boolean = false;
 		private var mFinished:Boolean = false;
 		private var mPaused:Boolean = false;
@@ -47,7 +48,7 @@ package org.asaplibrary.util.actionqueue {
 		function ActionRunner (inName:String = "Anonymous ActionRunner") {
 			mName = inName;
 			mActions = new Array();
-			mCurrentStep = 0;
+			currentStep = 0;
 		}
 		
 		/**
@@ -63,7 +64,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setActions(inActions:Array) : void {
 			mActions = inActions;
-			mCurrentStep = 0;
+			currentStep = 0;
 		}
 		
 		/**
@@ -80,6 +81,16 @@ package org.asaplibrary.util.actionqueue {
 		public function addAction(inAction:IAction) : void {
 			if (inAction == null) return;
 			mActions.push(inAction);
+		}
+		
+		/**
+		Inserts an action just before the current position.
+		*/
+		public function insertAction(inAction:IAction) : void {
+			if (inAction == null) return;
+			var index:uint = (mNextStep == 0) ? 0 : mNextStep - 1;
+			insertActionAtIndex(index, inAction);
+			mNextStep++;
 		}
 		
 		/**
@@ -176,7 +187,7 @@ package org.asaplibrary.util.actionqueue {
 			setCurrentAction(null);
 			mRunning = false;
 			mActions = new Array();
-			mCurrentStep = 0;
+			currentStep = 0;
 			if (mConditionManager != null) mConditionManager.reset();		
 		}
 		
@@ -223,14 +234,14 @@ package org.asaplibrary.util.actionqueue {
 		Skips the pointer to the action by one.
 		*/
 		public function skip () : void {
-			mCurrentStep++;
+			currentStep++;
 		}
 		
 		/**
 		Sets the index of the current step. The index is zero-based, so the first action has step index 0.
 		*/
 		public function gotoStep (inIndex:int) : void {
-			mCurrentStep = inIndex;
+			currentStep = inIndex;
 		}
 		
 		/**
@@ -242,7 +253,7 @@ package org.asaplibrary.util.actionqueue {
 				if (mPaused) break;
 				if (mWaitingForCondition) break;
 				if (mActions.length != mCurrentStep) {
-					inAction = mActions[mCurrentStep++];
+					inAction = mActions[currentStep++];
 				} else {
 					finish();
 					break;
@@ -281,7 +292,7 @@ package org.asaplibrary.util.actionqueue {
 				finish();
 				return;			
 			}
-			nextAction( mActions[mCurrentStep++] );
+			nextAction( mActions[currentStep++] );
 		}
 		
 		/**
@@ -351,6 +362,16 @@ package org.asaplibrary.util.actionqueue {
 			mRunning = false;
 			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this, mName));
 		}
+		
+		protected function get currentStep () : uint {
+			return mCurrentStep;
+		}
+		
+		protected function set currentStep (inStep:uint) : void {
+			mCurrentStep = inStep;
+			mNextStep = (mActions.length == 0) ? 0 : inStep + 1;
+		}
+		
 		
 	}
 	
