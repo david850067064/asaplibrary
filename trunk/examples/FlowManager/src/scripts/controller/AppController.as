@@ -56,8 +56,6 @@ package controller {
 		protected function initMenu () : void {
 			// show the menu later
 			tMenu.visible = false;
-			// let menu listen to navigation events
-			tMenu.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 		}
 		
 		protected function listen () : void {
@@ -153,15 +151,15 @@ package controller {
 			e.stopImmediatePropagation();
 			switch (e.subtype) {
 				case FlowNavigationEvent.UPDATE:
-					FM.goto(e.id);
+					FM.goto(e.name);
 					break;
 				case FlowNavigationEvent.WILL_LOAD:
 					// movie is about to be loaded
-					prepareMovie(e.id);
+					prepareMovie(e.name);
 					break;
 				case FlowNavigationEvent.LOADED:
 					// just for this demo, add a little pause just to show the loader
-					new FrameDelay(attachMovie, 45, [e.id]);
+					new FrameDelay(attachMovie, 45, [e.name]);
 					break;
 				default:
 					//
@@ -177,8 +175,8 @@ package controller {
 				return;
 			}
 			if (e.target is GenericButton) {
-				var id:String = GenericButton(e.target).id;
-				FM.goto(id);
+				var name:String = GenericButton(e.target).id;
+				FM.goto(name);
 			}
 		}
 		
