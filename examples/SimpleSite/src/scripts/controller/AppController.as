@@ -19,7 +19,7 @@ package controller {
 		private var mCurrentController:LocalController;
 		
 		function AppController () {
-			super();
+			super("AppController");
 			listen();
 			loadMenu();
 			gotoHome();
@@ -30,7 +30,7 @@ package controller {
 			addEventListener(NavigationEvent._EVENT, handleNavigationUpdate);
 			
 			// Listen for event when movies are loaded and ready to play
-			MovieManager.getInstance().addEventListener( MovieManagerEvent._EVENT, onMovieEvent);
+			MovieManager.getInstance().addEventListener( MovieManagerEvent._EVENT, onMovieEvent );
 		}
 		
 		protected function loadMenu () : void {
@@ -57,11 +57,12 @@ package controller {
 			var state:String = e.state;
 			var navMan:NavigationManager = NavigationManager.getInstance();
 			if (state == navMan.getState()) return;
-			// else
+			// else: a new state
 			navMan.setState(state);
 			
 			var lc:LocalController = MovieManager.getInstance().getLocalControllerByName(state);
 			if (lc != null) {
+				// already loaded
 				showMovie(lc);
 			} else {
 				loadNewMovie(state);

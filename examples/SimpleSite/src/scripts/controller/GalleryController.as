@@ -4,6 +4,13 @@ package controller {
 
 	public class GalleryController extends LocalController {
 		
+		/**
+		
+		*/
+		function GalleryController () {
+			super("GalleryController");
+		}
+
 	}
 	
 }
