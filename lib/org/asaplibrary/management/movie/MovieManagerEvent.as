@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
+
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 
@@ -36,7 +37,6 @@ package org.asaplibrary.management.movie {
 		
 		public function MovieManagerEvent (inSubtype:String, inName:String) {
 			super(_EVENT);
-			
 			subtype = inSubtype;
 			name = inName;
 		}
