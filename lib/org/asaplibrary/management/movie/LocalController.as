@@ -21,13 +21,17 @@ package org.asaplibrary.management.movie {
 	import org.asaplibrary.management.movie.MovieManager;
 	import org.asaplibrary.util.debug.Log;
 
-	
 	public class LocalController extends MovieClip implements ILocalController {
-		private var mName : String;
-		private var mIsStandalone : Boolean;
 
+		private var mName:String = "";
+		private var mIsStandalone:Boolean;
 
-		public function LocalController () {
+		public function LocalController (inName:String = null) {
+			
+			if (inName != null) {
+				setName(inName);
+			}
+			
 			// initialize standalone flag
 			mIsStandalone = ((stage != null) && (parent == stage));
 			
@@ -59,6 +63,13 @@ package org.asaplibrary.management.movie {
 
 		public function isStandalone () : Boolean {
 			return mIsStandalone;
+		}
+		
+		/**
+		@exclude
+		*/
+		public override function toString () : String {
+			return ";org.asaplibrary.management.movie.LocalController: " + getName();
 		}
 	}
 }
