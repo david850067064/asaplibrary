@@ -292,19 +292,19 @@ package org.asaplibrary.util.actionqueue {
 		protected function applyAction (inAction:IAction) : Boolean {
 
 			if (inAction == null) return false;
-			setCurrentAction(inAction);
 
 			if (inAction is Condition) {
 				handleCondition(Condition(inAction));
 				// consider this a timed action
 				// (ConditionManager is updated per frame)
 				return true;
-			}
-			
-			if (inAction is ITimedAction) {
+			} else if (inAction is ITimedAction) {
 				runTimedAction(ITimedAction(inAction));
 				return true;
+			} else {
+				setCurrentAction(inAction);
 			}
+			
 			// else
 			var result:* = inAction.run();
 			
