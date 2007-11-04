@@ -17,9 +17,7 @@
 	public class ConditionManagerTestCase extends TestCase {
 		
 		private static const TEST_DELAY:Number = 31;
-
-		private var mInstance:ConditionManagerTestCase = this as ConditionManagerTestCase;
-
+		
 		private var sTestRegisterFuncCalled:uint = 0;
 		private static var EXPECTED_TEST_REGISTER_FUNC_CALLED:uint = 1;
 		

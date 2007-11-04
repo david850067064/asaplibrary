@@ -58,8 +58,6 @@
 		private static var sEventMARKER_PASSEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_MARKER_PASSED_CALLED:uint = 0;
 		
-		private var mInstance:ActionRunnerTestCase = this as ActionRunnerTestCase;
-		
 		public function ActionRunnerTestCase () {
 			super();
 		}
@@ -80,6 +78,8 @@
 			doTestGoToStep();
 			doTestReset();
 			doTestEvents();
+			
+			// TODO: insertAction
 			
 			new FrameDelay(startTests, TEST_DELAY);
 		}
