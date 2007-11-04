@@ -110,7 +110,6 @@ package controller {
 		protected function start () : void {
 			FM.goto(AppSettings.SECTION_INTRO);
 			FM.goto(AppSettings.SECTION_MENU, false, false);
-			//FM.goto(AppSettings.SECTION3, false);
 		}
 		
 		protected function proceedToSection1 (inSection:IFlowSection) : void {
