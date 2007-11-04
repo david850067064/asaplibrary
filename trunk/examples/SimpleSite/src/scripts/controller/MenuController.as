@@ -19,7 +19,7 @@
 		private var mSelectedButton:MenuButton;
 					
 		function MenuController () {
-			super();
+			super("MenuController");
 			listen();
 			selfUpdate();
 		}

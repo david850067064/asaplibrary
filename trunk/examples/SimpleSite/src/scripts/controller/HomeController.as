@@ -17,7 +17,7 @@ package controller {
 		
 		*/
 		function HomeController () {
-			super();
+			super("HomeController");
 			addEventListener(MouseEvent.CLICK, handleButtonClick);
 		}
 
