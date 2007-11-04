@@ -26,8 +26,13 @@ package org.asaplibrary.management.movie {
 
 	public class MovieManager extends EventDispatcher {
 	
-		/** MovieData */
+		/**
+		List of type {@link MovieData}.
+		*/
 		private var mMovies:Array = new Array();
+		/**
+		The loader.
+		*/
 		private var mLoader:AssetLoader;
 		
 		private static var mInstance:MovieManager = null;
@@ -134,21 +139,22 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		* Add a specific controller; used by standalone LocalController to notify its existence to the MovieManager
-		* @param	inController
+		Add a specific controller; used by standalone LocalController to notify its existence to the MovieManager
+		@param	inController
 		*/
 		public function addLocalController (inController:LocalController) : void {
 			// check if movie has been added previously via loadMovie() 
 			var md:MovieData = getMovieDataByContainer(inController as DisplayObject);
 			if (md == null) {
 				// create new data for movie
-				md = new MovieData("");
+				md = new MovieData(inController.getName());
 				mMovies.push(md);
 			}
 			// store controller only if not stored during handleMovieLoaded
 			if (md.controller == null) {
 				storeLocalController(inController, md);
 			}
+			
 		}
 		
 		/**
@@ -172,9 +178,9 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		* Find MovieData object for specified name
-		* @param	inName
-		* @return data object, or null if none was found
+		Find MovieData object for specified name
+		@param	inName
+		@return data object, or null if none was found
 		*/
 		private function getMovieDataByName (inName:String) : MovieData {
 			var len:int = mMovies.length;
@@ -186,9 +192,9 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		* Find MovieData object for specified controller
-		* @param	inName
-		* @return data object, or null if none was found
+		Find MovieData object for specified controller
+		@param	inName
+		@return data object, or null if none was found
 		*/
 		private function getMovieDataByController (inController:LocalController) : MovieData {
 			var len:int = mMovies.length;
@@ -200,9 +206,9 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		* Find MovieData object for specified container
-		* @param	inName
-		* @return data object, or null if none was found
+		Find MovieData object for specified container
+		@param	inName
+		@return data object, or null if none was found
 		*/
 		private function getMovieDataByContainer (inObject:DisplayObject) : MovieData {
 			var len:int = mMovies.length;
@@ -214,8 +220,8 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		* Handle AssetLoaderEvent from AssetLoader
-		* @param	e
+		Handle AssetLoaderEvent from AssetLoader
+		@param	e
 		*/
 		private function handleLoaderEvent (e:AssetLoaderEvent) : void {
 			switch (e.subtype) {
@@ -225,9 +231,10 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		* Handle error during loading
-		* @param	e
-		* @return
+		Handle error during loading
+		@param e
+		@return
+		@sends MovieManagerEvent#ERROR
 		*/
 		private function handleLoaderError (e:AssetLoaderEvent) : void {
 			var evt:MovieManagerEvent = new MovieManagerEvent(MovieManagerEvent.ERROR, e.name);
@@ -239,9 +246,10 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		* Handle event that movie has been loaded
-		* @param	e
-		* @return
+		Handle event that movie has been loaded
+		@param	e
+		@return
+		@sends MovieManagerEvent#MOVIE_LOADED
 		*/
 		private function handleMovieLoaded (e:AssetLoaderEvent) : void {
 			var md:MovieData = getMovieDataByName(e.name);
@@ -268,9 +276,10 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		* Set local controller for specified data object
-		* @param	inController
-		* @param	inData
+		Set local controller for specified data object
+		@param inController
+		@param inData
+		@sends MovieManagerEvent#CONTROLLER_INITIALIZED
 		*/
 		private function storeLocalController (inController:LocalController, 
 											   inData:MovieData) : void {
@@ -286,6 +295,9 @@ package org.asaplibrary.management.movie {
 			dispatchEvent(e);
 		}
 		
+		/**
+		@sends MovieManagerEvent#MOVIE_READY
+		*/
 		private function checkLoadProgress (inData:MovieData) : void {
 			if ((inData.controller != null) && (inData.container != null)) {
 				var e:MovieManagerEvent = new MovieManagerEvent(MovieManagerEvent.MOVIE_READY, inData.name);
@@ -317,6 +329,7 @@ import org.asaplibrary.management.movie.LocalController;
 import flash.display.DisplayObject;
 
 class MovieData {
+
 	public var name : String;
 	public var controller : LocalController;
 	public var container : DisplayObject;
@@ -324,4 +337,5 @@ class MovieData {
 	public function MovieData (inName:String) {
 		name = inName;
 	}
+	
 }
