@@ -22,9 +22,142 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.management.movie.*;
 	import org.asaplibrary.util.actionqueue.*;	
 
+	/**
+	Enables to move from one state to the other within a site structure, even using 'deep links'.
+	
+	<h2>Introduction</h2>
+	Flow states are represented by site 'sections', using the {@link IFlowSection} type.
+	
+	{@link FlowSection} inherits from {@link LocalController}, but can be assigned to any MovieClip in the site that needs to be navigated to.
+	FlowManager registers FlowSections and uses their names to build a tree-like structure.
+	
+	The syntax to go to a new section is simply:
+	<code>
+	FlowManager.getInstance().goto("Intro");
+	</code>
+	FlowManager finds the FlowSection with that name, and finds what sections need to be shown or hidden or even loaded.
+	
+	<h2>Site structure</h2>
+	The structure of the site is defined by hierarchical naming of FlowSections, using dots for each level. An example of a naming structure can be found in the example demo:
+	<code>
+	public static const SECTION_INTRO:String = "Intro";
+	public static const SECTION1:String      = "Sections.Section1";
+	public static const SECTION1_1:String    = "Sections.Section1.Section1_1";
+	public static const SECTION2:String      = "Sections.Section2";
+	</code>
+	When going from 'Sections.Section1' to 'Sections.Section2', FlowManager will detect that this is a sibling relationship. The possible types of relationships are defined in {@link FlowSectionOptions}.
+	
+	<h2>Showing and hiding</h2>
+	Each FlowSection has 2 methods that are called: {@link FlowSection#showAction} and {@link FlowSection#hideAction}. Depending on the type of relationship between the current and the new section, either one is called, or none.
+	
+	For example using the name list above, when going from 'Sections.Section1' to 'Sections.Section1.Section1_1', a CHILD relationship, the current section 'Sections.Section1' will not be hidden when showing the new section. So only the showAction of 'Sections.Section1.Section1_1' is called.
+	While between 'Intro' and 'Sections.Section1' no relationship can be found, Intro will be hidden as expected.
+	
+	Each showAction and hideAction function may return a {@link IAction} or a subclass thereof, including an {@link ActionQueue}. Any animation is processed sequentially - an ActionQueue is first finished before the next Action is called.
+	The default behavior will just set the visibility flag.
+	
+	In the example demo one of the sections overrides the default showAction - it lets the clip scale from small to large in a elastic manner:
+	<code>
+	public override function get showAction () : IAction {
+		var queue:ActionQueue = new ActionQueue("Section1_1 show");
+		queue.addAction(new AQSet().setVisible(this, true));
+		queue.addAction(new AQSet().setScale(this, .5, .5));
+		const CURRENT:Number = Number.NaN;
+		var effect:Function = Elastic.easeOut;
+		queue.addAction(new AQScale().scale(this, .8, CURRENT, CURRENT, 1, 1, effect));
+		return queue;
+	}
+	</code>
+	
+	<h2>Rules</h2>
+	Sometimes it is desired to manage these show and hide actions from a higher level.  For example after the intro animation we want to go to section 1.
+	To do this Rules can be defined.
+
+	Rules are created with the {@link FlowRule} class:
+	<code>
+	var rule:FlowRule = new FlowRule (
+		"Intro",
+		OPTIONS.SHOW_END,
+		OPTIONS.ANY,
+		proceedToSection1
+	);
+	FlowManager.getInstance().addRule(rule);
+	</code>
+	This rule says that for a section with name <code>Intro</code>, when encountering mode <code>SHOW_END</code> (end of the show action), and <code>ANY</code> relationship type, function <code>proceedToSection1</code> needs to be called. And that function simply has:
+	<code>
+	protected function proceedToSection1 (inSection:IFlowSection) : void {
+		FlowManager.getInstance().goto("Sections.Section1", false);
+	}
+	</code>	
+	You will notice that the current section is always passed to the callback function.
+	
+	<h3>Apply many</h3>
+	It is also possible to set a Rule for multiple sections at once. For example:
+	<code>
+	var rule:FlowRule = new FlowRule (
+		null,
+		OPTIONS.HIDE,
+		OPTIONS.DISTANT|OPTIONS.SIBLING,
+		doNotHide
+	);
+	FM.addRuleForSections (
+		rule,
+		[AppSettings.SECTION1, AppSettings.SECTION2, AppSettings.SECTION3, AppSettings.SECTION4]
+	);
+	</code>
+	You can define combinations of options using bitwise operators. In the example, <code>OPTIONS.DISTANT|OPTIONS.SIBLING</code> means either a distant relative OR a sibling.
+	Function doNotHide simply voids the default behavior:
+	<code>
+	protected function doNotHide (inSection:IFlowSection) : void {
+		// do nothing
+	}
+	</code>
+	
+	<h3>Enhancing default behavior</h3>
+	As 'man in the middle' you can control what happens before and after a showAction. In the example demo we move the stage right after showing the section. Function <code>moveSection</code> is called because of a Rule:
+	<code>
+	protected function moveSection (inSection:IFlowSection) : void {
+		var x:Number, y:Number;
+		switch (inSection.getName()) {
+			case AppSettings.SECTION1:
+				x = 0; y = 40;
+				break;
+			// etcetera
+		}
+		var queue:ActionQueue = moveQueue(x, y); // creates a moving animation as ActionQueue
+		FlowManager.getInstance().addAction(inSection.showAction);
+		FlowManager.getInstance().addAction(queue);
+		}
+	</code>
+	
+	<h2>Automatic loading of missing Sections</h2>
+	When a section is not found, FlowManager will try to load it. Right before loading it will dispatch an event with subtype {@link FlowNavigationEvent#WILL_LOAD}. After loading successfully an event with subtype {@link FlowNavigationEvent#LOADED} is sent.
+	Note: calls to sections within a to be loaded movie are not supported yet.
+	
+	<h2>Responding to state changes</h2>
+	Before a new state change, an event with subtype {@link FlowNavigationEvent#WILL_UPDATE} is sent. After the transition has been complete, an event with subtype {@link FlowNavigationEvent#UPDATE} is sent.
+	
+	In the example demo a MenuController listens for state changes. It is subscribed to changes using:
+	<code>
+	FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+	</code>
+	The receiving method is:
+	<code>
+	private function handleNavigationEvent (e:FlowNavigationEvent) : void {
+		switch (e.subtype) {
+			case FlowNavigationEvent.WILL_UPDATE:
+			case FlowNavigationEvent.UPDATE:
+				e.stopImmediatePropagation();
+				// handle button state
+				break;
+		}
+	}
+	</code>
+	Because {@link FlowNavigationEvent} events bubble through and other classes may deal with update changes as well, chance is that we get stuck in a recursive loop. We end this by writing <code>e.stopImmediatePropagation();</code>.
+	*/
 	public class FlowManager extends EventDispatcher {
 		
-		private static var mInstance:FlowManager;
+		private static var sInstance:FlowManager;
 		
 		private var mActionRunner:ActionRunner;
 		private var mSections:Object; // of type String => IFlowSection
@@ -34,17 +167,18 @@ package org.asaplibrary.management.flow {
 		private var mDownloadDirectory:String = "";
 		
 		/**
-		Access point for the one instance of the FlowManager
+		Access point for the one instance of the FlowManager.
 		*/
 		public static function getInstance () : FlowManager {
-			if (mInstance == null) {
-				mInstance = new FlowManager();
+			if (sInstance == null) {
+				sInstance = new FlowManager();
 			}
-			return mInstance;
+			return sInstance;
 		}
 		
 		/**
-
+		Registers a {@link FlowRule}.
+		@param inRule: FlowRule to register
 		*/
 		public function addRule (inRule:FlowRule) : void {
 			var sectionName:String = inRule.name;
@@ -56,7 +190,9 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Applies a FlowRule to a list of sections.
+		Applies a {@link FlowRule} to a list of sections.
+		@param inRule: FlowRule to register
+		@param inSectionNames: list of section names to apply the Rule to
 		*/
 		public function addRuleForSections (inRule:FlowRule, inSectionNames:Array) : void {
 			if (inRule == null || inSectionNames == null) return;
@@ -69,7 +205,8 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-
+		Adds an {@link IAction} to the existing list of actions.
+		@param inAction: action to add
 		*/
 		public function addAction (inAction:IAction) : void {
 			if (inAction == null) return;
@@ -77,7 +214,8 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Stores FlowSections in a look-up hash.
+		Stores FlowSections in a look-up hash. Called by {@link IFlowSection FlowSections}.
+		@param inFlowSection: the FlowSection to register
 		*/
 		public function registerFlowSection (inFlowSection:IFlowSection, inSectionName:String = null) : void {
 			var name:String = inSectionName ? inSectionName : inFlowSection.getName();
@@ -85,7 +223,10 @@ package org.asaplibrary.management.flow {
 		}
 			
 		/**
-		
+		Goes to a new section.
+		@param inSectionName: name of the {@link IFlowSection} to move to
+		@param inStopEverythingFirst: (optional) whether the current actions are finished first (false) or stopped halfway (true); default: true
+		@param inUpdateState: (optional) whether the state is updated when going to the new section. This is not always desirable - for instance showing a navigation bar should not update the state itself. Default: true (state is updated).
 		*/
 		public function goto (inSectionName:String, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
 			if (inStopEverythingFirst) {
@@ -95,23 +236,33 @@ package org.asaplibrary.management.flow {
 			runNextGoToSection();
 		}
 		
+		/**
+		Sets the download directory of to be loaded movies.
+		@param inUrl: URL of the directory; by default the current movie directory is used
+		*/
 		public function setDownloadDirectory (inUrl:String) : void {
 			mDownloadDirectory = inUrl;
 		}
 		
+		/**
+		Stops all running actions.
+		@implementationNote The {@link ActionRunner} is reset
+		*/
 		protected function reset () : void {
 			mActionRunner.reset();
 		}
 		
 		/**
-		
+		Gets the {@link IFlowSection} with name inSectionName, if it has been registered.
+		@param inSectionName: name of the FlowSection
+		@return The found FlowSection
 		*/
 		public function getSectionByName (inSectionName:String) : IFlowSection {
 			return mSections[inSectionName];
 		}
 		
 		/**
-		
+		Gets the currently visited {@link IFlowSection}.
 		*/
 		public function getCurrentSection () : IFlowSection {
 			if (mCurrentSectionName == null) return null;
@@ -119,7 +270,11 @@ package org.asaplibrary.management.flow {
 		}
 						
 		/**
-		
+		Adds {@link Action Actions} to the ActionRunner's list.
+		@param inSectionName: name of the FlowSection
+		@param inMode: one of the modes in {@FlowSectionOptions}
+		@param inType: one of the types in {@FlowSectionOptions}
+		@param inHelper: reference of the used {@link StringNodeHelper}
 		*/
 		protected function addSectionActions (inSectionName:String, inMode:uint, inType:uint, inHelper:StringNodeHelper ) : void {
 			var actions:Array = new Array();
@@ -143,7 +298,11 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		@return Action
+		Returns an Action stored with a FlowRule, if any.
+		@param inSectionName: name of the FlowSection
+		@param inMode: one of the modes in {@FlowSectionOptions}
+		@param inType: one of the types in {@FlowSectionOptions}
+		@return Action, or null if no Action was found.
 		*/
 		protected function getRuleAction (inSectionName:String, inMode:uint, inType:uint) : Action {
 			var rule:FlowRule;
@@ -199,6 +358,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
+		Adds section actions to the ActionRunner and starts the runner.
 		@sends FlowNavigationEvent#WILL_UPDATE
 		*/
 		protected function runNextGoToSection () : void {
@@ -245,7 +405,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Tells {@link MovieManager} to load a SWF movie with name inSectionName in the directory set by {@link #setDownloadDirectory) (default the current movie directory). The loaded movie event is processed in {@link #onMovieEvent}.
+		Tells {@link MovieManager} to load a SWF movie with name inSectionName in the directory set by {@link #setDownloadDirectory} (default the current movie directory). The loaded movie event is processed in {@link #onMovieEvent}.
 		@param inSectionName: name of the section and the SWF; a section named 'Sections.Section4' will be loaded as 'Section4.swf'
 		@sends FlowNavigationEvent#WILL_LOAD
 		*/
@@ -260,6 +420,8 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
+		Updates the state with the current section name.
+		@param inSectionName: name of the current FlowSection
 		@sends FlowNavigationEvent#UPDATE
 		*/
 		protected function setCurrentSection (inSectionName:String) : void {
@@ -294,12 +456,15 @@ package org.asaplibrary.management.flow {
 		}
 		
 		override public function toString () : String {
-			return ";FlowManager";
+			return ";org.asaplibrary.management.flow.FlowManager";
 		}
 		
 	}
 }
 
+/**
+Value Object for section names and 'should update state' flags.
+*/
 class SectionVO {
 	
 	public var sectionName:String;

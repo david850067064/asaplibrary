@@ -23,8 +23,24 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.actionqueue.*;
 	
+	/**
+	Building block of navigatable site sections. Subclasses will most likely override {@link #showAction} and {@link #hideAction}. For example:
+	<code>
+	public override function get hideAction () : IAction {
+		var queue:ActionQueue = new ActionQueue("Section1_1 hide");
+		const CURRENT:Number = Number.NaN;
+		var effect:Function = Quadratic.easeOut;
+		queue.addAction(new AQScale().scale(this, .3, CURRENT, CURRENT, 0, 0, effect));
+		queue.addAction(new AQSet().setVisible(this, false));
+		return queue;
+	}
+	</code>
+	*/
 	public class FlowSection extends LocalController implements IFlowSection {
 		
+		/**
+		Creates a new FlowSection.
+		*/
 		function FlowSection (inName:String = null) {
 			super(inName);
 			visible = false;
@@ -32,14 +48,14 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		
+		The Action to be run when the section is shown. Actions are run by {@link ActionRunner}.
 		*/
 		public function get showAction () : IAction {
 			return new Action(this, show);
 		}
 		
 		/**
-		
+		The Action to be run when the section is hidden. Actions are run by {@link ActionRunner}.
 		*/
 		public function get hideAction () : IAction {
 			return new Action(this, hide);
@@ -60,7 +76,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		
+		Runs {@link #showAction} stand-alone, for testing purposes. 
 		*/
 		protected function showStandalone () : void {
 			var runner:ActionRunner = new ActionRunner();
@@ -69,7 +85,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		
+		Runs {@link #hideAction} stand-alone, for testing purposes. 
 		*/
 		protected function hideStandalone () : void {
 			var runner:ActionRunner = new ActionRunner();
@@ -81,7 +97,7 @@ package org.asaplibrary.management.flow {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "FlowSection: " + getName();
+			return ";org.asaplibrary.management.flow.FlowSection: " + getName();
 		}
 		
 	}

@@ -17,23 +17,26 @@ limitations under the License.
 
 package org.asaplibrary.management.flow {
 	
+	/**
+	FlowSection relation types and display mode types. The options use bitwise operators, see {@link ButtonStates} for an example.
+	*/
 	public class FlowSectionOptions {
 
-		public static const NONE:uint =      (1<<0);		
-		public static const EQUAL:uint =     (1<<1);
-		public static const UNRELATED:uint = (1<<2);		
-		public static const ROOT:uint =      (1<<3);
-		public static const DISTANT:uint =  (1<<4);
-		public static const SIBLING:uint =   (1<<5);
-		public static const CHILD:uint =     (1<<6);
-		public static const PARENT:uint =    (1<<7);
+		public static const NONE:uint =      (1<<0); /**< Relation type. */
+		public static const EQUAL:uint =     (1<<1); /**< Relation type. */
+		public static const UNRELATED:uint = (1<<2); /**< Relation type. */
+		public static const ROOT:uint =      (1<<3); /**< Relation type. */
+		public static const DISTANT:uint =   (1<<4); /**< Relation type. */
+		public static const SIBLING:uint =   (1<<5); /**< Relation type. */
+		public static const CHILD:uint =     (1<<6); /**< Relation type. */
+		public static const PARENT:uint =    (1<<7); /**< Relation type. */
 		
-		public static const ANY:uint =       UNRELATED|ROOT|DISTANT|SIBLING|CHILD|PARENT;
+		public static const ANY:uint =       UNRELATED|ROOT|DISTANT|SIBLING|CHILD|PARENT; /**< Relation type. */
 		
-		public static const SHOW:uint =      (1<<8);
-		public static const SHOW_END:uint =  (1<<9);
-		public static const HIDE:uint =      (1<<10);
-		public static const HIDE_END:uint =  (1<<11);
-		public static const LOAD:uint =      (1<<12);
+		public static const SHOW:uint =      (1<<8); /**< Display mode type. */
+		public static const SHOW_END:uint =  (1<<9); /**< Display mode type. */
+		public static const HIDE:uint =      (1<<10); /**< Display mode type. */
+		public static const HIDE_END:uint =  (1<<11); /**< Display mode type. */
+		public static const LOAD:uint =      (1<<12); /**< Display mode type. */
 	}
 }

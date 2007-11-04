@@ -18,7 +18,7 @@ limitations under the License.
 package org.asaplibrary.management.flow {
 	
 	/**
-	
+	Behavior rule for FlowManager when traversing from one state to the other. See {@link FlowManager} for examples.
 	*/
 	public class FlowRule {
 	
@@ -28,9 +28,10 @@ package org.asaplibrary.management.flow {
 		public var callback:Function;
 		
 		/**
-		@param inName: name of FlowSection
-		@param inMode: the mode, either {@link FlowSectionOptions#SHOW}, {@link FlowSectionOptions#SHOW_END}, {@link FlowSectionOptions#HIDE} or {@link FlowSectionOptions#HIDE_END}
-		@param inType: one of the type options in {@link FlowSectionOptions}
+		Creates a new FlowRule.
+		@param inName: name of the {@link IFlowSection}
+		@param inMode: the display mode, see {@link FlowSectionOptions}
+		@param inType: relation type, see {@link FlowSectionOptions}
 		@param inCallbackFunction: the function to call
 		*/
 		function FlowRule (inName:String, inMode:uint, inType:uint, inCallback:Function) {
@@ -41,14 +42,14 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Creates a copy of an existing rule.
+		Creates a copy of an existing FlowRule.
 		*/
 		public function copy () : FlowRule {
 			return new FlowRule(name, mode, type, callback);
 		}
 		
 		public function toString () : String {
-			return "Rule: name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
+			return ";org.asaplibrary.management.flow.FlowRule: name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
 		}
 	}
 

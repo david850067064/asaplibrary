@@ -20,6 +20,9 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.management.movie.ILocalController;
 	import org.asaplibrary.util.actionqueue.IAction;
 
+	/**
+	Building block of navigatable site sections. 
+	*/
 	public interface IFlowSection extends ILocalController {
 		
 		function get hideAction () : IAction;
