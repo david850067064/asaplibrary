@@ -20,40 +20,63 @@ package org.asaplibrary.management.flow {
 	import flash.events.Event;
 	
 	/**
-	Event objects that are dispatched by {@link FlowManager}.
+	Event objects that are dispatched by {@link FlowManager}. Subscribe using:
+	<code>
+	FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+	</code>
 	*/
 	
 	public class FlowNavigationEvent extends Event {
 	
+		/**
+		Event type.
+		*/
 		public static const _EVENT:String = "navigationEvent";
 		
+		/**
+		Event subtype sent before changing state.
+		*/
 		public static const WILL_UPDATE:String = "willUpdate";
+		/**
+		Event subtype sent after changing state.
+		*/
 		public static const UPDATE:String = "update";
-		
+		/**
+		Event subtype sent before trying to load a section movie.
+		*/
 		public static const WILL_LOAD:String = "willLoad";
+		/**
+		Event subtype sent after successfully loading a section movie.
+		*/
 		public static const LOADED:String = "loaded";
 		
 		public var subtype:String;
-		public var id:String;
+		public var name:String;
 		public var sender:Object
 	
 		/**
 		Creates a new FlowNavigationEvent.
+		@param inSubtype: either subtype, see above
+		@param inName: name of the {@link FlowSection}
+		@param inSender: sender of the event
 		*/
-		public function FlowNavigationEvent (inSubtype:String, inId:String, inSender:Object) {
+		public function FlowNavigationEvent (inSubtype:String, inName:String, inSender:Object) {
 			super(_EVENT, true, true);
 			
 			subtype = inSubtype;
-			id = inId;
+			name = inName;
 			sender = inSender;
 		}
 		
 		public override function toString () : String {
-			return ";FlowNavigationEvent: subtype=" + subtype + "; id=" + id + "; sender=" + sender;
+			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; sender=" + sender;
 		}
 		
+		/**
+		Creates a copy of an existing FlowNavigationEvent.
+		*/
 		public override function clone() : Event {
-			return new FlowNavigationEvent(subtype, id, sender);
+			return new FlowNavigationEvent(subtype, name, sender);
 		} 
 	}
 }
