@@ -16,7 +16,6 @@
 	*/
 	public class ConditionTestCase extends TestCase {
 		
-		private var mInstance:ConditionTestCase = this as ConditionTestCase;
 		private var mCanvas : Sprite;
 
 		private var sConditionMetCallFunctionCalled:uint = 0;

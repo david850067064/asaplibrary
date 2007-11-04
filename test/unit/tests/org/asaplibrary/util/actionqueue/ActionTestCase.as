@@ -15,8 +15,6 @@
 
 	*/
 	public class ActionTestCase extends TestCase {
-		
-		private var mInstance:ActionTestCase = this as ActionTestCase;
 
 		public function ActionTestCase () {
 			super();
