@@ -18,43 +18,79 @@ limitations under the License.
 package org.asaplibrary.util.actionqueue {
 	
 	import flash.display.*;
-		
+	
 	public class AQSet {
 		
 		/**
-		
+		Sets the location of a DisplayObject
+		@param inDO: DisplayObject to set
+		@param inX: (optional) x position; default the current x position
+		@param inY: (optional) y position; default the current y position
+		@return The performing Action.
 		*/
 		public function setLoc (inDO:DisplayObject,
 								inX:Number = Number.NaN,
-								inY:Number = Number.NaN) : void {
+								inY:Number = Number.NaN) : Action {
+			return new Action(this, doSetLoc, [inDO, inX, inY]);
+		}
+		
+		protected function doSetLoc (inDO:DisplayObject,
+									 inX:Number = Number.NaN,
+									 inY:Number = Number.NaN) : void {
 			var x:Number = (!isNaN(inX)) ? inX : inDO.x;
 			var y:Number = (!isNaN(inY)) ? inY : inDO.y;
 			inDO.x = x;
 			inDO.y = y;
 		}
-
-		/**
 		
+		/**
+		Sets the visible flag of a DisplayObject.
+		@param inDO: DisplayObject to set
+		@param inFlag: visibility flag
+		@return The performing Action.
 		*/
 		public function setVisible (inDO:DisplayObject,
-									inFlag:Boolean) : void {
+									inFlag:Boolean) : Action {
+			return new Action(this, doSetVisible, [inDO, inFlag]);
+		}
+		
+		protected function doSetVisible (inDO:DisplayObject,
+										 inFlag:Boolean) : void {
 			inDO.visible = inFlag;
 		}
 		
 		/**
-		
+		Sets the alpha value of a DisplayObject.
+		@param inDO: DisplayObject to set
+		@param inAlpha: alpha value between 0 and 1
+		@return The performing Action.
 		*/
 		public function setAlpha (inDO:DisplayObject,
-								  inAlpha:Number) : void {
+								  inAlpha:Number) : Action {
+			return new Action(this, doSetAlpha, [inDO, inAlpha]);
+		}
+		
+		protected function doSetAlpha (inDO:DisplayObject,
+									   inAlpha:Number) : void {
 			inDO.alpha = inAlpha;
 		}
 		
 		/**
-		
+		Sets the scale of a DisplayObject.
+		@param inDO: DisplayObject to set
+		@param inScaleX: (optional) x scale; default the current x scale
+		@param inScaleY: (optional) y scale; default the current y scale
+		@return The performing Action.
 		*/
 		public function setScale (inDO:DisplayObject,
-								  inScaleX:Number,
-								  inScaleY:Number) : void {
+								  inScaleX:Number = Number.NaN,
+								  inScaleY:Number = Number.NaN) : Action {
+			return new Action(this, doSetScale, [inDO, inScaleX, inScaleY]);
+		}
+		
+		protected function doSetScale (inDO:DisplayObject,
+									   inScaleX:Number,
+									   inScaleY:Number) : void {
 			var scaleX:Number = (!isNaN(inScaleX)) ? inScaleX : inDO.scaleX;
 			var scaleY:Number = (!isNaN(inScaleY)) ? inScaleY : inDO.scaleY;
 			inDO.scaleX = scaleX;
@@ -62,19 +98,34 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Sets a DisplayObject to the mouse position.
+		@param inDO: DisplayObject to set
+		@return The performing Action.
 		*/
-		public function setToMouse (inDO:DisplayObject) : void {
+		public function setToMouse (inDO:DisplayObject) : Action {
+			return new Action(this, doSetToMouse, [inDO]);
+		}
+		
+		protected function doSetToMouse (inDO:DisplayObject) : void {
 			inDO.x = inDO.parent.mouseX;
 			inDO.y = inDO.parent.mouseY;
-		}			
+		}
 		
 		/**
-		
+		Sets a DisplayObject to the center of the stage.
+		@param inOffsetX: (optional) x offset; default 0
+		@param inOffsetY: (optional) y offset; default 0
+		@return The performing Action.
 		*/
 		public function centerOnStage (inDO:DisplayObject,
 								  	   inOffsetX:Number = Number.NaN,
-								   	   inOffsetY:Number = Number.NaN) : void {
+								   	   inOffsetY:Number = Number.NaN) : Action {
+			return new Action(this, doCenterOnStage, [inDO, inOffsetX, inOffsetY]);
+		}
+		
+		protected function doCenterOnStage (inDO:DisplayObject,
+								 			inOffsetX:Number = Number.NaN,
+											inOffsetY:Number = Number.NaN) : void {
 			var x:Number = inDO.stage.stageWidth / 2;
 			var y:Number = inDO.stage.stageHeight / 2;
 			
@@ -86,10 +137,18 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Sets the enabled flag of a MovieClip
+		@param inOffsetX: (optional) x offset; default 0
+		@param inOffsetY: (optional) y offset; default 0
+		@return The performing Action.
 		*/
 		public function setEnabled (inMC:MovieClip,
-									inState:Boolean) : void {
+									inState:Boolean) : Action {
+			return new Action(this, doSetEnabled, [inMC, inState]);
+		}
+		
+		protected function doSetEnabled (inMC:MovieClip,
+							  		 	 inState:Boolean) : void {
 			inMC.enabled = inState;
 		}
 		
