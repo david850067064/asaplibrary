@@ -75,7 +75,6 @@
 		Called when a button is clicked.
 		*/
 		private function handleButtonClick (e:MouseEvent) : void {
-			e.stopImmediatePropagation();
 			var button:MenuButton = e.currentTarget as MenuButton;
 			if (button == mSelectedButton) return;
 			// do not draw yet, but wait until we receive an update event in handleNavigationEvent
@@ -93,10 +92,10 @@
 				case FlowNavigationEvent.WILL_UPDATE:
 				case FlowNavigationEvent.UPDATE:
 					e.stopImmediatePropagation();
-					if (mSelectedButton && mSelectedButton.id == e.id) return;
-					var button:MenuButton = mButtons[e.id];
+					if (mSelectedButton && mSelectedButton.id == e.name) return;
+					var button:MenuButton = mButtons[e.name];
 					if (button != null) {
-						setSelectedButton( mButtons[e.id] );
+						setSelectedButton( mButtons[e.name] );
 					}
 					break;
 				default:
