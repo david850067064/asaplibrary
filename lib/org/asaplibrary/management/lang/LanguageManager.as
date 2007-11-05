@@ -15,92 +15,93 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Class for managing language dependencies in an application.
-For text, the language dependent texts are expected to be in an xml per language, with the following structure:
-<code>
-<texts>
-<text id="1">Hello World</text>
-<text id="2"><[!CDATA[<b>Hello</b> World with bold Hello]]></text>
-<text id="3" html="false"><[!CDATA[<b>Hello</b> World with visible html tags]]></text>
-<text id="4"><[!CDATA[>>>Hello World<<<]]></text>
-</texts>
-</code>
-The 'id' attribute is mandatory, and has to be a number.
-The 'html' attribute is optional. If left out, text is rendered as HTML text; any other value than "false" is seen as true. When false, the text is set directly into the text field, and any html tags are ignored.
-In case the text contains xml characters, the text has to be wrapped in a {@code  <![CDATA[[]]>} tag.
-The id is expected to be unique. When it isn't, the last item is taken.
-The xml file containing the language dependent texts has to be loaded with the method {@link #loadXML}. 
-When loaded and parsed, the LanguageManager sends an event of type LanguageManager.EVENT_LOADED. Subscribe to this event if you wish to be notified.
-No event is sent when the loading fails, only a Log message of level ERROR is output.
-Once an xml file has been loaded, data is available by id through {@link #getTextByID} and {@link #getDataByID}. Since the LanguageManager is a Singleton, the language dependent data is available throughout your application.
-However, the LanguageManager also contains a mechanism for automatic assignment of data. To use this functionality, use the provided class {@link MultiLanguageTextContainer}, or write your own implementation of {@link IMultiLanguageTextContainer}.
-When writing your own class, allow for a way to determine the id of the text that is to be used by a specific instance for your class. In case of the MultiLanguageTextContainer class, this id is retrieved from the name of the movieclip instance to which the class is linked, by taking everything after the last underscore and converting to a number. So "myText_1" gets the text with id=1.
-Once the id is known inside your class, add the instance to the LanguageManager with {@link #addContainer}, providing the id and the instance itself as parameters. If data has been loaded, it is provided to the instance immediately. Whenever new data is loaded, the LanguageManager calls "setData" on each instance that was added, thereby updating language dependent text instantaneously.
-A good spot to add an instance to the LanguageManager is when Event.ADDED is received. Make sure to remove it again when Event.REMOVED is received, to allow for proper memory management. This also makes sure that the instance keeps its text when subject to animation key frames.
-Instances can share the same id, and thereby have the same text.
-By default, the LanguageManager returns an empty string (or provides an empty string in the data) when a requested id is not found. 
-This has two drawbacks:
-<ul><li>The textfield becomes effectively invisible since there is no text in it</li>
-<li>Formatting of the textfield (such as weight or alignment) may be lost when the textfield is cleared</li></ul>
-To allow for easier debugging, the flag {@link #generateDebugText} can be set. If an unknown id is requested, the returned text will be ">> id = #id", where #id is replaced with the actually requested id. This makes it easier to find missing texts from the xml files.
-@example
-<ul>
-<li>Loading an xml file into the LanguageManager, specifying a language code to be used in determining the name of the xml file to be loaded.
-<code>
-// @param inCode: 2-letter ISO language code; will be added to filename. Example: with parameter "en" the file "texts_en.xml" will be loaded.
-private function loadLanguage (inCode:String) : void {
-var lm:LanguageManager = LanguageManager.getInstance();
-lm.addEventListener(LanguageManager.EVENT_LOADED, handleLanguageLoaded);
-lm.loadXML("../xml/texts_" + inCode + ".xml");
-}
-private function handleLanguageLoaded () : Void {
-Log.debug("handleLanguageLoaded: Language file loaded.", toString());
-}
-</code>
-</li>
-<li>Assigning a text to a textfield manually from anywhere in your code:
-<code>myTextfield.text = LanguageManager.getInstance().getTextByID(23);</code>
-</li>
-<li>A class that gets a random text from the first 10 texts of the LanguageManager each time it is loaded:
-<code>
-class MyText extends MovieClip implements IMultiLanguageTextContainer {
-private var mID:Number;
-private var myTextField:TextField;
-public function MyText () {
-addEventListener(Event.ADDED, handleAdded);
-addEventListener(Event.REMOVED, handleRemoved);
-}
-public function setData (inData : TextItemData) : Void {
-setText(inData.text, inData.isHTML);
-}
-public function setText (inText:String, inIsHTML:Boolean = true) : Void {
-if (inIsHTML) tf_txt.htmlText = inText;
-else tf_txt.text = inText;
-}
-private function handleAdded (e:Event) : Void {
-		mID = Math.floor(10 * Math.random());
-		
-		LanguageManager.getInstance().addContainer(mID, this);
-	}
-	
-	private function handleRemoved (e:Event) : Void {
-		LanguageManager.getInstance().removeContainer(this);
-	}
-}
-</code>
-</li>
-</ul>
-*/
-
 package org.asaplibrary.management.lang {
+
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import org.asaplibrary.data.xml.*;
 	import org.asaplibrary.util.debug.Log;
 
-	
+	/**
+	Class for managing language dependencies in an application.
+	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
+	<code>
+	<texts>
+	<text id="1">Hello World</text>
+	<text id="2">&lt;[!CDATA[<b>Hello</b> World with bold Hello]]&gt;</text>
+	<text id="3" html="false">&lt;[!CDATA[<b>Hello</b> World with visible html tags]]&gt;</text>
+	<text id="4">&lt;[!CDATA[>>>Hello World<<<]]&gt;</text>
+	</texts>
+	</code>
+	The 'id' attribute is mandatory, and has to be a number.
+	The 'html' attribute is optional. If left out, text is rendered as HTML text; any other value than "false" is seen as true. When false, the text is set directly into the text field, and any html tags are ignored.
+	In case the text contains xml characters, the text has to be wrapped in a {@code  <![CDATA[[]]>} tag.
+	The id is expected to be unique. When it isn't, the last item is taken.
+	The xml file containing the language dependent texts has to be loaded with the method {@link #loadXML}. 
+	When loaded and parsed, the LanguageManager sends an event of type LanguageManager.EVENT_LOADED. Subscribe to this event if you wish to be notified.
+	No event is sent when the loading fails, only a Log message of level ERROR is output.
+	Once an xml file has been loaded, data is available by id through {@link #getTextByID} and {@link #getDataByID}. Since the LanguageManager is a Singleton, the language dependent data is available throughout your application.
+	However, the LanguageManager also contains a mechanism for automatic assignment of data. To use this functionality, use the provided class {@link MultiLanguageTextContainer}, or write your own implementation of {@link IMultiLanguageTextContainer}.
+	When writing your own class, allow for a way to determine the id of the text that is to be used by a specific instance for your class. In case of the MultiLanguageTextContainer class, this id is retrieved from the name of the movieclip instance to which the class is linked, by taking everything after the last underscore and converting to a number. So "myText_1" gets the text with id=1.
+	Once the id is known inside your class, add the instance to the LanguageManager with {@link #addContainer}, providing the id and the instance itself as parameters. If data has been loaded, it is provided to the instance immediately. Whenever new data is loaded, the LanguageManager calls "setData" on each instance that was added, thereby updating language dependent text instantaneously.
+	A good spot to add an instance to the LanguageManager is when Event.ADDED is received. Make sure to remove it again when Event.REMOVED is received, to allow for proper memory management. This also makes sure that the instance keeps its text when subject to animation key frames.
+	Instances can share the same id, and thereby have the same text.
+	By default, the LanguageManager returns an empty string (or provides an empty string in the data) when a requested id is not found. 
+	This has two drawbacks:
+	<ul><li>The textfield becomes effectively invisible since there is no text in it</li>
+	<li>Formatting of the textfield (such as weight or alignment) may be lost when the textfield is cleared</li></ul>
+	To allow for easier debugging, the flag {@link #generateDebugText} can be set. If an unknown id is requested, the returned text will be ">> id = #id", where #id is replaced with the actually requested id. This makes it easier to find missing texts from the xml files.
+	@example
+	<ul>
+	<li>Loading an xml file into the LanguageManager, specifying a language code to be used in determining the name of the xml file to be loaded.
+	<code>
+	// @param inCode: 2-letter ISO language code;
+	// will be added to filename.
+	// Example: with parameter "en" the file "texts_en.xml" will be loaded.
+	private function loadLanguage (inCode:String) : void {
+	var lm:LanguageManager = LanguageManager.getInstance();
+	lm.addEventListener(LanguageManager.EVENT_LOADED, handleLanguageLoaded);
+	lm.loadXML("../xml/texts_" + inCode + ".xml");
+	}
+	private function handleLanguageLoaded () : Void {
+	Log.debug("handleLanguageLoaded: Language file loaded.", toString());
+	}
+	</code>
+	</li>
+	<li>Assigning a text to a textfield manually from anywhere in your code:
+	<code>myTextfield.text = LanguageManager.getInstance().getTextByID(23);</code>
+	</li>
+	<li>A class that gets a random text from the first 10 texts of the LanguageManager each time it is loaded:
+	<code>
+	class MyText extends MovieClip implements IMultiLanguageTextContainer {
+	private var mID:Number;
+	private var myTextField:TextField;
+	public function MyText () {
+		addEventListener(Event.ADDED, handleAdded);
+		addEventListener(Event.REMOVED, handleRemoved);
+	}
+	public function setData (inData : TextItemData) : Void {
+	setText(inData.text, inData.isHTML);
+	}
+	public function setText (inText:String, inIsHTML:Boolean = true) : Void {
+		if (inIsHTML) tf_txt.htmlText = inText;
+		else tf_txt.text = inText;
+	}
+	private function handleAdded (e:Event) : Void {
+			mID = Math.floor(10 * Math.random());
+			
+			LanguageManager.getInstance().addContainer(mID, this);
+		}
+		
+		private function handleRemoved (e:Event) : Void {
+			LanguageManager.getInstance().removeContainer(this);
+		}
+	}
+	</code>
+	</li>
+	</ul>
+	*/
 	public class LanguageManager extends EventDispatcher {
 		/** The event sent when the language xml has been loaded and parsed */	
 		public static const EVENT_LOADED:String = "onLanguageLoaded";
@@ -310,7 +311,7 @@ package org.asaplibrary.management.lang {
 }
 
 /**
-* Helper class for storing information about IMultiLanguageTextContainer vs. ID
+Helper class for storing information about IMultiLanguageTextContainer vs. ID
 */
 import org.asaplibrary.management.lang.IMultiLanguageTextContainer;
 
