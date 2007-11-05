@@ -109,7 +109,7 @@ package org.asaplibrary.util.actionqueue {
 			if (mActions.length == 0) return null;
 			mFinished = false;
 			mRunning = true;
-			dispatchEvent(new ActionEvent(ActionEvent.STARTED, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STARTED, this));
 			step();
 			return null;
 		}
@@ -124,7 +124,7 @@ package org.asaplibrary.util.actionqueue {
 			if (mCurrentAction is ITimedAction) {
 				ITimedAction(mCurrentAction).pause(inContinueWhereLeftOff);
 			}
-			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.PAUSED, this));
 		}
 		
 		/**
@@ -141,7 +141,7 @@ package org.asaplibrary.util.actionqueue {
 			}
 			setCurrentAction(null);
 			mRunning = false;
-			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.STOPPED, this));
 		}
 	
 		/**
@@ -171,7 +171,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function quit () : void {
 			reset();
-			dispatchEvent(new ActionEvent(ActionEvent.QUIT, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.QUIT, this));
 		}
 		
 		/**
@@ -198,7 +198,7 @@ package org.asaplibrary.util.actionqueue {
 		public function resume () : void {
 			mPaused = false;
 			mRunning = true;
-			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.RESUMED, this));
 			if (mCurrentAction is ITimedAction) {
 				ITimedAction(mCurrentAction).resume();
 				return;
@@ -360,7 +360,7 @@ package org.asaplibrary.util.actionqueue {
 		protected function finish () : void {
 			mFinished = true;
 			mRunning = false;
-			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this, mName));
+			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this));
 		}
 		
 		protected function get currentStep () : uint {

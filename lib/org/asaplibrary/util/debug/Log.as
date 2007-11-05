@@ -215,7 +215,7 @@ public class Log extends EventDispatcher {
 	*	Add a function to the event listeners
 	*/
 	private function addListener (inFunction:Function) : void {
-		addEventListener(LogEvent.EVENT_LOG, inFunction);
+		addEventListener(LogEvent._EVENT, inFunction);
 	}
 	
 	/**

@@ -21,7 +21,7 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.MouseEvent;
 
 	/**
-	Passes events for {@link ButtonBehaviorDelegate} (and subclasses thereof). Subscribe to type <code>UPDATE</code>.
+	Passes events for {@link ButtonBehaviorDelegate} (and subclasses thereof). Subscribe to type <code>_EVENT</code>.
 	@example
 	<code>
 	mDelegate.addEventListener(ButtonBehaviorDelegateEvent._EVENT, handleUpdate);
@@ -36,8 +36,10 @@ package org.asaplibrary.ui.buttons {
 	*/
 	public class ButtonBehaviorDelegateEvent extends Event {
 	
-		public static const _EVENT:String = "onButtonBehaviorDelegateEvent";
-		public static const UPDATE:String = "onButtonBehaviorDelegateUpdate";
+		/** Event type. */
+		public static const _EVENT:String = "buttonBehaviorDelegateEvent";
+		/** Event subtype. */
+		public static const UPDATE:String = "buttonBehaviorDelegateUpdate";
 		
 		public var subtype:String;
 		public var state:uint;
@@ -47,6 +49,7 @@ package org.asaplibrary.ui.buttons {
 		public var mouseEvent:MouseEvent;
 
 		/**
+		Creates a new ButtonBehaviorDelegateEvent.
 		@param inSubtype: "UPDATE"
 		@param inState: one of the options in {@link ButtonStates}
 		@param inSelected: the selected button state
@@ -73,6 +76,9 @@ package org.asaplibrary.ui.buttons {
 			return ";org.asaplibrary.ui.buttons.ButtonBehaviorDelegateEvent; state=" + state + "; selected=" + selected + "; enabled=" + enabled + "; pressed=" + pressed + "; mouseEvent=" + mouseEvent;
 		}
 		
+		/**
+		Creates a copy of an existing ButtonBehaviorDelegateEvent.
+		*/
 		public override function clone() : Event {
 			return new ButtonBehaviorDelegateEvent(subtype, state, selected, enabled, pressed, mouseEvent);
 		} 

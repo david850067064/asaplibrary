@@ -151,7 +151,6 @@
 		}
 		
 		public function performTestaddAction2 () : void {
-			trace("performTestaddAction2");
 			sTestaddActionCount++;
 		}
 		

@@ -57,7 +57,6 @@ package org.asaplibrary.data.xml {
 	<li>Since the last parameter to the call to {@link #parseList} is false, an error in the xml data will result in mURLs being null. The parsing class determines if the data is valid or not, by returning true or false from parseObject().</li>
 	</ul> 
 	*/
-	 
 	public class Parser {
 	
 		/**
@@ -69,13 +68,13 @@ package org.asaplibrary.data.xml {
 		*/
 		public static function parseList (inList:XMLList,
 										  inClass:Class,
-										  ignoreError:Boolean = false) : Array {
+										  inIgnoreError:Boolean = false) : Array {
 			var a:Array = new Array();
 			
 			var len:Number = inList.length();
 			for (var i : Number = 0; i < len; i++) {
-				var ipa:IParsable = parseXML(inList[i], inClass, ignoreError);
-				if ((ipa == null) && !ignoreError) return null;
+				var ipa:IParsable = parseXML(inList[i], inClass, inIgnoreError);
+				if ((ipa == null) && !inIgnoreError) return null;
 				else a.push(ipa);
 			}
 			
@@ -91,9 +90,9 @@ package org.asaplibrary.data.xml {
 		*/
 		public static function parseXML (inXML:XML,
 										 inClass:Class,
-										 ignoreError:Boolean = false) : IParsable {
+										 inIgnoreError:Boolean = false) : IParsable {
 			var ipa:IParsable = new inClass();
-			if (ipa.parseXML(inXML) || ignoreError) {
+			if (ipa.parseXML(inXML) || inIgnoreError) {
 				return ipa;
 			} else {
 				return null;

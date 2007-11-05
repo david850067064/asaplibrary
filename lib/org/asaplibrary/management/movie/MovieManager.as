@@ -25,7 +25,21 @@ package org.asaplibrary.management.movie {
 	import org.asaplibrary.util.debug.Log;
 
 	/**
+	MovieManager handles administration, loading and retrieving of separate SWF movies.
 	
+	Start the loading process by calling {@link #loadMovie}.
+	After this, three events of type {@link MovieManagerEvent} can be expected: when the movie has been {@link MovieManagerEvent#CONTROLLER_INITIALIZED initialized}, has been {@link MovieManagerEvent#MOVIE_LOADED loaded}, and is {@link MovieManagerEvent#MOVIE_READY ready}.
+	Ready is defined as both initialized and loaded.
+
+	Once a movie has been loaded, its {@link LocalController} reference is sent with the MovieManagerEvent, or can be retrieved by name.
+
+	Naming of movies:
+	- use a unique name for each movie
+	- use publicly accessible constants for movie names. This makes it easier to change names throughout the application.
+	- the name has to be given when loading the movie with MovieManager.getInstance().loadMovie(). 
+	This means the local controller of a standalone running movie does not have a name. 
+	This can be circumvented (if necessary) by giving the local controller its name locally when it is running standalone. 
+	ILocalController has a function isStandalone() for checking this.
 	*/
 	public class MovieManager extends EventDispatcher {
 	
@@ -60,11 +74,11 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Start loading the movie with path inSource.url, and adds it to the list of movies under the name inSource.name
+		Start loading the movie with path inURL, and adds it to the list of movies under the name inName
 		@param inName: unique identifying name for the movie to be loaded
 		@param inURL: url where the swf can be found
-		@param inIsVisible: visibility of movie when loaded, default = true
-		@return: false if the loader cannot load the movie, or the movie could not be added to the list (usually because another or the same movie with the same name exists already), otherwise true
+		@param inIsVisible: visibility of movie when loaded, default = true (visible)
+		@return False if the loader cannot load the movie, or the movie could not be added to the list (usually because another or the same movie with the same name exists already); otherwise true.
 		*/
 		public function loadMovie (inURL:String,
 								   inName:String,
@@ -126,10 +140,10 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Finds a local controller by name
-		@param inName: unique identifier for the loaded movie
+		Finds a LocalController by name.
+		@param inName: name of the LocalController
 		@param inHideWarning: do not emit a Log warning if the movie is not found; default false (a warning is given)
-		@return The controller for that movie, or null if none was found
+		@return The controller for that movie, or null if no controller could be found.
 		*/
 		public function getLocalControllerByName (inName:String, inHideWarning:Boolean = false) : ILocalController {
 			var md:MovieData = getMovieDataByName(inName);
@@ -143,8 +157,8 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Add a specific controller; used by standalone LocalController to notify its existence to the MovieManager
-		@param	inController
+		Add a specific LocalController; used by standalone LocalControllers to notify its existence to the MovieManager.
+		@param inController: the LocalController to add
 		*/
 		public function addLocalController (inController:ILocalController) : void {
 			// check if movie has been added previously via loadMovie() 
@@ -162,10 +176,10 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Adds a movie with specified properties to the list, after checking if a movie with the same name exists already
-		@param inName: unique identifying name for the movie to be loaded
+		Adds a movie with specified properties to the list, after checking if a movie with the same name already exists.
 		@param inURL: url where the swf can be found
-		@return : false if another movie with the same name exists in the list, otherwise true
+		@param inName: unique identifying name for the movie to be loaded
+		@return False if another movie with the same name exists in the list; otherwise true.
 		*/
 		private function addMovie (inURL:String, inName:String) : Boolean {
 			var md:MovieData = getMovieDataByName(inName);
@@ -182,9 +196,9 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Find MovieData object for specified name
-		@param	inName
-		@return data object, or null if none was found
+		Find a MovieData object for specified name.
+		@param inName: name of the LocalController
+		@return MovieData with attribute name as inName; or null if none could be found.
 		*/
 		private function getMovieDataByName (inName:String) : MovieData {
 			var len:int = mMovies.length;
@@ -196,9 +210,9 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		Find MovieData object for specified controller
-		@param	inName
-		@return data object, or null if none was found
+		Find MovieData object for specified controller.
+		@param inName: name of the LocalController
+		@return MovieData object, or null if none could be found.
 		*/
 		private function getMovieDataByController (inController:ILocalController) : MovieData {
 			var len:int = mMovies.length;
@@ -211,8 +225,8 @@ package org.asaplibrary.management.movie {
 
 		/**
 		Find MovieData object for specified container
-		@param	inName
-		@return data object, or null if none was found
+		@param inName: name of the LocalController
+		@return MovieData object, or null if none could be found.
 		*/
 		private function getMovieDataByContainer (inObject:DisplayObject) : MovieData {
 			var len:int = mMovies.length;
@@ -224,8 +238,8 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		Handle AssetLoaderEvent from AssetLoader
-		@param	e
+		Handle AssetLoaderEvent from {@link AssetLoader}.
+		@param e: event sent by AssetLoader
 		*/
 		private function handleLoaderEvent (e:AssetLoaderEvent) : void {
 			switch (e.subtype) {
@@ -235,9 +249,8 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Handle error during loading
-		@param e
-		@return
+		Handle errors during loading.
+		@param e: event sent by AssetLoader
 		@sends MovieManagerEvent#ERROR
 		*/
 		private function handleLoaderError (e:AssetLoaderEvent) : void {
@@ -250,9 +263,8 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Handle event that movie has been loaded
-		@param	e
-		@return
+		Handle event that the movie has been loaded.
+		@param e: event sent by AssetLoader
 		@sends MovieManagerEvent#MOVIE_LOADED
 		*/
 		private function handleMovieLoaded (e:AssetLoaderEvent) : void {
@@ -281,9 +293,9 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
-		Set local controller for specified data object
-		@param inController
-		@param inData
+		Set LocalController for specified data object.
+		@param inController: the LocalController to store
+		@param inData: the corresponding MovieData
 		@sends MovieManagerEvent#CONTROLLER_INITIALIZED
 		*/
 		private function storeLocalController (inController:ILocalController, 
@@ -302,6 +314,7 @@ package org.asaplibrary.management.movie {
 		}
 		
 		/**
+		Checks if the movie has been fully loaded and the LocalController is known.
 		@sends MovieManagerEvent#MOVIE_READY
 		*/
 		private function checkLoadProgress (inData:MovieData) : void {
@@ -334,12 +347,18 @@ package org.asaplibrary.management.movie {
 import org.asaplibrary.management.movie.*;
 import flash.display.DisplayObject;
 
+/**
+Helper data container.
+*/
 class MovieData {
 
 	public var name:String;
 	public var controller:ILocalController;
 	public var container:DisplayObject;
 	
+	/**
+	@param inName: name of the ILocalController
+	*/
 	public function MovieData (inName:String) {
 		name = inName;
 	}

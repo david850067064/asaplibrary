@@ -15,6 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+<div style="background:#ffc; padding:1em; margin:0 0 1em 0; text-align:center">
+WARNING: provided "AS IS" -- this code has not been tested on production sites!
+</div>
+*/
 package org.asaplibrary.management.flow {
 	
 	import flash.events.*;
@@ -24,10 +29,11 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.util.debug.Log;
 
 	/**
+	Enables to move from one state to the other within a site structure, even using 'deep links'.
+	
 	<div style="background:#ffc; padding:1em; margin:0 0 1em 0; text-align:center">
 	WARNING: provided "AS IS" -- this code has not been tested on production sites!
 	</div>
-	Enables to move from one state to the other within a site structure, even using 'deep links'.
 	
 	<h2>Introduction</h2>
 	Flow states are represented by site 'sections', using the {@link IFlowSection} type.

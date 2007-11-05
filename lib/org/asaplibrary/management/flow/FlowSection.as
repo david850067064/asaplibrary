@@ -24,7 +24,13 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.util.actionqueue.*;
 	
 	/**
-	Building block of navigatable site sections. Subclasses will most likely override {@link #showAction} and {@link #hideAction}, see example below.
+	Building block of navigatable site sections.
+	
+	<div style="background:#ffc; padding:1em; margin:0 0 1em 0; text-align:center">
+	WARNING: provided "AS IS" -- this code has not been tested on production sites!
+	</div>
+	
+	Subclasses will most likely override {@link #showAction} and {@link #hideAction}, see example below.
 	It is also possible to override {@link #show} and {@link #hide} for non-timebased actions.
 	
 	Each FlowSection needs to have a name to be addressable by {@link FlowManager}. Simply pass the name with the super constructor call:
