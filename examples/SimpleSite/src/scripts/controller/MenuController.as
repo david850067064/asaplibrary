@@ -19,7 +19,7 @@
 		private var mSelectedButton:MenuButton;
 					
 		function MenuController () {
-			super("MenuController");
+			super(AppSettings.MENU_NAME);
 			listen();
 			selfUpdate();
 		}
