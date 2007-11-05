@@ -20,6 +20,7 @@ package org.asaplibrary.util.actionqueue {
 	import flash.display.DisplayObject;
 	
 	/**
+	Action method to control the timed scaling of a DisplayObject.
 	@example:
 	<code>
 	var CURRENT:Number = Number.NaN;

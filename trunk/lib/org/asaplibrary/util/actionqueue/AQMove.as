@@ -18,7 +18,10 @@ limitations under the License.
 package org.asaplibrary.util.actionqueue {
 
 	import flash.display.DisplayObject;
-		
+	
+	/**
+	Action method to control the timed movement of a DisplayObject.
+	*/
 	public class AQMove {
 		
 		private var mDO:DisplayObject;

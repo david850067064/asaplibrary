@@ -22,7 +22,10 @@ package org.asaplibrary.util.actionqueue {
 	
 	// ASAP classes
 	import org.asaplibrary.util.actionqueue.*;
-		
+	
+	/**
+	Action method to let a DisplayObject follow the mouse pointer.
+	*/
 	public class AQFollowMouse {
 		
 		private var mDO:DisplayObject;
