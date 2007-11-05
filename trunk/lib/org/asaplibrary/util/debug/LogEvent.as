@@ -19,25 +19,40 @@ package org.asaplibrary.util.debug {
 
 	import flash.events.Event;
 	
+	/**
+	Event object sent by {@link Log}. Subscribe to type <code>_EVENT</code>.
+	*/
 	public class LogEvent extends Event {
 	
-		public static const EVENT_LOG:String = "onLogEvent";
+		/** Event type. */
+		public static const _EVENT:String = "onLogEvent";
 	
 		public var level:String;
 		public var text:String;
 		public var sender:String;
 		
+		/**
+		Creates a new LogEvent.
+		
+		*/
 		function LogEvent (inLevel:String, inText:String, inSender:String) {
-			super(EVENT_LOG);
+			super(_EVENT);
 			
 			level = inLevel;
 			text = inText;
 			sender = inSender;
 		}
 		
+		public override function toString ():String {
+			return ";org.asaplibrary.util.debug.LogEvent: level=" + level + "; text=" + text + "; sender=" + sender;
+		}
+	
+		/**
+		Creates a copy of an existing LogEvent.
+		*/
 		public override function clone() : Event {
 			return new LogEvent(level, text, sender);
 		} 
-
+	
 	}
 }

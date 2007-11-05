@@ -21,20 +21,23 @@ package org.asaplibrary.util.loader {
 	import flash.display.Loader;
 	import flash.events.Event;
 	
+	/**
+	Event object sent by {@link AssetLoader}. Subscribe to type <code>_EVENT</code>.
+	*/
 	public class AssetLoaderEvent extends Event {
 
-		/** Generic event type */
-		public static const _EVENT:String = "onLoaderStackEvent";
+		/** Event type. */
+		public static const _EVENT:String = "loaderStackEvent";
 	
-		/** event sent when a single object starts being loaded */
+		/** Event subtype sent when a single object starts being loaded. */
 		public static const START:String = "loadStart";
-		/** event sent during loading */
+		/** Event subtype  sent during loading. */
 		public static const PROGRESS:String = "loadProgress";
-		/** event sent when loading is done */
+		/** Event subtype  sent when loading is done. */
 		public static const COMPLETE:String = "loadDone";
-		/** event sent when all objects have been loaded */
+		/** Event subtype  sent when all objects have been loaded. */
 		public static const ALL_LOADED:String = "allLoadFinished";
-		/** event sent when there's an error */
+		/** Event subtype  sent when there's an error. */
 		public static const ERROR:String = "loadError";
 
 		public var subtype : String;
@@ -45,6 +48,11 @@ package org.asaplibrary.util.loader {
 		public var loader:Loader;
 		public var asset:DisplayObject;
 	
+		/**
+		Creates a new AssetLoaderEvent.
+		@param inSubtype: either subtype; see above
+		@param inName: (optional) identifier of the loading action
+		*/
 		public function AssetLoaderEvent (inSubtype:String, inName:String = "") {
 			super(_EVENT);
 			
@@ -53,9 +61,12 @@ package org.asaplibrary.util.loader {
 		}
 		
 		public override function toString ():String {
-			return "org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
+			return ";org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
 		}
 		
+		/**
+		Creates a copy of an existing AssetLoaderEvent.
+		*/
 		public override function clone() : Event {
 			return new AssetLoaderEvent(subtype, name);
 		} 

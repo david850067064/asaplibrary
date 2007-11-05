@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Interface to implement in DataValueObject classes that get their data through the {@link Parser} class.
-The {@link Parser} class calls the {@link #parseObject} function with data from {@link XML2Object#parseXML}. The implementing class is expected to use this Object to retrieve data from.
-*/
-
 package org.asaplibrary.data.xml {
+
+	/**
+	Interface to implement in DataValueObject classes that get their data through the {@link Parser} class.
+	The {@link Parser} class calls the {@link #parseObject} function with data from {@link XML2Object#parseXML}. The implementing class is expected to use this Object to retrieve data from.
+	*/
 	public interface IParsable {
 		/**
 		*	Parse an object from XML into typed variables.

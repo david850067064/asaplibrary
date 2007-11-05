@@ -20,20 +20,28 @@ package org.asaplibrary.util.actionqueue {
 	import flash.events.Event;
 	
 	/**
-	Event objects that are dispatched by {@link Action} objects.
+	Event object sent by {@link Action} and {@link TimedAction} classes. Subscribe to type <code>_EVENT</code>.
 	*/
-	
 	public class ActionEvent extends Event {
 	
+		/** Event type. */
 		public static const _EVENT:String = "onActionEvent";
 		
+		/** Event subtype sent when the Action has started. */
 		public static const STARTED:String = "onActionStarted";
+		/** Event subtype sent when the Action has finished. */
 		public static const FINISHED:String = "onActionFinished";
+		/** Event subtype sent when the Action has been quit (from outside). */
 		public static const QUIT:String = "onActionQuit";
+		/** Event subtype sent when the Action has been paused. */
 		public static const PAUSED:String = "onActionPaused";
+		/** Event subtype sent when the paused Action has been resumed. */
 		public static const RESUMED:String = "onActionResumed";
+		/** Event subtype sent when the Action has been stopped (from outside). */
 		public static const STOPPED:String = "onActionStopped";
+		/** Event subtype when sent when a marker has been passed (currently only with {@link ActionQueue}. */
 		public static const MARKER_VISITED:String = "onActionMarkerVisited";
+		/** Event subtype sent when a {@link Condition} has been met. */
 		public static const CONDITION_MARKER:String = "onActionConditionMarker";
 		
 		public var name:String;
@@ -42,17 +50,18 @@ package org.asaplibrary.util.actionqueue {
 		public var markerName:String;
 	
 		/**
-
+		Creates a new ActionEvent.
+		@param inSubtype: either subtype; see above
+		@param inAction: (optional) the performing Action object (presumably {@link ActionRunner} or {@link ActionQueue}
+		@param inMarkerName: (optional) name of the Marker (currently only used by {@link ActionQueue})
 		*/
 		public function ActionEvent (inSubtype:String,
 									 inAction:IAction = null,
-									 inName:String = null,
 									 inMarkerName:String = null) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
 			action = inAction;
-			name = inName;
 			markerName = inMarkerName;
 		}
 		
@@ -60,11 +69,14 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";ActionEvent: subtype=" + subtype + "; name=" + name + "; action=" + action;
+			return ";org.asaplibrary.util.actionqueue.ActionEvent: subtype=" + subtype + "; action=" + action;
 		}
 		
+		/**
+		Creates a copy of an existing ActionEvent.
+		*/
 		public override function clone() : Event {
-			return new ActionEvent(subtype, action, name, markerName);
+			return new ActionEvent(subtype, action, markerName);
 		} 
 	}
 }

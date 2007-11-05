@@ -20,13 +20,33 @@ package org.asaplibrary.management.movie {
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 
+	/**
+	Event object sent by {@link MovieManager}. Subscribe to type <code>_EVENT</code>.
+	@example
+	<code>
+	MovieManager.getInstance().addEventListener( MovieManagerEvent._EVENT, onMovieEvent );
+	</code>
+	Listen for movie events:
+	<code>
+	protected function onMovieEvent (e:MovieManagerEvent) {
+		if (e.subtype == MovieManagerEvent.MOVIE_READY) {
+			showMovie(e.controller);
+		}
+	}
+	</code>
+	*/
 	public class MovieManagerEvent extends Event {
 
+		/** Event type. */
 		public static const _EVENT:String = "onMovieManagerEvent";
 		
+		/** Event subtype sent when the SWF asset has been loaded. */
 		public static const MOVIE_LOADED:String = "movieLoaded";
+		/** Event subtype sent when the LocalController has been registered to the MovieManager. */
 		public static const CONTROLLER_INITIALIZED:String = "controllerInitialized";
+		/** Event subtype sent when the LocalController is ready to start. */
 		public static const MOVIE_READY:String = "movieReady";
+		/** Event subtype sent on loading error. */
 		public static const ERROR:String = "error";
 		
 		public var subtype:String;
@@ -35,6 +55,14 @@ package org.asaplibrary.management.movie {
 		public var container:DisplayObject;
 		public var error:String;
 		
+		/**
+		Creates a new MovieManagerEvent.
+		@param inSubtype: either subtype; see above
+		@param inName: name of the ILocalController
+		@param inController: (optional) reference to the ILocalController (if any)
+		@param inContainer: (optional) the hosting container (if any)
+		@param inError: (optional) {@link AssetLoaderEvent} error (if any)
+		*/
 		public function MovieManagerEvent (inSubtype:String, inName:String, inController:ILocalController = null, inContainer:DisplayObject = null, inError:String = null) {
 			super(_EVENT);
 			subtype = inSubtype;
@@ -48,6 +76,9 @@ package org.asaplibrary.management.movie {
 			return "org.asaplibrary.management.movie.MovieManagerEvent; subtype=" + subtype + "; name=" + name + "; controller=" + controller + "; container=" + container + "; error=" + error;
 		}
 		
+		/**
+		Creates a copy of an existing MovieManagerEvent.
+		*/
 		public override function clone() : Event {
 			return new MovieManagerEvent(subtype, name, controller, container, error);
 		} 

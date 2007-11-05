@@ -21,22 +21,26 @@ package org.asaplibrary.data.array {
 	import org.asaplibrary.data.array.TraverseArrayEnumerator;
 	
 	/**
-	Passes events for {@link TraverseArrayEnumerator}. Subscribe to type <code>UPDATE</code>.
+	Passes events for {@link TraverseArrayEnumerator}. Subscribe to type <code>_EVENT</code>.
 	@example
 	<code>
 	var enumerator:TraverseArrayEnumerator = new TraverseArrayEnumerator(objects);
-	enumerator.addEventListener(TraverseArrayEnumeratorEvent.UPDATE, handleTraverseUpdate);
+	enumerator.addEventListener(TraverseArrayEnumeratorEvent._EVENT, handleTraverseUpdate);
 	</code>
 	Listen for traverse events:
 	<code>
 	private function handleTraverseUpdate (e:TraverseArrayEnumeratorEvent) : void {
-		// retrieve object with e.value
+		if (e.subtype == TraverseArrayEnumeratorEvent.UPDATE) {
+			// retrieve object with e.value
+		}
 	}
 	</code>
 	*/
 	public class TraverseArrayEnumeratorEvent extends Event {
 	
+		/** Event type. */
 		public static const _EVENT:String = "onTraverseArrayEnumeratorEvent";
+		/** Event subtypes sent on update. */
 		public static const UPDATE:String = "onTraverseArrayEnumeratorUpdate";
 		
 		public var subtype:String;
@@ -45,9 +49,9 @@ package org.asaplibrary.data.array {
 
 		/**
 		Creates a new TraverseArrayEnumeratorEvent.
-		@param inSubtype: name of event (and name of handler function when no Delegate is used)
+		@param inSubtype: subtype UPDATE
 		@param inValue: the object at the TraverseArrayEnumerator pointer position
-		@param inEnumerator : the TraverseArrayEnumerator object
+		@param inEnumerator: the TraverseArrayEnumerator object
 		*/
 		public function TraverseArrayEnumeratorEvent (inSubtype:String, 	  		  
 													  inValue:Object, inEnumerator:TraverseArrayEnumerator) {
@@ -57,6 +61,9 @@ package org.asaplibrary.data.array {
 			enumerator = inEnumerator;
 		}
 		
+		/**
+		Creates a copy of an existing TraverseArrayEnumeratorEvent.
+		*/
 		public override function clone() : Event {
 			return new TraverseArrayEnumeratorEvent(subtype, value, enumerator);
 		} 

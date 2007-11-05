@@ -29,8 +29,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inMC : movieclip which timeline to control
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/	
-		public function gotoAndPlay (inMC:MovieClip,
-									 inFrame:Object = null) : void {
+		public function gotoAndPlay (inMC:MovieClip, inFrame:Object = null) : void {
 			var frame:Object = (inFrame != null) ? inFrame : Number(1);
 			inMC.gotoAndPlay(frame);
 		}
@@ -40,8 +39,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inMC : movieclip which timeline to control
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/
-		public function gotoAndStop (inMC:MovieClip,
-									 inFrame:Object = null) : void {
+		public function gotoAndStop (inMC:MovieClip, inFrame:Object = null) : void {
 			var frame:Object = (inFrame != null) ? inFrame : Number(1);
 			inMC.gotoAndStop(frame);
 		}

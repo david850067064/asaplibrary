@@ -20,21 +20,21 @@ package org.asaplibrary.util.actionqueue {
 	import flash.events.Event;
 	
 	/**
-	Event objects that are dispatched by {@link ConditionManager}.
+	Event objects that are sent by {@link ConditionManager}. Subscribe to type <code>_EVENT</code>.
 	*/
-	
 	public class ConditionEvent extends Event {
-	
-		public static const _EVENT:String = "onConditionEvent";
 		
-		public static const CONDITION_MET:String = "onConditionMet";
+		/** Event type. */
+		public static const _EVENT:String = "conditionEvent";
+		/** Event subtype sent when the condition has been met. */
+		public static const CONDITION_MET:String = "conditionMet";
 		
 		public var condition:Condition;
 		public var subtype:String;
 	
 		/**
 		Creates a new ConditionEvent.
-		@param inSubtype: <code>CONDITION_MET</code>
+		@param inSubtype: CONDITION_MET
 		@param inCondition: Condition that is met
 		*/
 		public function ConditionEvent (inSubtype:String, inCondition:Condition) {
@@ -45,9 +45,12 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		public override function toString () : String {
-			return ";ConditionEvent: subtype=" + subtype + "; condition=" + condition;
+			return ";org.asaplibrary.util.actionqueue.ConditionEvent: subtype=" + subtype + "; condition=" + condition;
 		}
 		
+		/**
+		Creates a copy of an existing ConditionEvent.
+		*/
 		public override function clone() : Event {
 			return new ConditionEvent(subtype, condition);
 		} 

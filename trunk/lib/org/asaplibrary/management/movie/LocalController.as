@@ -21,11 +21,24 @@ package org.asaplibrary.management.movie {
 	import org.asaplibrary.management.movie.MovieManager;
 	import org.asaplibrary.util.debug.Log;
 
+	/**
+	(Virtual) base class for controlling movies locally, either independently or embedded.
+	Extend this class for each separate movie in your project that requires certain complex controlled functionality.
+	The base class takes care of communication with the MovieManager, so the movie is known to other movies.
+	
+	The LocalController functions as controller for everything that happens locally.
+	For other movies, it functions as a Facade, hiding implementation of details.
+	The preferred mode of communication with the LocalController is through events, to avoid having to know the actual specific interface.
+	*/
 	public class LocalController extends MovieClip implements ILocalController {
 
 		private var mName:String = "";
 		private var mIsStandalone:Boolean;
 
+		/**
+		Creates a new LocalController.
+		@param inName: (optional) unique identifying name
+		*/
 		public function LocalController (inName:String = null) {
 			
 			if (inName != null) {
@@ -41,6 +54,9 @@ package org.asaplibrary.management.movie {
 			}
 		}
 
+		/**
+
+		*/
 		public function startMovie () : void {
 			play();
 		}
@@ -49,18 +65,31 @@ package org.asaplibrary.management.movie {
 			stop();
 		}
 
+		/**
+		To be implemented by subclasses.
+		*/
 		public function die () : void {
 			//
 		}
 
+		/**
+		@return The name of the LocalController.
+		*/
 		public function getName () : String {
 			return mName;
 		}
 
+		/**
+		Sets the name of the LocalController
+		@param inName: new name of the controller
+		*/
 		public function setName (inName:String) : void {
 			mName = inName;
 		}
 
+		/**
+		@return True if the LocalController is the Document class.
+		*/
 		public function isStandalone () : Boolean {
 			return mIsStandalone;
 		}

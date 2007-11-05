@@ -20,12 +20,12 @@ package org.asaplibrary.management.flow {
 	import flash.events.Event;
 	
 	/**
-	Event objects that are dispatched by {@link FlowManager}. Subscribe using:
+	Event objects that are dispatched by {@link FlowManager}. Subscribe to type <code>_EVENT</code>.
+	@example
 	<code>
 	FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 	</code>
 	*/
-	
 	public class FlowNavigationEvent extends Event {
 	
 		/**
