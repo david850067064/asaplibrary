@@ -126,15 +126,17 @@ package org.asaplibrary.management.movie {
 		/**
 		Finds a local controller by name
 		@param inName: unique identifier for the loaded movie
+		@param inHideWarning: do not emit a Log warning if the movie is not found; default false (a warning is given)
 		@return The controller for that movie, or null if none was found
 		*/
-		public function getLocalControllerByName (inName:String) : LocalController {
+		public function getLocalControllerByName (inName:String, inHideWarning:Boolean = false) : LocalController {
 			var md:MovieData = getMovieDataByName(inName);
 			if (md == null) {
-				Log.warn("getLocalControllerByName; controller with name '" + inName + "' not found.", toString());
+				if (!inHideWarning) {
+					Log.warn("getLocalControllerByName; controller with name '" + inName + "' not found.", toString());
+				}
 				return null;
 			}
-
 			return md.controller;
 		}
 		
