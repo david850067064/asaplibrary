@@ -22,7 +22,10 @@ package org.asaplibrary.util.actionqueue {
 	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.util.NumberUtils;
 	
-	public class AQBaseSinoid {
+	/**
+	Base class that does calculates the initial settings for sinoid-like movements, like blinking and pulsing.
+	*/
+	public class AQBaseSinusoid {
 				
 		protected var mDO:DisplayObject;
 		protected var mDuration:Number;

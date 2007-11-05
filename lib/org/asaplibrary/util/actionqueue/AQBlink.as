@@ -22,7 +22,10 @@ package org.asaplibrary.util.actionqueue {
 	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.util.NumberUtils;
 	
-	public class AQBlink extends AQBaseSinoid {
+	/**
+	Action method to control the timed blinking (making more or less visible) of a DisplayObject.
+	*/
+	public class AQBlink extends AQBaseSinusoid {
 		
 		public static var MASK_OFFSCREEN_X:Number = -9999;
 		
