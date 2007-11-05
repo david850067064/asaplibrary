@@ -4,7 +4,7 @@ package controller {
 	
 	import data.AppSettings;
 	
-	public class GalleryController extends LocalController {
+	public class GalleryController extends ProjectController {
 		
 		function GalleryController () {
 			super(AppSettings.GALLERY_NAME);

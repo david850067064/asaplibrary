@@ -8,7 +8,7 @@ package controller {
 	import event.NavigationEvent;
 	import ui.SimpleButton;
 	
-	public class HomeController extends LocalController {
+	public class HomeController extends ProjectController {
 		
 		public var tRoundedBtn:SimpleButton;
 		public var tPictureBtn:SimpleButton;
