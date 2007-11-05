@@ -31,22 +31,25 @@ package org.asaplibrary.management.movie {
 		
 		public var subtype:String;
 		public var name:String;
+		public var controller:ILocalController;
 		public var container:DisplayObject;
-		public var controller:LocalController;
 		public var error:String;
 		
-		public function MovieManagerEvent (inSubtype:String, inName:String) {
+		public function MovieManagerEvent (inSubtype:String, inName:String, inController:ILocalController = null, inContainer:DisplayObject = null, inError:String = null) {
 			super(_EVENT);
 			subtype = inSubtype;
 			name = inName;
+			controller = inController;
+			container = inContainer;
+			error = inError;
 		}
 		
 		public override function toString ():String {
-			return "org.asaplibrary.management.movie.MovieManagerEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; controller=" + controller + "; container=" + container;
+			return "org.asaplibrary.management.movie.MovieManagerEvent; subtype=" + subtype + "; name=" + name + "; controller=" + controller + "; container=" + container + "; error=" + error;
 		}
 		
 		public override function clone() : Event {
-			return new MovieManagerEvent(subtype, name);
+			return new MovieManagerEvent(subtype, name, controller, container, error);
 		} 
 	}
 	
