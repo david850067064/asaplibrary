@@ -1,24 +1,4 @@
-﻿/**
-TEST:
-
-----
-----
-1 2 
- O
-3 4
-
-
-(all: move rules)
-O = intro timeline anim
-1 = simple show/hide
-2 = fade show/hide
-3 = fade show/hide +
-	3.1 fade show/hide
-4 = simple show/hide + 
-	4.1 external swf
-*/
-
-package controller {
+﻿package controller {
 
 	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
@@ -34,7 +14,7 @@ package controller {
 	import data.AppSettings;
 	import ui.*;
 	
-	public class AppController extends LocalController {
+	public class AppController extends FlowSection {
 		
 		public var tSections:MovieClip;
 		public var tMenu:MovieClip;
@@ -45,7 +25,7 @@ package controller {
 		protected var FM:FlowManager = FlowManager.getInstance();
 		
 		function AppController () {
-			super("AppController");
+			super();
 
 			initMenu();
 			listen();
@@ -106,6 +86,7 @@ package controller {
 		}
 		
 		protected function start () : void {
+			visible = true;
 			FM.goto(AppSettings.SECTION_INTRO);
 			FM.goto(AppSettings.SECTION_MENU, false, false);
 		}
@@ -159,7 +140,9 @@ package controller {
 					break;
 				case FlowNavigationEvent.LOADED:
 					// just for this demo, add a little pause just to show the loader
-					new FrameDelay(attachMovie, 45, [e.name]);
+					// otherwise use:
+					//attachMovie(e.name);
+					new FrameDelay(attachMovie, 30, [e.name]);
 					break;
 				default:
 					//
@@ -183,8 +166,8 @@ package controller {
 		/**
 		
 		*/
-		protected function prepareMovie (inId:String) : void {
-			switch (inId) {
+		protected function prepareMovie (inName:String) : void {
+			switch (inName) {
 				case AppSettings.SECTION4: 
 					// move to position
 					var x:Number, y:Number;
@@ -209,22 +192,24 @@ package controller {
 		
 		*/
 		protected function hideLoader () : void {
-			removeChild(mLoaderAnim);
+			if (mLoaderAnim != null) {
+				removeChild(mLoaderAnim);
+			}
 		}
 		
 		/**
 		
 		*/
-		protected function attachMovie (inId:String) : void {
-			var section:IFlowSection = FM.getSectionByName(inId);
+		protected function attachMovie (inName:String) : void {
+			var section:IFlowSection = FM.getSectionByName(inName);
 			if (section != null) {
 				var clip:DisplayObject = tSections.addChild(DisplayObject(section));
-				if (inId == AppSettings.SECTION4) {
+				if (inName == AppSettings.SECTION4) {
 					clip.x = 400;
 					clip.y = 300;
 				}
 				hideLoader();
-				FM.goto(inId);
+				FM.goto(inName);
 			}
 		}
 		
