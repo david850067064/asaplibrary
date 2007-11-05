@@ -23,6 +23,13 @@
 			assertTrue("Tree data", root.data == 10);
 		}
 		
+		public function testAddChildNode() : void {
+			var root:Tree = new Tree("root");
+			var child:Tree = new Tree("A");
+			root.addChildNode(child);
+			assertTrue("Tree testAddChildNode", root.children[0] == child);
+		}
+		
 		public function testAddChild() : void {
 			var root:Tree = new Tree("root");
 

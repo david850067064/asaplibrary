@@ -24,6 +24,9 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.util.debug.Log;
 
 	/**
+	<div style="background:#ffc; padding:1em; margin:0 0 1em 0; text-align:center">
+	WARNING: provided "AS IS" -- this code has not been tested on production sites!
+	</div>
 	Enables to move from one state to the other within a site structure, even using 'deep links'.
 	
 	<h2>Introduction</h2>
@@ -155,6 +158,19 @@ package org.asaplibrary.management.flow {
 	}
 	</code>
 	Because {@link FlowNavigationEvent} events bubble through and other classes may deal with update changes as well, chance is that we get stuck in a recursive loop. We end this by writing <code>e.stopImmediatePropagation();</code>.
+	
+	<h2>How to start</h2>
+	<ul>
+		<li>Create a name list of navigatable elements in your Flash site/project.</li>
+			<ul>
+				<li>I prefer to have a list of consts in <code>data/AppSettings</code>, so when referring to "Intro" I write <code>AppSettings.SECTION_INTRO</code>.</li>
+				<li>Section names are hierarchical. Use dots to indicate levels. For example: "Sections.Gallery" and "Sections.Gallery.Latest"</li>
+			</ul>
+		<li>Normally the main controller for each SWF is a LocalController. Now make it inherit from {@link FlowSection}, and pass the name of the section in the super constructor call.</li>
+		<li>Other navigatable sections (like nested MovieClips) also need a {@link FlowSection} class.</li>
+		<li>If your main controller is a FlowSection as well, do not forget to make it visible.</li>
+		<li>Now write <code>FlowManager.getInstance().goto( "My.starting.section" );</code> (insert your section)</li>
+   	</ul>
 	*/
 	public class FlowManager extends EventDispatcher {
 		

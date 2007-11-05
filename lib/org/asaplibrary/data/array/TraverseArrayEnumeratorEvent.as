@@ -44,6 +44,7 @@ package org.asaplibrary.data.array {
 		public var enumerator:TraverseArrayEnumerator;
 
 		/**
+		Creates a new TraverseArrayEnumeratorEvent.
 		@param inSubtype: name of event (and name of handler function when no Delegate is used)
 		@param inValue: the object at the TraverseArrayEnumerator pointer position
 		@param inEnumerator : the TraverseArrayEnumerator object

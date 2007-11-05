@@ -165,7 +165,7 @@
 			mReceivedOnArrayTraverseEvent = true;
 		}
 		
-		public function validateObjectAtLocation (inObjects:Array, inLocation:Number) : Boolean {
+		public function mayUpdateToObject (inObjects:Array, inLocation:Number) : Boolean {
 			return (inObjects[inLocation] == DELEGATE_TEST_VALUE);
 		}
 	}

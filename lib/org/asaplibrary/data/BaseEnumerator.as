@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Base class for enumerator objects.
-*/
 
 package org.asaplibrary.data {
 
 	import flash.events.EventDispatcher;
 
+	/**
+	Base class for enumerator objects.
+	*/
 	public class BaseEnumerator extends EventDispatcher {
 		
 		/**
