@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -24,6 +24,9 @@ package org.asaplibrary.management.movie {
 	import org.asaplibrary.management.movie.LocalController;
 	import org.asaplibrary.util.debug.Log;
 
+	/**
+	
+	*/
 	public class MovieManager extends EventDispatcher {
 	
 		/**
@@ -31,7 +34,7 @@ package org.asaplibrary.management.movie {
 		*/
 		private var mMovies:Array = new Array();
 		/**
-		The loader.
+		The {@link AssetLoader loader} for SWFs.
 		*/
 		private var mLoader:AssetLoader;
 		
@@ -39,7 +42,7 @@ package org.asaplibrary.management.movie {
 
 		
 		/**
-		Access point for the one instance of the MovieManager
+		Access point for the one instance of the MovieManager.
 		*/
 		public static function getInstance () : MovieManager {
 			if (mInstance == null) {
@@ -50,7 +53,7 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		The {@link org.asaplibrary.util.loader.AssetLoader} loader class used by MovieManager.
+		The {@link AssetLoader} loader class used by MovieManager.
 		*/
 		public function getLoader () : AssetLoader {
 			return mLoader;
@@ -70,7 +73,6 @@ package org.asaplibrary.management.movie {
 			if (!addMovie(inURL, inName)) {
 				return false;
 			}
-
 			// start loading
 			mLoader.loadAsset(inURL, inName, inIsVisible);
 
@@ -88,8 +90,8 @@ package org.asaplibrary.management.movie {
 			// retrieve data block depending on type of inMovie
 			var md:MovieData;
 
-			if (inMovie is LocalController) {
-				md = getMovieDataByController(inMovie as LocalController);
+			if (inMovie is ILocalController) {
+				md = getMovieDataByController(inMovie as ILocalController);
 				if (md == null) {
 					Log.error("removeMovie; data for controller '" + inMovie + "' not found", toString());
 					return false;
@@ -129,7 +131,7 @@ package org.asaplibrary.management.movie {
 		@param inHideWarning: do not emit a Log warning if the movie is not found; default false (a warning is given)
 		@return The controller for that movie, or null if none was found
 		*/
-		public function getLocalControllerByName (inName:String, inHideWarning:Boolean = false) : LocalController {
+		public function getLocalControllerByName (inName:String, inHideWarning:Boolean = false) : ILocalController {
 			var md:MovieData = getMovieDataByName(inName);
 			if (md == null) {
 				if (!inHideWarning) {
@@ -144,7 +146,7 @@ package org.asaplibrary.management.movie {
 		Add a specific controller; used by standalone LocalController to notify its existence to the MovieManager
 		@param	inController
 		*/
-		public function addLocalController (inController:LocalController) : void {
+		public function addLocalController (inController:ILocalController) : void {
 			// check if movie has been added previously via loadMovie() 
 			var md:MovieData = getMovieDataByContainer(inController as DisplayObject);
 			if (md == null) {
@@ -198,7 +200,7 @@ package org.asaplibrary.management.movie {
 		@param	inName
 		@return data object, or null if none was found
 		*/
-		private function getMovieDataByController (inController:LocalController) : MovieData {
+		private function getMovieDataByController (inController:ILocalController) : MovieData {
 			var len:int = mMovies.length;
 			for (var i:int = 0; i < len; i++) {
 				var md:MovieData = mMovies[i] as MovieData;
@@ -255,6 +257,7 @@ package org.asaplibrary.management.movie {
 		*/
 		private function handleMovieLoaded (e:AssetLoaderEvent) : void {
 			var md:MovieData = getMovieDataByName(e.name);
+
 			if (md == null) {
 				Log.error("handleMovieLoaded: MovieData for name = '" + e.name + "' not found", toString());
 				return;
@@ -264,8 +267,8 @@ package org.asaplibrary.management.movie {
 			md.container = e.asset;
 			
 			// store controller if container is controller and controller hasn't been set by addLocalController
-			if ((md.container is LocalController) && (md.controller == null)) {
-				storeLocalController(md.container as LocalController, md);
+			if ((md.container is ILocalController) && (md.controller == null)) {
+				storeLocalController(md.container as ILocalController, md);
 			}
 
 			// dispatch event
@@ -283,11 +286,12 @@ package org.asaplibrary.management.movie {
 		@param inData
 		@sends MovieManagerEvent#CONTROLLER_INITIALIZED
 		*/
-		private function storeLocalController (inController:LocalController, 
+		private function storeLocalController (inController:ILocalController, 
 											   inData:MovieData) : void {
 			// set name of local controller
-			inController.setName(inData.name);
-
+			if (inController.getName.length == 0) {
+				inController.setName(inData.name);
+			}
 			// store local controller in data
 			inData.controller = inController;
 			
@@ -327,17 +331,21 @@ package org.asaplibrary.management.movie {
 	
 }
 
-import org.asaplibrary.management.movie.LocalController;
+import org.asaplibrary.management.movie.*;
 import flash.display.DisplayObject;
 
 class MovieData {
 
-	public var name : String;
-	public var controller : LocalController;
-	public var container : DisplayObject;
+	public var name:String;
+	public var controller:ILocalController;
+	public var container:DisplayObject;
 	
 	public function MovieData (inName:String) {
 		name = inName;
+	}
+	
+	public function toString () : String {
+		return "; org.asaplibrary.management.movie.MovieData: name=" + name + "; controller=" + controller + "; container=" + container;
 	}
 	
 }
