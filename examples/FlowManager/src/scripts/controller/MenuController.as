@@ -60,7 +60,7 @@
 			return null;
 		}
 		
-		private function addButton (inId:String, inLabel:String, inX:Number) : Number {
+		protected function addButton (inId:String, inLabel:String, inX:Number) : Number {
 			var button:MenuButton = new MenuButton();
 			button.setData(inLabel, inId);
 			button.x = inX;
@@ -74,23 +74,26 @@
 		/**
 		Called when a button is clicked.
 		*/
-		private function handleButtonClick (e:MouseEvent) : void {
+		protected function handleButtonClick (e:MouseEvent) : void {
+			// stop other classes processing this event
+			e.stopImmediatePropagation();
 			var button:MenuButton = e.currentTarget as MenuButton;
 			if (button == mSelectedButton) return;
 			// do not draw yet, but wait until we receive an update event in handleNavigationEvent
-			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.UPDATE, button.id, this));
+			FlowManager.getInstance().goto(button.id);
 		}
 		
-		private function setSelectedButton (inButton:MenuButton) : void {
+		protected function setSelectedButton (inButton:MenuButton) : void {
 			if (mSelectedButton) mSelectedButton.select(false);
 			mSelectedButton = inButton;
 			mSelectedButton.select(true);
 		}
 		
-		private function handleNavigationEvent (e:FlowNavigationEvent) : void {
+		protected function handleNavigationEvent (e:FlowNavigationEvent) : void {
 			switch (e.subtype) {
 				case FlowNavigationEvent.WILL_UPDATE:
 				case FlowNavigationEvent.UPDATE:
+					// stop other classes processing this event
 					e.stopImmediatePropagation();
 					if (mSelectedButton && mSelectedButton.id == e.name) return;
 					var button:MenuButton = mButtons[e.name];

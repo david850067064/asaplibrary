@@ -22,7 +22,7 @@
 
 		}
 
-		private function handleClose (e:MouseEvent) : void {
+		protected function handleClose (e:MouseEvent) : void {
 			FlowManager.getInstance().goto(AppSettings.SECTION1);
 		}
 		
