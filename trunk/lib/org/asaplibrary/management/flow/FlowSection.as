@@ -24,7 +24,25 @@ package org.asaplibrary.management.flow {
 	import org.asaplibrary.util.actionqueue.*;
 	
 	/**
-	Building block of navigatable site sections. Subclasses will most likely override {@link #showAction} and {@link #hideAction}. For example:
+	Building block of navigatable site sections. Subclasses will most likely override {@link #showAction} and {@link #hideAction}, see example below.
+	It is also possible to override {@link #show} and {@link #hide} for non-timebased actions.
+	
+	Each FlowSection needs to have a name to be addressable by {@link FlowManager}. Simply pass the name with the super constructor call:
+	<code>
+	function Gallery () {
+		super( "Gallery" );
+		...
+	}
+	</code>
+	or better:
+	<code>
+	function Gallery () {
+		super( APPSETTINGS.SECTION_GALLERY );
+		...
+	}
+	</code>
+	@example
+	Overriding the default hide action with a scaling animation:
 	<code>
 	public override function get hideAction () : IAction {
 		var queue:ActionQueue = new ActionQueue("Section1_1 hide");
@@ -34,7 +52,7 @@ package org.asaplibrary.management.flow {
 		queue.addAction(new AQSet().setVisible(this, false));
 		return queue;
 	}
-	</code>
+	</code> 
 	*/
 	public class FlowSection extends LocalController implements IFlowSection {
 		

@@ -21,6 +21,7 @@ package org.asaplibrary.management.flow {
 
 	import org.asaplibrary.management.movie.*;
 	import org.asaplibrary.util.actionqueue.*;	
+	import org.asaplibrary.util.debug.Log;
 
 	/**
 	Enables to move from one state to the other within a site structure, even using 'deep links'.
@@ -163,7 +164,8 @@ package org.asaplibrary.management.flow {
 		private var mSections:Object; // of type String => IFlowSection
 		private var mRules:Object; // of type FlowRule
 		private var mCurrentSectionName:String;
-		private var mSectionDestinations:Array; // of type SectionVO
+		private var mSectionDestinations:Array; // of type SectionNavigationData
+		private var mNavigationData:Object; // of type String => SectionNavigationData
 		private var mDownloadDirectory:String = "";
 		
 		/**
@@ -227,12 +229,18 @@ package org.asaplibrary.management.flow {
 		@param inSectionName: name of the {@link IFlowSection} to move to
 		@param inStopEverythingFirst: (optional) whether the current actions are finished first (false) or stopped halfway (true); default: true
 		@param inUpdateState: (optional) whether the state is updated when going to the new section. This is not always desirable - for instance showing a navigation bar should not update the state itself. Default: true (state is updated).
+		@example
+		<code>
+		FlowManager.getInstance().goto(button.id);
+		</code>
 		*/
 		public function goto (inSectionName:String, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
 			if (inStopEverythingFirst) {
 				reset();
 			}
-			mSectionDestinations.push( new SectionVO(inSectionName, inUpdateState) );
+			var sectionNavigationData:SectionNavigationData = new SectionNavigationData(inSectionName, inStopEverythingFirst, inUpdateState);
+			mNavigationData[inSectionName] = sectionNavigationData;
+			mSectionDestinations.push(sectionNavigationData);
 			runNextGoToSection();
 		}
 		
@@ -262,13 +270,40 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
+		Gets the {@link SectionNavigationData} with name inSectionName, if it has been registered (once {@link #goto} has been called).
+		@param inSectionName: name of the FlowSection
+		@return The found SectionNavigationData
+		*/
+		public function getSectionNavigationDataByName (inSectionName:String) : SectionNavigationData {
+			return mNavigationData[inSectionName];
+		}
+		
+		/**
 		Gets the currently visited {@link IFlowSection}.
 		*/
 		public function getCurrentSection () : IFlowSection {
 			if (mCurrentSectionName == null) return null;
 			return mSections[mCurrentSectionName];
 		}
-						
+		
+		/**
+		Updates the state with the current section name.
+		@param inSectionName: name of the current FlowSection
+		@sends FlowNavigationEvent#UPDATE
+		*/
+		protected function setCurrentSection (inSectionName:String) : void {
+			mCurrentSectionName = inSectionName;
+			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.UPDATE, mCurrentSectionName, this));
+		}
+		
+		/**
+		Gets the name of the currently visited {@link IFlowSection}.
+		*/
+		public function getCurrentSectionName () : String {
+			if (mCurrentSectionName == null) return null;
+			return mCurrentSectionName;
+		}
+		
 		/**
 		Adds {@link Action Actions} to the ActionRunner's list.
 		@param inSectionName: name of the FlowSection
@@ -363,14 +398,14 @@ package org.asaplibrary.management.flow {
 		*/
 		protected function runNextGoToSection () : void {
 						
-			var sectionVO:SectionVO = mSectionDestinations.shift();
-			if (sectionVO == null) {
+			var sectionNavigationData:SectionNavigationData = mSectionDestinations.shift();
+			if (sectionNavigationData == null) {
 				reset();
 				return;
 			}
 			
-			var doUpdateState:Boolean = sectionVO.doUpdateState;
-			var sectionName:String = sectionVO.sectionName;
+			var doUpdateState:Boolean = sectionNavigationData.updateState;
+			var sectionName:String = sectionNavigationData.name;
 						
 			var section:IFlowSection = mSections[sectionName];
 			if (!section) {
@@ -382,9 +417,11 @@ package org.asaplibrary.management.flow {
 			var helper:StringNodeHelper = new StringNodeHelper();
 			var type:uint = helper.getType(sectionName, mCurrentSectionName);
 			
-			// hide current section
-			addSectionActions( sectionName, FlowSectionOptions.HIDE, type, helper );
-			addSectionActions( sectionName, FlowSectionOptions.HIDE_END, type, helper );
+			if (doUpdateState) {
+				// hide current section
+				addSectionActions( sectionName, FlowSectionOptions.HIDE, type, helper );
+				addSectionActions( sectionName, FlowSectionOptions.HIDE_END, type, helper );
+			}
 			
 			// show new section
 			addSectionActions( sectionName, FlowSectionOptions.SHOW, type, helper );
@@ -412,7 +449,11 @@ package org.asaplibrary.management.flow {
 		protected function loadSection (inSectionName:String) : void {
 			var sectionNameParts:Array = inSectionName.split(".");
 			var fileName:String = sectionNameParts[sectionNameParts.length-1];
+			if (fileName.length == 0) {
+				Log.error("loadSection; trying to load empty file for section: " + inSectionName, toString());
+			}
 			var url:String = mDownloadDirectory + fileName + ".swf";
+			Log.info("loadSection; trying to load file: " + url, toString());
 			var mm:MovieManager = MovieManager.getInstance();
 			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_LOAD, inSectionName, this));
 			mm.addEventListener( MovieManagerEvent._EVENT, onMovieEvent );
@@ -420,26 +461,21 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Updates the state with the current section name.
-		@param inSectionName: name of the current FlowSection
-		@sends FlowNavigationEvent#UPDATE
-		*/
-		protected function setCurrentSection (inSectionName:String) : void {
-			mCurrentSectionName = inSectionName;
-			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.UPDATE, mCurrentSectionName, this));
-		}
-		
-		/**
 		Handles MovieManagerEvents.
 		@sends FlowNavigationEvent#LOADED
 		*/
 		protected function onMovieEvent (e:MovieManagerEvent) {
-			if (e.subtype == MovieManagerEvent.MOVIE_READY) {
-				if (e.controller is IFlowSection) {
-					var section:IFlowSection = IFlowSection(e.controller);
-					registerFlowSection(section);
-					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, section.getName(), this));
-				}
+			switch (e.subtype) {
+				case MovieManagerEvent.MOVIE_READY:
+					if (e.controller is IFlowSection) {
+						var section:IFlowSection = IFlowSection(e.controller);
+						registerFlowSection(section);
+						dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, section.getName(), this));
+					}
+					break;
+				case MovieManagerEvent.ERROR:
+					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADING_ERROR, e.name, this));
+					break;
 			}
 		}
 		
@@ -453,6 +489,7 @@ package org.asaplibrary.management.flow {
 			mSections = new Object();
 			mRules = new Object();
 			mSectionDestinations = new Array();
+			mNavigationData = new Object();
 		}
 		
 		override public function toString () : String {
@@ -460,25 +497,6 @@ package org.asaplibrary.management.flow {
 		}
 		
 	}
-}
-
-/**
-Value Object for section names and 'should update state' flags.
-*/
-class SectionVO {
-	
-	public var sectionName:String;
-	public var doUpdateState:Boolean;
-	
-	function SectionVO (inSectionName:String, inDoUpdateState:Boolean) : void {
-		sectionName = inSectionName;
-		doUpdateState = inDoUpdateState;
-	}
-	
-	public function toString () : String {
-		return "SectionVO: sectionName=" + sectionName + "; doUpdateState=" + doUpdateState;
-	}
-	
 }
 
 import org.asaplibrary.management.flow.*;
