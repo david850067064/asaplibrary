@@ -13,11 +13,8 @@ package controller {
 		public var tRoundedBtn:SimpleButton;
 		public var tPictureBtn:SimpleButton;
 		
-		/**
-		
-		*/
 		function HomeController () {
-			super("HomeController");
+			super(AppSettings.HOME_NAME);
 			addEventListener(MouseEvent.CLICK, handleButtonClick);
 		}
 

@@ -19,7 +19,7 @@ package controller {
 		private var mCurrentController:LocalController;
 		
 		function AppController () {
-			super("AppController");
+			super(AppSettings.MAIN_NAME);
 			listen();
 			loadMenu();
 			gotoHome();
@@ -60,7 +60,7 @@ package controller {
 			// else: a new state
 			navMan.setState(state);
 			
-			var lc:LocalController = MovieManager.getInstance().getLocalControllerByName(state);
+			var lc:LocalController = MovieManager.getInstance().getLocalControllerByName(state, true);
 			if (lc != null) {
 				// already loaded
 				showMovie(lc);
