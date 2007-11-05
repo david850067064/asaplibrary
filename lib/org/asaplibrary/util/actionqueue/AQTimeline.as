@@ -14,14 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-ActionQueue methods to control a MovieClip's timeline.
-*/
-
 package org.asaplibrary.util.actionqueue {
 
 	import flash.display.MovieClip;
 
+	/**
+	Action methods to control a MovieClip's timeline.
+	*/
 	public class AQTimeline {
 	
 		/**
@@ -29,7 +28,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inMC : movieclip which timeline to control
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/	
-		public function gotoAndPlay (inMC:MovieClip, inFrame:Object = null) : void {
+		public function gotoAndPlay (inMC:MovieClip, inFrame:Object = null) : Action {
+			return new Action(this, doGotoAndPlay, [inMC, inFrame]);
+		}
+		
+		protected function doGotoAndPlay (inMC:MovieClip, inFrame:Object = null) : void {
 			var frame:Object = (inFrame != null) ? inFrame : Number(1);
 			inMC.gotoAndPlay(frame);
 		}
@@ -39,7 +42,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inMC : movieclip which timeline to control
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/
-		public function gotoAndStop (inMC:MovieClip, inFrame:Object = null) : void {
+		public function gotoAndStop (inMC:MovieClip, inFrame:Object = null) : Action {
+			return new Action(this, doGotoAndStop, [inMC, inFrame]);
+		}
+		
+		protected function doGotoAndStop (inMC:MovieClip, inFrame:Object = null) : void {
 			var frame:Object = (inFrame != null) ? inFrame : Number(1);
 			inMC.gotoAndStop(frame);
 		}

@@ -19,6 +19,9 @@ package org.asaplibrary.util.actionqueue {
 	
 	import flash.display.*;
 	
+	/**
+	Action methods to set the properties of a DisplayObject or MovieClip.
+	*/
 	public class AQSet {
 		
 		/**
