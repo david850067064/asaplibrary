@@ -49,13 +49,17 @@ package org.asaplibrary.management.flow {
 		Event subtype sent after successfully loading a section movie.
 		*/
 		public static const LOADED:String = "loaded";
+		/**
+		Event subtype sent when an error occurred loading a section movie.
+		*/
+		public static const LOADING_ERROR:String = "loadError";
 		
 		public var subtype:String;
 		public var name:String;
-		public var sender:Object
+		public var sender:Object;
 	
 		/**
-		Creates a new FlowNavigationEvent.
+		Creates a new FlowNavigationEvent. This event bubbles through and is cancelable.
 		@param inSubtype: either subtype, see above
 		@param inName: name of the {@link FlowSection}
 		@param inSender: sender of the event
