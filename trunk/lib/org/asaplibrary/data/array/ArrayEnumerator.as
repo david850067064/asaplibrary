@@ -15,15 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Straightforward enumeration (iterator) class for arrays. ArrayEnumerator has one way of iterating: forward ({@link #getNextObject}). For more options see {@link TraverseArrayEnumerator}.
-@author Arthur Clemens
-*/
 
 package org.asaplibrary.data.array {
 
 	import org.asaplibrary.data.BaseEnumerator;
 
+	/**
+	Straightforward enumeration (iterator) class for arrays. ArrayEnumerator has one way of iterating: forward (using {@link #getNextObject}). For more options see {@link TraverseArrayEnumerator}.
+	*/
 	public class ArrayEnumerator extends BaseEnumerator {
 
 		protected var mObjects:Array; /**< Pointer to external array. */

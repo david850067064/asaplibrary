@@ -18,7 +18,24 @@ limitations under the License.
 package org.asaplibrary.data.tree {
 
 	import org.asaplibrary.data.BaseEnumerator;
+	import org.asaplibrary.util.debug.Log;
 	
+	/**
+	Straightforward enumeration (iterator) class for {@link Tree} objects. TreeEnumerator has one way of iterating: forward ({@link #getNextObject}).
+	@use
+	<code>
+	var root:Tree = new Tree("root");
+	var child:Tree = root.addChild("A");
+	var e:TreeEnumerator = new TreeEnumerator(root);
+	trace(e.getCurrentObject()); // null
+	var node:Tree = e.getNextObject();
+	trace(e.getCurrentObject()); // Tree: root
+	node = e.getNextObject();
+	trace(e.getCurrentObject()); // Tree: "A"
+	node = e.getNextObject();
+	trace(e.getCurrentObject()); // null
+	</code>
+	*/
 	public class TreeEnumerator extends BaseEnumerator {
 	
 		private var mRootNode:Tree; /**< The root node. May be set to any node. */
@@ -26,17 +43,21 @@ package org.asaplibrary.data.tree {
 		private var mIsEnumerating:Boolean;
 		private var mLastNode:Tree; /**< Last node of the Tree; for performance reasons searched only once. */
 		
+		/**
+		Creates a new enumerator.
+		@param inRoot: Tree (root node) to enumerate
+		*/
 		public function TreeEnumerator (inRoot:Tree) {
 			super();
 			if (inRoot == null) {
-				//Console.ERROR(toString() + "; constructor: root node must be passed.");
+				Log.error("TreeEnumerator constructor: root node must be passed.", toString());
 				return;
 			}
 			root = inRoot;
 		}
 		
 		/**
-		
+		The enumerated Tree.
 		*/
 		public function get root () : Tree {
 			return mRootNode;
@@ -54,21 +75,23 @@ package org.asaplibrary.data.tree {
 		}
 		
 		/**
-
+		@return The current Tree node.
 		*/
 		public override function getCurrentObject () : * {
 			return Tree(mCurrentNode);
 		}
 		
 		/**
-
+		Moves the enumerator to Tree node inTreeNode.
+		@param inTreeNode: the node to start enumerating from
 		*/
 		public function setCurrentObject (inTreeNode:Tree) : void {
 			update(inTreeNode);
 		}
 		
 		/**
-		
+		Moves the enumerator to the next position and returns its value.
+		@return The Tree node at the new position.
 		*/
 		public override function getNextObject () : * {
 			var nextNode:Tree = performGetNextObject();
@@ -79,7 +102,7 @@ package org.asaplibrary.data.tree {
 		}
 		
 		/**
-
+		Resets the enumerator to the start.
 		*/	
 		public override function reset () : void {
 			update(null);
@@ -104,7 +127,9 @@ package org.asaplibrary.data.tree {
 		}
 		
 		/**
-
+		Updates the position of the enumerator to Tree node inNewNode. The new node may be null.
+		@param inNewNode: the Tree node to move the enumerator to
+		@return The node passed in mCurrentNode, or null.
 		*/
 		protected function update (inNewNode:Tree) : Tree {
 			mCurrentNode = inNewNode;
@@ -113,7 +138,8 @@ package org.asaplibrary.data.tree {
 		}
 		
 		/**
-
+		Finds the nexts object in the Tree.
+		@return The Tree node at the next position.
 		*/
 		protected function performGetNextObject () : Tree {
 			if (!mIsEnumerating) {
@@ -187,8 +213,8 @@ package org.asaplibrary.data.tree {
 			var siblings:Array = inTempNode.parent.children;
 			if (!siblings) return null;
 			
-			var thisSiblingPosition:int = getArrayItemIndex(inTempNode, siblings);
-
+			var thisSiblingPosition:int = siblings.indexOf(inTempNode);
+			
 			if (siblings.length - 1 > thisSiblingPosition) {
 				// the parent has more children after this current child
 				var nextNode:Tree = siblings[thisSiblingPosition + 1];
@@ -202,21 +228,6 @@ package org.asaplibrary.data.tree {
 			// else
 			return null;
 		}
-		
-		/**
-		
-		*/
-		protected function getArrayItemIndex(inNode:Tree,
-													inArray:Array) : int {
-			var i:int, ilen:int = inArray.length;
-			for (i=0; i<ilen; ++i) {
-				if (inNode == inArray[i]) {
-					return i;
-				}
-			}
-			return -1;
-		}
-
 		
 	}
 	

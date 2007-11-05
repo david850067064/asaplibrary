@@ -17,16 +17,35 @@ limitations under the License.
 
 package org.asaplibrary.data.tree {
 
+	/**
+	All sorts of information is hierarchical and can be represented by a tree structure: websites, photo albums, topic knowledge, etcetera.
+	
+	This Tree class is a position tree: each tree node has exactly one parent node and can have multiple children. The root node has no parent.
+	Tree nodes can be added as sub-Tree objects.
+	
+	Use a {@link TreeEnumerator} to traverse the tree.
+	@use
+	<code>
+	var root:Tree = new Tree("root");
+	var data:Object = {order:0;};
+	var child:Tree = root.addChild("A", data);
+	</code>
+	*/
 	public class Tree {
 	
-		private var mName:String; /**< Tree identifier. */
-		private var mParent:Tree = null; /**< Parent node. */
-		private var mChildren:Array; /*< List of child nodes (typical of a position tree). */
-		
-		private var mData:Object = null; /**< Contents of this node. */
+		 /** Tree identifier. */
+		private var mName:String;
+		/** Parent node. */
+		private var mParent:Tree = null;
+		/** List of child nodes (typical of a position tree). */
+		private var mChildren:Array; 
+		/**< Contents of this node. */
+		private var mData:Object = null; 
 				
 		/**
-		
+		Creates a new Tree.
+		@param inName: (optional) name of the tree.
+		@param inParent: (optional) parent of this node
 		*/
 		function Tree (inName:String = "", inParent:Tree = null) {
 			parent = inParent;
@@ -34,10 +53,22 @@ package org.asaplibrary.data.tree {
 		}
 		
 		/**
-		
+		Adds an existing Tree node as child.
+		@param inTree: child node to add
 		*/
-		public function addChild (inName:String,
-								  inData:Object = null) : Tree {
+		public function addChildNode (inTree:Tree) : void {
+		
+			inTree.parent = this;
+			if (mChildren == null) mChildren = new Array();
+			mChildren.push(inTree);
+		}
+		
+		/**
+		Creates a new Tree node and adds it as child.
+		@param inName: the identifier name; this name should be unique and without spaces.
+		@param inData: (optional) data container
+		*/
+		public function addChild (inName:String, inData:Object = null) : Tree {
 		
 			var childNode = new Tree(inName, this);
 			if (mChildren == null) mChildren = new Array();
@@ -46,7 +77,6 @@ package org.asaplibrary.data.tree {
 			if (inData != null) {
 				childNode.data = inData;
 			}
-			
 			return childNode;
 		}
 		
@@ -73,7 +103,7 @@ package org.asaplibrary.data.tree {
 		}
 				
 		/**
-		The array of child nodes.
+		The list of child nodes.
 		*/
 		public function get children () : Array {
 			return mChildren;
@@ -94,7 +124,7 @@ package org.asaplibrary.data.tree {
 		*/
 		public function toString () : String {
 			var dataStr:String = data ? data.toString() : "";
-			return "Tree " + name + "; data=" + dataStr;
+			return ";org.asaplibrary.data.tree.Tree: " + name + "; data=" + dataStr;
 		}
 		
 		/**

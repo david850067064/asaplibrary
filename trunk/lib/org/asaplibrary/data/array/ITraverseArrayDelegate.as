@@ -15,15 +15,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/**
-Array traverse options used by {@link TraverseArrayEnumerator}.
-*/
-
 package org.asaplibrary.data.array {
 
+	/**
+	Delegate interface contract for {@link TraverseArrayEnumerator} delegate objects - see {@link TraverseArrayEnumerator#addDelegate}.
+	*/
 	public interface ITraverseArrayDelegate {
 	
-		function validateObjectAtLocation (inObjects:Array, inLocation:Number) : Boolean;
+		/**
+		Validates if the {@link TraverseArrayEnumerator} may update its state to the object at location inLocation in list inObjects.
+		@param inObjects: list of enumerated objects
+		@param inLocation: pointer location of the to be updated state
+		@return True if the update is allowed; false if it is prohibited.
+		@use
+		<code>
+		public function mayUpdateToObject (inObjects:Array, inLocation:Number) : Boolean {
+			return (inObjects[inLocation] == "A");
+		}
+		</code>
+		*/
+		function mayUpdateToObject (inObjects:Array, inLocation:Number) : Boolean;
 		
 	}
 }

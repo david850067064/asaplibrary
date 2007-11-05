@@ -1,4 +1,4 @@
-package org.asaplibrary.data.tree {
+﻿package org.asaplibrary.data.tree {
 	
 	import asunit.framework.TestCase;
 	import org.asaplibrary.data.tree.TreeEnumerator;
@@ -18,6 +18,21 @@ package org.asaplibrary.data.tree {
 			e.root = newroot;
 			assertTrue("TreeEnumerator root", e.root == newroot);
 		}
+		
+		/*
+		public function testDocumentation () : void {
+			var root:Tree = new Tree("root");
+			var child:Tree = root.addChild("A");
+			var e:TreeEnumerator = new TreeEnumerator(root);
+			trace(e.getCurrentObject()); // null
+			var node:Tree = e.getNextObject();
+			trace(e.getCurrentObject()); // Tree: root
+			node = e.getNextObject();
+			trace(e.getCurrentObject()); // Tree: "A"
+			node = e.getNextObject();
+			trace(e.getCurrentObject()); // null
+		}
+		*/
 		
 		public function testEnumerate() : void {
 			var root:Tree = new Tree("root");

@@ -20,15 +20,15 @@ package org.asaplibrary.data.array {
 	import org.asaplibrary.data.array.*;
 	
 	/**
-	Enhanced array enumerator, with the option to loop. TraverseArrayEnumerator sends out traverse events of type {@link TraverseArrayEnumeratorEvent#UPDATE}.
+	Enhanced array enumerator, with the option to loop and validate updates by way of a delegate. TraverseArrayEnumerator sends out traverse events of type {@link TraverseArrayEnumeratorEvent#UPDATE}.
 	
 	A TraverseArrayEnumerator can be used with a paging controller to navigate through a list of thumbs or search result pages.
 	*/
-	
 	public class TraverseArrayEnumerator extends ArrayEnumerator {
 	
+		/** Bitwise traverse options, see {@link TraverseArrayOptions}. */
 		private var mTraverseOptions:uint = TraverseArrayOptions.NONE;
-		/** List of type ITraverseArrayDelegate */
+		/** List of type ITraverseArrayDelegate. */
 		private var mDelegates:Array; 
 		
 		/**
@@ -61,7 +61,8 @@ package org.asaplibrary.data.array {
 		}
 		
 		/**
-		Adds a delegate object that implements {@link ITraverseArrayDelegate} to validate the current object. Each delegate method is called in {@link #update} when a delegate object is set. The delegate's validation method is called to evaluate the new node before it is set.	
+		A delegate may prohibit the enumerator to update.
+		Adds a delegate object that implements {@link ITraverseArrayDelegate} to validate the current object. Each delegate method is called in {@link #update}, if a delegate object has been set. The delegate's validation method {@link ITraverseArrayDelegate#mayUpdateToObject} is called to evaluate the new node if it may be updated.
 		@param inDelegateObject: the object a class that implements ITraverseArrayDelegate
 		*/
 		public function addDelegate (inDelegateObject:ITraverseArrayDelegate) : void {
@@ -128,7 +129,7 @@ package org.asaplibrary.data.array {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "org.asaplibrary.data.array.TraverseArrayEnumerator; objects " + mObjects;
+			return ";org.asaplibrary.data.array.TraverseArrayEnumerator: objects=" + mObjects;
 		}
 		
 		// PRIVATE METHODS
@@ -136,7 +137,7 @@ package org.asaplibrary.data.array {
 		/**
 		@return The next location; -1 if the next location is not valid.
 		*/
-		private function indexOfNextObject () : int {
+		protected function indexOfNextObject () : int {
 	
 			var nextLocation:int = mLocation + 1;
 			if (mTraverseOptions & TraverseArrayOptions.LOOP) {
@@ -156,7 +157,7 @@ package org.asaplibrary.data.array {
 		/**
 		@return The previous location; -1 if the previous location is not valid.
 		*/
-		private function indexOfPreviousObject () : int {
+		protected function indexOfPreviousObject () : int {
 			
 			var previousLocation:int = mLocation - 1;
 			if (mTraverseOptions & TraverseArrayOptions.LOOP) {
@@ -179,15 +180,14 @@ package org.asaplibrary.data.array {
 		@return (Deliberately untyped) The object from the array at the new position.
 		@sends TraverseArrayEnumeratorEvent#UPDATE If the delegate validation method exists and only if the delegate method returns true.
 		*/
-		private function update (inLocation:int) : * {
+		protected function update (inLocation:int) : * {
 			
 			var isValid:Boolean = true;
 			
 			var i:uint, ilen:uint = mDelegates.length;
 			for (i=0; i<ilen; ++i) {
 				var delegate:ITraverseArrayDelegate = mDelegates[i] as ITraverseArrayDelegate;				
-				var method:Function = delegate["validateObjectAtLocation"];
-				var approved:Boolean =  Boolean(method.apply(delegate, [mObjects, inLocation]));
+				var approved:Boolean =  Boolean(delegate.mayUpdateToObject.apply(delegate, [mObjects, inLocation]));
 				if (!approved) {
 					isValid = false;
 				}

@@ -27,14 +27,15 @@ package org.asaplibrary.data {
 	public class URLData implements IParsable {
 		// the names of the urls in the file settings.xml
 
-		/** unique identifying name of url */
+		/** Unique identifying name of url. */
 		public var name:String;
-		/** actual url to be opened */
+		/** Actual url to be opened. */
 		public var url:String;
-		/** target of getURL function */
+		/** Target of getURL function. */
 		public var target:String;
 		
 		/**
+		Creates a new URLData.
 		The constructor will be called without parameters by the Parser.
 		*/
 		public function URLData (inName:String = null,
@@ -47,11 +48,11 @@ package org.asaplibrary.data {
 		
 		/**
 		This method can be used to test if the XML has valid data. Valid XML must have this setup:
-		<code>
+		{@code
 		<urls>
 			<url name="..." url="..." target="..." />
 		</urls>
-		</code>
+		}
 		... where name and url are mandatory, and target is optional.
 		@return True if parsing went ok, otherwise false.
 		*/
