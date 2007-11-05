@@ -1,4 +1,4 @@
-package controller {
+﻿package controller {
 
 	import flash.display.MovieClip;
 
@@ -10,13 +10,11 @@ package controller {
 	
 	public class AppController extends LocalController {
 		
-		private static const FADE_OUT_DURATION:Number = .2;
-		private static const FADE_IN_DURATION:Number = .7;
+		private var mCurrentController:ProjectController;
 		
-		public var tMovieHolder:MovieClip;
+		public var tHomeHolder:MovieClip;
+		public var tGalleryHolder:MovieClip;
 		public var tMenuHolder:MovieClip;
-		
-		private var mCurrentController:LocalController;
 		
 		function AppController () {
 			super(AppSettings.MAIN_NAME);
@@ -71,28 +69,34 @@ package controller {
 		
 		protected function showMovie (inController:LocalController) : void {
 
-			addChild(inController);
+			switch (inController.getName()) {
+				case AppSettings.MENU_NAME:
+					tMenuHolder.addChild(inController);
+					break;
+				case AppSettings.HOME_NAME:
+					tHomeHolder.addChild(inController);
+					break;
+				case AppSettings.GALLERY_NAME:
+					tGalleryHolder.addChild(inController);
+					break;
+			}
 			inController.alpha = 0;
 			inController.visible = true;
 			
 			var queue:ActionQueue = new ActionQueue();
-			const CURRENT:Number = Number.NaN;
-			
+						
 			switch (inController.getName()) {
 				case AppSettings.HOME_NAME:
 				case AppSettings.GALLERY_NAME:
 					if (mCurrentController != null) {
 						// hide old
-						queue.addAction( new AQFade().fade( mCurrentController, FADE_OUT_DURATION, CURRENT, 0 ));
-						queue.addAction( new AQSet().setVisible( mCurrentController, false));
+						queue.addAction( mCurrentController.hideAction );
 					}
-					mCurrentController = inController;
+					mCurrentController = inController as ProjectController;
 					break;
-				default:
-					//
 			}
 			// show new
-			queue.addAction( new AQFade().fade(inController, FADE_IN_DURATION, 0, 1));
+			queue.addAction( inController.showAction );
 			queue.run();
 		}
 

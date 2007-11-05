@@ -8,14 +8,11 @@
 	import event.NavigationEvent;
 	import ui.MenuButton;
 	
-	public class MenuController extends LocalController {
+	public class MenuController extends ProjectController {
 	
 		public var tHomeBtn:MenuButton;
 		public var tGalleryBtn:MenuButton;
-		
-		private static var BUTTON_HOME_NAME:String = "home";
-		private static var BUTTON_GALLERY_NAME:String = "gallery";
-		
+				
 		private var mSelectedButton:MenuButton;
 					
 		function MenuController () {
