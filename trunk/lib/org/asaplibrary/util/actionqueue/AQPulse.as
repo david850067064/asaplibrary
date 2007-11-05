@@ -21,7 +21,10 @@ package org.asaplibrary.util.actionqueue {
 	
 	import org.asaplibrary.util.actionqueue.*;
 	
-	public class AQPulse extends AQBaseSinoid {
+	/**
+	Action methods to control pulsing animations (fading, scaling) of a DisplayObject.
+	*/
+	public class AQPulse extends AQBaseSinusoid {
 		
 		public function fade (inDO:DisplayObject,
 							  inCount:int,
