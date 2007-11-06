@@ -64,7 +64,7 @@ package org.asaplibrary.data.array {
 		/**
 		Creates a copy of an existing TraverseArrayEnumeratorEvent.
 		*/
-		public override function clone() : Event {
+		public override function clone() : TraverseArrayEnumeratorEvent {
 			return new TraverseArrayEnumeratorEvent(subtype, value, enumerator);
 		} 
 	

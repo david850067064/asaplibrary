@@ -75,7 +75,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Creates a copy of an existing ActionEvent.
 		*/
-		public override function clone() : Event {
+		public override function clone() : ActionEvent {
 			return new ActionEvent(subtype, action, markerName);
 		} 
 	}
