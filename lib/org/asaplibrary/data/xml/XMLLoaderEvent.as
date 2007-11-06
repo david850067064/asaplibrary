@@ -81,7 +81,7 @@ package org.asaplibrary.data.xml {
 		/**
 		Creates a copy of an existing XMLLoaderEvent.
 		*/
-		public override function clone() : XMLLoaderEvent {
+		public override function clone() : Event {
 			return new XMLLoaderEvent(subtype, name, data, source);
 		} 
 	}	
