@@ -51,7 +51,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Creates a copy of an existing ConditionEvent.
 		*/
-		public override function clone() : Event {
+		public override function clone() : ConditionEvent {
 			return new ConditionEvent(subtype, condition);
 		} 
 	}

@@ -67,7 +67,7 @@ package org.asaplibrary.util.loader {
 		/**
 		Creates a copy of an existing AssetLoaderEvent.
 		*/
-		public override function clone() : Event {
+		public override function clone() : AssetLoaderEvent {
 			return new AssetLoaderEvent(subtype, name);
 		} 
 	}

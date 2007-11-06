@@ -57,30 +57,33 @@ package org.asaplibrary.management.flow {
 		public var subtype:String;
 		public var name:String;
 		public var sender:Object;
-	
+		public var destination:String;
+		
 		/**
 		Creates a new FlowNavigationEvent. This event bubbles through and is cancelable.
 		@param inSubtype: either subtype, see above
 		@param inName: name of the {@link FlowSection}
 		@param inSender: sender of the event
+		@param inDestination: name of destination FlowSection
 		*/
-		public function FlowNavigationEvent (inSubtype:String, inName:String, inSender:Object) {
+		public function FlowNavigationEvent (inSubtype:String, inName:String, inSender:Object, inDestination:String = null) {
 			super(_EVENT, true, true);
 			
 			subtype = inSubtype;
 			name = inName;
 			sender = inSender;
+			destination = inDestination;
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; sender=" + sender;
+			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; sender=" + sender + "; destination=" + destination;
 		}
 		
 		/**
 		Creates a copy of an existing FlowNavigationEvent.
 		*/
-		public override function clone() : Event {
-			return new FlowNavigationEvent(subtype, name, sender);
+		public override function clone() : FlowNavigationEvent {
+			return new FlowNavigationEvent(subtype, name, sender, destination);
 		} 
 	}
 }

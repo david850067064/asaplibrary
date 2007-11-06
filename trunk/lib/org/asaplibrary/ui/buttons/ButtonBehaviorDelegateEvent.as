@@ -79,7 +79,7 @@ package org.asaplibrary.ui.buttons {
 		/**
 		Creates a copy of an existing ButtonBehaviorDelegateEvent.
 		*/
-		public override function clone() : Event {
+		public override function clone() : ButtonBehaviorDelegateEvent {
 			return new ButtonBehaviorDelegateEvent(subtype, state, selected, enabled, pressed, mouseEvent);
 		} 
 	}	
