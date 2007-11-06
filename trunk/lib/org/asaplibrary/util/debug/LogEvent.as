@@ -50,7 +50,7 @@ package org.asaplibrary.util.debug {
 		/**
 		Creates a copy of an existing LogEvent.
 		*/
-		public override function clone() : LogEvent {
+		public override function clone() : Event {
 			return new LogEvent(level, text, sender);
 		} 
 	

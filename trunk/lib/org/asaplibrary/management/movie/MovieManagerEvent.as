@@ -79,7 +79,7 @@ package org.asaplibrary.management.movie {
 		/**
 		Creates a copy of an existing MovieManagerEvent.
 		*/
-		public override function clone() : MovieManagerEvent {
+		public override function clone() : Event {
 			return new MovieManagerEvent(subtype, name, controller, container, error);
 		} 
 	}
