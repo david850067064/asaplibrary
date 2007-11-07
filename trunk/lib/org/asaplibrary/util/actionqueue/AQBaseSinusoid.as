@@ -23,7 +23,7 @@ package org.asaplibrary.util.actionqueue {
 	import org.asaplibrary.util.NumberUtils;
 	
 	/**
-	Base class that does calculates the initial settings for sinoid-like movements, like blinking and pulsing.
+	Base class that calculates the starting values for sinusoid-like movements like blinking and pulsing.
 	*/
 	public class AQBaseSinusoid {
 				
@@ -46,7 +46,8 @@ package org.asaplibrary.util.actionqueue {
 		protected var mPerformFunction:Function;
 		
 		/**
-		
+		Initializes the starting values.
+		@return A TimedAction created from {@link #mPerformFunction}. 
 		*/
 		protected function init () : TimedAction {
 			mMaxValue = (!isNaN(mParamMaxValue)) ? mParamMaxValue : mDO.alpha;
