@@ -2,6 +2,7 @@
 
 	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import fl.motion.easing.*;
 
@@ -21,7 +22,7 @@
 
 		private var mLoaderAnim:Loader;
 
-		public static const OPTIONS:Class = FlowSectionOptions;		
+		public static const OPTIONS:Class = FlowOptions;		
 		protected var FM:FlowManager = FlowManager.getInstance();
 		
 		function AppController () {
@@ -82,11 +83,10 @@
 				rule,
 				[AppSettings.SECTION1, AppSettings.SECTION2, AppSettings.SECTION3, AppSettings.SECTION4]
 			);
-	
 		}
 		
 		protected function start () : void {
-			visible = true;
+			visible = true; // necessary because this is a FlowSection as well
 			FM.goto(AppSettings.SECTION_INTRO);
 			FM.goto(AppSettings.SECTION_MENU, false, false);
 		}
@@ -136,13 +136,13 @@
 					break;
 				case FlowNavigationEvent.WILL_LOAD:
 					// movie is about to be loaded
-					prepareMovie(e.name);
+					prepareMovie(e);
 					break;
 				case FlowNavigationEvent.LOADED:
 					// just for this demo, add a little pause just to show the loader
 					// otherwise use:
-					//attachMovie(e.name);
-					new FrameDelay(attachMovie, 30, [e.name]);
+					//attachMovie(e);
+					new FrameDelay(attachMovie, 30, [e]);
 					break;
 				default:
 					//
@@ -166,16 +166,14 @@
 		/**
 		
 		*/
-		protected function prepareMovie (inName:String) : void {
-			switch (inName) {
-				case AppSettings.SECTION4: 
-					// move to position
-					var x:Number, y:Number;
-					x = -400; y = -260;
-					var queue:ActionQueue = moveQueue(x, y);
-					queue.addAction(showLoader);
-					queue.run();
-					break;
+		protected function prepareMovie (e:FlowNavigationEvent) : void {
+			if (e.name.indexOf(AppSettings.SECTION4) != -1) {
+				// move to position
+				var x:Number, y:Number;
+				x = -400; y = -260;
+				var queue:ActionQueue = moveQueue(x, y);
+				queue.addAction(showLoader);
+				queue.run();
 			}
 		}
 		
@@ -200,16 +198,16 @@
 		/**
 		
 		*/
-		protected function attachMovie (inName:String) : void {
-			var section:IFlowSection = FM.getSectionByName(inName);
+		protected function attachMovie (e:FlowNavigationEvent) : void {
+			var section:IFlowSection = FM.getSectionByName(e.name);
 			if (section != null) {
 				var clip:DisplayObject = tSections.addChild(DisplayObject(section));
-				if (inName == AppSettings.SECTION4) {
+				if (e.name == AppSettings.SECTION4) {
 					clip.x = 400;
 					clip.y = 300;
 				}
 				hideLoader();
-				FM.goto(inName);
+				FM.goto(e.destination);
 			}
 		}
 		
