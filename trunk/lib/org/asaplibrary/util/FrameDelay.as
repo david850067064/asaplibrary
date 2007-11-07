@@ -22,7 +22,7 @@ package org.asaplibrary.util {
 	
 	/**
 	Class that provides one or more frames delay. 
-	Use this when initializing a swf or a bunch of movieclips, to enable the player to do its thing.
+	Use this when initializing a swf or a bunch of MovieClips, to enable the player to do its thing.
 	Usually a single frame delay will do the job, since the next enterFrame will come when all other jobs are finished.
 	This class will catch that next onEnterFrame and fire the function in the object passed as parameters.
 	
@@ -49,14 +49,6 @@ package org.asaplibrary.util {
 				mFrameDelay.die();
 		}
 	</code>
-	
-	When starting a swf:
-	<code>
-		// wait one enterFrame before notifying the MovieManager that this movie is done initializing
-		var fd:FrameDelay = new FrameDelay(lc.notifyMovieInitialized);
-	</code>
-	
-	@todo Update docs
 	*/
 	
 	public class FrameDelay {
@@ -67,19 +59,23 @@ package org.asaplibrary.util {
 		private var mParams:Array;
 	
 		/**
-		Constructor; starts the waiting immediately.
-		@param inCallback:Function, the callback function to be called when done waiting
-		@param inFrameCount:Number, the number of frames to wait; when left out, or set to 1 or 0, one frame is waited
-		@param inParams:Array, list of paramters to pass to callback function
+		Creates a new FrameDelay. Starts the delay immediately.
+		@param inCallback: the callback function to be called when done waiting
+		@param inFrameCount: the number of frames to wait; when left out, or set to 1 or 0, one frame is waited
+		@param inParams: list of parameters to pass to the callback function
 		
 		*/
-		public function FrameDelay (inCallback:Function, inFrameCount:Number = Number.NaN, inParams:Array = null) {
-			wait(inCallback, inFrameCount, inParams);
+		public function FrameDelay (inCallback:Function, inFrameCount:int = 0, inParams:Array = null) {
+			mCurrentFrame = inFrameCount;
+			mCallback = inCallback;
+			mParams = inParams;
+			mIsDone = (isNaN(inFrameCount) || (inFrameCount <= 1));
+			FramePulse.addEnterFrameListener(handleEnterFrame);
 		}
 	
 		/**
-		*	Release reference to creating object
-		*	Use this to remove a FrameDelay object that is still running when the creating object will be removed
+		Release reference to creating object.
+		Use this to remove a FrameDelay object that is still running when the creating object will be removed.
 		*/
 		public function die () : void {
 			if (!mIsDone) {
@@ -87,33 +83,18 @@ package org.asaplibrary.util {
 			}
 		}
 	
-		// PRIVATE METHODS
-		
-		/**
-		Stores input parameters (see {@link #FrameDelay constructor} parameters), start waiting.
-		*/
-		private function wait (inCallback:Function, inFrameCount:Number, inParams:Array) : void {
-			mCurrentFrame = inFrameCount;
-			mCallback = inCallback;
-			mParams = inParams;
-	
-			mIsDone = (isNaN(inFrameCount) || (inFrameCount <= 1));
-	
-			// listen to framepulse events
-			FramePulse.addEnterFrameListener(handleEnterFrame);
-		}
-	
 		/**
 		Handle the onEnterFrame event.
 		Checks if still waiting - when true: calls callback function.
+		@param e: not used
 		*/
 		private function handleEnterFrame (e:Event) : void {
 			if (mIsDone) {
 				FramePulse.removeEnterFrameListener(handleEnterFrame);
 				if (mParams == null) {
-					mCallback();
+					mCallback.apply(null);
 				} else {
-					mCallback(mParams);
+					mCallback.apply(null, mParams);
 				}
 			} else {
 				mCurrentFrame--;
