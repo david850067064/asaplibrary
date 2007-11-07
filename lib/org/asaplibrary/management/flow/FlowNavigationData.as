@@ -18,22 +18,22 @@ limitations under the License.
 package org.asaplibrary.management.flow {
 	
 	/**
-	Data for section names and flags.
+	Navigation properties for {@link FlowSection} names.
 	*/
-	public class SectionNavigationData {
+	public class FlowNavigationData {
 		
 		public var name:String;
 		public var stopEverythingFirst:Boolean;
 		public var updateState:Boolean;
 		
-		function SectionNavigationData (inSectionName:String, inStopEverythingFirst:Boolean, inUpdateState:Boolean) : void {
+		function FlowNavigationData (inSectionName:String, inStopEverythingFirst:Boolean, inUpdateState:Boolean) : void {
 			name = inSectionName;
 			stopEverythingFirst = inStopEverythingFirst;
 			updateState = inUpdateState;
 		}
 		
 		public function toString () : String {
-			return "SectionNavigationData: name=" + name + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
+			return "FlowNavigationData: name=" + name + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
 		}
 		
 	}

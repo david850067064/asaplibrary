@@ -64,7 +64,7 @@ package org.asaplibrary.management.flow {
 		@param inSubtype: either subtype, see above
 		@param inName: name of the {@link FlowSection}
 		@param inSender: sender of the event
-		@param inDestination: name of destination FlowSection
+		@param inDestination: (optional) name of destination FlowSection; when not specified this defaults to the FlowSection name
 		*/
 		public function FlowNavigationEvent (inSubtype:String, inName:String, inSender:Object, inDestination:String = null) {
 			super(_EVENT, true, true);
@@ -72,12 +72,19 @@ package org.asaplibrary.management.flow {
 			subtype = inSubtype;
 			name = inName;
 			sender = inSender;
-			destination = inDestination;
+			destination = inDestination != null ? inDestination : inName;
 		}
 		
 		public override function toString () : String {
 			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; sender=" + sender + "; destination=" + destination;
 		}
+		
+		/**
+		Creates a copy of an existing FlowNavigationEvent.
+		*/
+		public function copy() : FlowNavigationEvent {
+			return new FlowNavigationEvent(subtype, name, sender, destination);
+		} 
 		
 		/**
 		Creates a copy of an existing FlowNavigationEvent.
