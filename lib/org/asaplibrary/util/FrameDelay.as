@@ -29,28 +29,20 @@ package org.asaplibrary.util {
 	A parameter is available if the delay has to be more than one frame.
 	
 	@usage
+	To execute function 'init' after 10 frames, use:
 	<code>
-		class myClass {
-		
-		private var mFrameDelay:FrameDelay;
-		
-			function init () : void {
-				 ... do a bunch of inits
-				
-				// wait one enterFrame
-				mFrameDelay = new FrameDelay(initDone);
-			}
-	
-			private function initDone () : void {
-				...
-			}
-			
-			private function goAway () {
-				mFrameDelay.die();
-		}
+	new FrameDelay(init, 10);
+	</code>
+	To call function 'setProps' with parameters, executed after 1 frame:
+	<code>
+	new FrameDelay(setProps, 1, [shape, 'alpha', 0]);
+	</code>
+	<code>
+	private function setProps (inShape:Shape, inProperty:String, inValue:Number) : void {
+		inShape[inProperty] == inValue);
+	}
 	</code>
 	*/
-	
 	public class FrameDelay {
 		
 		private var mIsDone:Boolean = false;
@@ -63,7 +55,6 @@ package org.asaplibrary.util {
 		@param inCallback: the callback function to be called when done waiting
 		@param inFrameCount: the number of frames to wait; when left out, or set to 1 or 0, one frame is waited
 		@param inParams: list of parameters to pass to the callback function
-		
 		*/
 		public function FrameDelay (inCallback:Function, inFrameCount:int = 0, inParams:Array = null) {
 			mCurrentFrame = inFrameCount;

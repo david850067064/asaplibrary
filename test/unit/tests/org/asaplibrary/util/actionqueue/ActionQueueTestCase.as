@@ -399,9 +399,7 @@
 			new FrameDelay(evaluateTestAddMove, TEST_DELAY, [shape, 100]);
 		}
 		
-		private function evaluateTestAddMove (inArgs:Array) : void {
-			var s:Shape = inArgs[0] as Shape;
-			var value:Number = inArgs[1] as Number;
+		private function evaluateTestAddMove (s:Shape, value:Number) : void {
 			// because of rounding errors we cannot measure y to the floating point, so we use a round
 			assertTrue("ActionQueueTestCase evaluateTestAddMove", Math.round(s.y) == Math.round(value));
 		}
@@ -463,8 +461,7 @@
 			queue.run();
 		}
 		
-		private function evaluateTestFollowMouse (inArgs:Array) : void {
-			var s:Shape = inArgs[0] as Shape;
+		private function evaluateTestFollowMouse (s:Shape) : void {
 			
 			assertTrue("ActionQueueTestCase evaluateTestFollowMouse", Math.round(s.x) == Math.round(mCanvas.mouseX));
 			assertTrue("ActionQueueTestCase evaluateTestFollowMouse", Math.round(s.y) == Math.round(mCanvas.mouseY));
@@ -510,10 +507,7 @@
 			return s;
 		}
 		
-		private function evaluateShapeProperty (inArgs:Array) : void {
-			var s:Shape = inArgs[0] as Shape;
-			var type:String = inArgs[1] as String;
-			var value:Number = inArgs[2] as Number;
+		private function evaluateShapeProperty (s:Shape, type:String, value:Number) : void {
 			
 //			trace("evaluateShapeProperty: " + type + " should be:" + value + " is:" + s[type]);
 			assertTrue("ActionQueueTestCase evaluateShapeProperty " + type, s[type] == value);
