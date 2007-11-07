@@ -82,13 +82,6 @@ package org.asaplibrary.management.flow {
 		/**
 		Creates a copy of an existing FlowNavigationEvent.
 		*/
-		public function copy() : FlowNavigationEvent {
-			return new FlowNavigationEvent(subtype, name, sender, destination);
-		} 
-		
-		/**
-		Creates a copy of an existing FlowNavigationEvent.
-		*/
 		public override function clone() : Event {
 			return new FlowNavigationEvent(subtype, name, sender, destination);
 		} 
