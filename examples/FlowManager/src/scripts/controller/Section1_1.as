@@ -14,12 +14,15 @@
 		
 		public var tNumber:MovieClip;
 		public var tClose:CloseButton;
-		
+				
 		function Section1_1 () {
-			super( AppSettings.SECTION1_1 );
+			super();
 			tNumber.tText.text = "1.1";
 			tClose.addEventListener(MouseEvent.MOUSE_UP, handleClose);
-
+		}
+		
+		public override function getName () : String {
+			return AppSettings.SECTION1_1;
 		}
 
 		protected function handleClose (e:MouseEvent) : void {

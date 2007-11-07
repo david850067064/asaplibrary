@@ -14,6 +14,7 @@
 		public var Show_Section2:GenericButton;
 		public var Show_Section3:GenericButton;
 		public var Show_Register:GenericButton;
+		public var Show_Section4_1:GenericButton;
 		
 		function Section4 () {
 			super( AppSettings.SECTION4 );
@@ -21,6 +22,10 @@
 			Show_Section2.setData("Show 2", AppSettings.SECTION2);
 			Show_Section3.setData("Show 3", AppSettings.SECTION3);
 			Show_Register.setData("Register now", AppSettings.SECTION1_1);
+			Show_Section4_1.setData("Show 4.1", AppSettings.SECTION4_1);
+			
+			alpha = 0;
+			visible = false;
 			
 			if (isStandalone()) {
 				showStandalone();
@@ -30,7 +35,6 @@
 		public override function get showAction () : IAction {
 			var queue:ActionQueue = new ActionQueue("Section4 show");
 			queue.addAction(new AQSet().setVisible(this, true));
-			queue.addAction(new AQSet().setAlpha(this, 0));
 			const CURRENT:Number = Number.NaN;
 			var effect:Function = Quadratic.easeOut;
 			// use an asychronous action so we don't have to wait each time

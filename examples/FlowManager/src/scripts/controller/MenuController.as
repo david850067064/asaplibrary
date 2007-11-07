@@ -26,7 +26,7 @@
 		private var mLeft:Number = XPOS;
 		
 		function MenuController () {
-			super("Menu");
+			super();
 			
 			mButtons = new Object();
 			
@@ -39,7 +39,12 @@
 			x += addButton(AppSettings.SECTION2, "Two", x) + MARGIN_RIGHT;
 			x += addButton(AppSettings.SECTION3, "Three", x) + MARGIN_RIGHT;
 			x += addButton(AppSettings.SECTION4, "Four", x) + MARGIN_RIGHT;
+			x += addButton(AppSettings.SECTION4_1, "Four.1", x) + MARGIN_RIGHT;
 			FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+		}
+		
+		public override function getName () : String {
+			return AppSettings.SECTION_MENU;
 		}
 		
 		/**
