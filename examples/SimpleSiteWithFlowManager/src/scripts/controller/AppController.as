@@ -56,7 +56,7 @@ package controller {
 						tGalleryHolder.addChild(DisplayObject(section));
 						break;
 				}
-				var data:SectionNavigationData = FM.getSectionNavigationDataByName(inName);
+				var data:FlowNavigationData = FM.getSectionNavigationDataByName(inName);
 				FM.goto(data.name, data.stopEverythingFirst, data.updateState);
 			}
 		}
