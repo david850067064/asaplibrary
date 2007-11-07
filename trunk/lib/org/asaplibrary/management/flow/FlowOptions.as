@@ -20,7 +20,7 @@ package org.asaplibrary.management.flow {
 	/**
 	FlowSection relation types and display mode types. The options use bitwise operators, see {@link ButtonStates} for an example.
 	*/
-	public class FlowSectionOptions {
+	public class FlowOptions {
 
 		public static const NONE:uint =      (1<<0); /**< Relation type. */
 		public static const EQUAL:uint =     (1<<1); /**< Relation type. */
@@ -37,6 +37,6 @@ package org.asaplibrary.management.flow {
 		public static const SHOW_END:uint =  (1<<9); /**< Display mode type. */
 		public static const HIDE:uint =      (1<<10); /**< Display mode type. */
 		public static const HIDE_END:uint =  (1<<11); /**< Display mode type. */
-		public static const LOAD:uint =      (1<<12); /**< Display mode type. */
+		
 	}
 }

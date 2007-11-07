@@ -55,7 +55,16 @@ package org.asaplibrary.management.flow {
 	public static const SECTION1_1:String    = "Sections.Section1.Section1_1";
 	public static const SECTION2:String      = "Sections.Section2";
 	</code>
-	When going from 'Sections.Section1' to 'Sections.Section2', FlowManager will detect that this is a sibling relationship. The possible types of relationships are defined in {@link FlowSectionOptions}.
+	When going from 'Sections.Section1' to 'Sections.Section2', FlowManager will detect that this is a sibling relationship. The possible types of relationships are defined in {@link FlowOptions}.
+	
+	You may also use a dot to indicate a level. In the next list the Section items have a higher depth than Intro:
+	<code>
+	public static const SECTION_INTRO:String = "Intro";
+	public static const SECTION1:String      = ".Section1";
+	public static const SECTION1_1:String    = ".Section1.Section1_1";
+	public static const SECTION2:String      = ".Section2";
+	</code>
+	This is useful when you want to let FlowManager automatically load movies based on the section names. 
 	
 	<h2>Showing and hiding</h2>
 	Each FlowSection has 2 methods that are called: {@link FlowSection#showAction} and {@link FlowSection#hideAction}. Depending on the type of relationship between the current and the new section, either one is called, or none.
@@ -142,6 +151,17 @@ package org.asaplibrary.management.flow {
 	
 	<h2>Automatic loading of missing Sections</h2>
 	When a section is not found, FlowManager will try to load it. Right before loading it will dispatch an event with subtype {@link FlowNavigationEvent#WILL_LOAD}. After loading successfully an event with subtype {@link FlowNavigationEvent#LOADED} is sent.
+	
+	You may even navigate to a section within a to-be-loaded movie. After loading you can proceed to the nested section by using the <code>destination</code> property of the incoming FlowNavigationEvent.
+	<code>
+	protected function attachMovie (e:FlowNavigationEvent) : void {
+		if (section != null) {
+			// add child clip...
+			FlowManager.getInstance().goto(e.destination);
+		}
+	}
+	</code>
+	
 	Note: calls to sections within a to be loaded movie are not supported yet.
 	
 	<h2>Responding to state changes</h2>
@@ -186,9 +206,10 @@ package org.asaplibrary.management.flow {
 		private var mSections:Object; // of type String => IFlowSection
 		private var mRules:Object; // of type FlowRule
 		private var mCurrentSectionName:String;
-		private var mSectionDestinations:Array; // of type SectionNavigationData
-		private var mNavigationData:Object; // of type String => SectionNavigationData
+		private var mSectionDestinations:Array; // of type FlowNavigationData
+		private var mNavigationData:Object; // of type String => FlowNavigationData
 		private var mDownloadDirectory:String = "";
+		private var mDownloadSections:Object; // of type String => DownloadSection
 		
 		/**
 		Access point for the one instance of the FlowManager.
@@ -259,8 +280,8 @@ package org.asaplibrary.management.flow {
 		public function goto (inSectionName:String, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
 			if (inStopEverythingFirst) {
 				reset();
-			}
-			var sectionNavigationData:SectionNavigationData = new SectionNavigationData(inSectionName, inStopEverythingFirst, inUpdateState);
+			}			
+			var sectionNavigationData:FlowNavigationData = new FlowNavigationData(inSectionName, inStopEverythingFirst, inUpdateState);
 			mNavigationData[inSectionName] = sectionNavigationData;
 			mSectionDestinations.push(sectionNavigationData);
 			runNextGoToSection();
@@ -292,11 +313,11 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Gets the {@link SectionNavigationData} with name inSectionName, if it has been registered (once {@link #goto} has been called).
+		Gets the {@link FlowNavigationData} with name inSectionName, if it has been registered (once {@link #goto} has been called).
 		@param inSectionName: name of the FlowSection
-		@return The found SectionNavigationData
+		@return The found FlowNavigationData
 		*/
-		public function getSectionNavigationDataByName (inSectionName:String) : SectionNavigationData {
+		public function getSectionNavigationDataByName (inSectionName:String) : FlowNavigationData {
 			return mNavigationData[inSectionName];
 		}
 		
@@ -329,17 +350,17 @@ package org.asaplibrary.management.flow {
 		/**
 		Adds {@link Action Actions} to the ActionRunner's list.
 		@param inSectionName: name of the FlowSection
-		@param inMode: one of the modes in {@FlowSectionOptions}
-		@param inType: one of the types in {@FlowSectionOptions}
+		@param inMode: one of the modes in {@FlowOptions}
+		@param inType: one of the types in {@FlowOptions}
 		@param inHelper: reference of the used {@link StringNodeHelper}
 		*/
 		protected function addSectionActions (inSectionName:String, inMode:uint, inType:uint, inHelper:StringNodeHelper ) : void {
 			var actions:Array = new Array();
 			var sectionNames:Array = new Array();
-			if (inMode == FlowSectionOptions.HIDE) {
+			if (inMode == FlowOptions.HIDE) {
 				sectionNames = inHelper.getHideSections(inSectionName, mCurrentSectionName, inType);
 			}
-			if (inMode == FlowSectionOptions.SHOW) {
+			if (inMode == FlowOptions.SHOW) {
 				sectionNames = inHelper.getShowSections(inSectionName, mCurrentSectionName, inType);
 			}
 			
@@ -357,8 +378,8 @@ package org.asaplibrary.management.flow {
 		/**
 		Returns an Action stored with a FlowRule, if any.
 		@param inSectionName: name of the FlowSection
-		@param inMode: one of the modes in {@FlowSectionOptions}
-		@param inType: one of the types in {@FlowSectionOptions}
+		@param inMode: one of the modes in {@FlowOptions}
+		@param inType: one of the types in {@FlowOptions}
 		@return Action, or null if no Action was found.
 		*/
 		protected function getRuleAction (inSectionName:String, inMode:uint, inType:uint) : Action {
@@ -398,11 +419,11 @@ package org.asaplibrary.management.flow {
 				
 				section = mSections[sectionName];
 				if (section != null) {
-					if (inMode == FlowSectionOptions.HIDE) {
+					if (inMode == FlowOptions.HIDE) {
 						// default hide action
 						action = section.hideAction;
 					}
-					if (inMode == FlowSectionOptions.SHOW) {
+					if (inMode == FlowOptions.SHOW) {
 						// default show action
 						action = section.showAction;
 					}
@@ -420,7 +441,7 @@ package org.asaplibrary.management.flow {
 		*/
 		protected function runNextGoToSection () : void {
 						
-			var sectionNavigationData:SectionNavigationData = mSectionDestinations.shift();
+			var sectionNavigationData:FlowNavigationData = mSectionDestinations.shift();
 			if (sectionNavigationData == null) {
 				reset();
 				return;
@@ -428,26 +449,24 @@ package org.asaplibrary.management.flow {
 			
 			var doUpdateState:Boolean = sectionNavigationData.updateState;
 			var sectionName:String = sectionNavigationData.name;
-						
 			var section:IFlowSection = mSections[sectionName];
+			var helper:StringNodeHelper = new StringNodeHelper();
+			var type:uint = helper.getType(sectionName, mCurrentSectionName);
+
 			if (!section) {
 				// not found, try to load first
 				loadSection(sectionName);
 				return;
 			}
-			
-			var helper:StringNodeHelper = new StringNodeHelper();
-			var type:uint = helper.getType(sectionName, mCurrentSectionName);
-			
 			if (doUpdateState) {
 				// hide current section
-				addSectionActions( sectionName, FlowSectionOptions.HIDE, type, helper );
-				addSectionActions( sectionName, FlowSectionOptions.HIDE_END, type, helper );
+				addSectionActions( sectionName, FlowOptions.HIDE, type, helper );
+				addSectionActions( sectionName, FlowOptions.HIDE_END, type, helper );
 			}
 			
 			// show new section
-			addSectionActions( sectionName, FlowSectionOptions.SHOW, type, helper );
-			addSectionActions( sectionName, FlowSectionOptions.SHOW_END, type, helper );
+			addSectionActions( sectionName, FlowOptions.SHOW, type, helper );
+			addSectionActions( sectionName, FlowOptions.SHOW_END, type, helper );
 			
 			if (doUpdateState) {
 				// add state update action
@@ -464,18 +483,66 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Tells {@link MovieManager} to load a SWF movie with name inSectionName in the directory set by {@link #setDownloadDirectory} (default the current movie directory). The loaded movie event is processed in {@link #onMovieEvent}.
-		@param inSectionName: name of the section and the SWF; a section named 'Sections.Section4' will be loaded as 'Section4.swf'
-		@sends FlowNavigationEvent#WILL_LOAD
+		Try to load the section. The section inSectionName may several levels deep. We try to get the first section that has not been registered and download that one first.
+		We store the destination in mDownloadSections for the next time {@link #goto} is called with that first section as destination, so we can switch the destination to our actual one.
+		@param inSectionName to go to, eventually
 		*/
 		protected function loadSection (inSectionName:String) : void {
+			
+			// find which section needs to be loaded first
+			var helper:StringNodeHelper = new StringNodeHelper();
+			var sectionParts:Array = helper.getSectionPartsFromName(inSectionName);
+						
+			var unregisteredSectionName:String = getFirstUnregisteredSectionName(sectionParts);
+			
+			var fileName:String = helper.removeLeadingDots(unregisteredSectionName);
+			if (fileName == null) {
+				return;
+			}
+			
+			mDownloadSections[unregisteredSectionName] = new DownloadSection(unregisteredSectionName, inSectionName);
+			
+			loadSectionFile(fileName, unregisteredSectionName);
+		}
+		
+		/**
+		
+		*/
+		protected function getFirstUnregisteredSectionName (inParts:Array) : String {
+			// find the first section name not yet registered
+			// we know we need to download that one first
+			var i:uint, ilen:uint = inParts.length;
+			var sectionName:String;
+			for (i=0; i<ilen; ++i) {
+				sectionName = inParts[i];
+				if (getSectionByName(sectionName) == null) {
+					return sectionName;
+				}
+			}
+			return null;
+		}
+		
+		/**
+		Tells {@link MovieManager} to load a SWF movie with name inSectionName in the directory set by {@link #setDownloadDirectory} (default the current movie directory). The loaded movie event is processed in {@link #onMovieEvent}.
+		@param inFilePart: part name of the filename; '.swf' will be added
+		@param inSectionName: name of the section and the SWF; a section named 'Sections.Section4' will be loaded as 'Section4.swf'
+		@param inTargetSectionName: section name to go to after this file has been loaded
+		@sends FlowNavigationEvent#WILL_LOAD
+		*/
+		protected function loadSectionFile (inFilePart:String, inSectionName:String) : void {
+			/*
 			var sectionNameParts:Array = inSectionName.split(".");
 			var fileName:String = sectionNameParts[sectionNameParts.length-1];
 			if (fileName.length == 0) {
-				Log.error("loadSection; trying to load empty file for section: " + inSectionName, toString());
+				Log.error("loadSectionFile; trying to load empty file for section: " + inSectionName, toString());
 			}
-			var url:String = mDownloadDirectory + fileName + ".swf";
-			Log.info("loadSection; trying to load file: " + url, toString());
+			*/
+			if (inFilePart.length == 0) {
+				Log.error("loadSectionFile; trying to load empty file for section: " + inSectionName, toString());
+				return;
+			}
+			var url:String = mDownloadDirectory + inFilePart + ".swf";
+			Log.info("loadSectionFile; trying to load file: " + url, toString());
 			var mm:MovieManager = MovieManager.getInstance();
 			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_LOAD, inSectionName, this));
 			mm.addEventListener( MovieManagerEvent._EVENT, onMovieEvent );
@@ -490,9 +557,16 @@ package org.asaplibrary.management.flow {
 			switch (e.subtype) {
 				case MovieManagerEvent.MOVIE_READY:
 					if (e.controller is IFlowSection) {
-						var section:IFlowSection = IFlowSection(e.controller);
-						registerFlowSection(section);
-						dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, section.getName(), this));
+						
+						// retrieve the destination and pass it to the event
+						var destination:String;
+						var downloadSection:DownloadSection = mDownloadSections[e.name];
+						if (downloadSection != null) {
+							destination = downloadSection.destination;
+							// void stored data
+							mDownloadSections[e.name] = null;
+						}
+						dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, e.name, this, destination));
 					}
 					break;
 				case MovieManagerEvent.ERROR:
@@ -512,6 +586,7 @@ package org.asaplibrary.management.flow {
 			mRules = new Object();
 			mSectionDestinations = new Array();
 			mNavigationData = new Object();
+			mDownloadSections = new Object();
 		}
 		
 		override public function toString () : String {
@@ -520,6 +595,21 @@ package org.asaplibrary.management.flow {
 		
 	}
 }
+
+
+/**
+ValueObject for to-be-loaded sections.
+*/
+class DownloadSection {
+	public var name:String;
+	public var destination:String;
+	
+	function DownloadSection (inName:String, inDestination:String) {
+		name = inName;
+		destination = inDestination;
+	}
+}
+
 
 import org.asaplibrary.management.flow.*;
 
@@ -533,7 +623,7 @@ Portfolio.Movies
 </code>
 ... StringNodeHelper will define that going from 'Portfolio.Photos' to 'Portfolio.Movies' is a SIBLING relationship, and going from 'Portfolio.Photos.Detail1' to 'Portfolio.Photos' is a PARENT relationship.
 
-The possible options are listed in {@link FlowSectionOptions}.
+The possible options are listed in {@link FlowOptions}.
 */
 class StringNodeHelper {
 
@@ -543,36 +633,36 @@ class StringNodeHelper {
 	public function getType (inNewSection:String, inCurrentSection:String) : uint {
 		
 		if (!inCurrentSection || !inNewSection) {
-			return FlowSectionOptions.UNRELATED;
+			return FlowOptions.UNRELATED;
 		}
 		
 		// equal?
 		if (inNewSection == inCurrentSection) {
-			return FlowSectionOptions.EQUAL;
+			return FlowOptions.EQUAL;
 		}
 
 		// child?
 		if ( isChild(inNewSection, inCurrentSection) ) {
-			return FlowSectionOptions.CHILD;
+			return FlowOptions.CHILD;
 		}
 
 		// parent?
 		// (reverse child)			
 		if ( isChild(inCurrentSection, inNewSection) ) {
-			return FlowSectionOptions.PARENT;
+			return FlowOptions.PARENT;
 		}
 
 		// sibling?
 		if ( isSibling(inNewSection, inCurrentSection) ) {
-			return FlowSectionOptions.SIBLING;
+			return FlowOptions.SIBLING;
 		}
 		
 		// distant relative?
 		if ( isDistantRelative(inNewSection, inCurrentSection) ) {
-			return FlowSectionOptions.DISTANT;
+			return FlowOptions.DISTANT;
 		}
 
-		return FlowSectionOptions.UNRELATED;
+		return FlowOptions.UNRELATED;
 	}
 
 	/**
@@ -580,7 +670,7 @@ class StringNodeHelper {
 	*/
 	public function getHideSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
 		
-		if (inCurrentSection == null) return null;
+		if (inCurrentSection == null || inCurrentSection.length == 0) return null;
 		
 		var base:String = getCommonBase(inNewSection, inCurrentSection);
 		
@@ -591,19 +681,19 @@ class StringNodeHelper {
 			baseDepth = base.split(".").length;
 		}
 		switch (inType) {
-			case FlowSectionOptions.CHILD:
+			case FlowOptions.CHILD:
 				// do nothing
 				break;
-			case FlowSectionOptions.PARENT:
+			case FlowOptions.PARENT:
 				// hide current up to base
 				hideSections = hideSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
 				break;
-			case FlowSectionOptions.SIBLING:
+			case FlowOptions.SIBLING:
 				// hide current section
 				hideSections.push(inCurrentSection);
 				break;
-			case FlowSectionOptions.DISTANT:
-			case FlowSectionOptions.UNRELATED:
+			case FlowOptions.DISTANT:
+			case FlowOptions.UNRELATED:
 				// hide current up to base
 				hideSections = hideSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
 				break;
@@ -618,6 +708,8 @@ class StringNodeHelper {
 	*/
 	public function getShowSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
 		
+		if (inNewSection == null || inNewSection.length == 0) return null;
+
 		var base:String = getCommonBase(inNewSection, inCurrentSection);
 		var showSections = new Array();
 		
@@ -626,19 +718,19 @@ class StringNodeHelper {
 			startDepth = base.split(".").length + 1;
 		}
 		switch (inType) {
-			case FlowSectionOptions.CHILD:
+			case FlowOptions.CHILD:
 				// show current up to new
 				showSections = showSections.concat( getSectionNamesForward(inNewSection, startDepth));
 				break;
-			case FlowSectionOptions.PARENT:
+			case FlowOptions.PARENT:
 				// do nothing
 				break;
-			case FlowSectionOptions.SIBLING:
+			case FlowOptions.SIBLING:
 				// show new
 				showSections.push( inNewSection );
 				break;
-			case FlowSectionOptions.DISTANT:
-			case FlowSectionOptions.UNRELATED:
+			case FlowOptions.DISTANT:
+			case FlowOptions.UNRELATED:
 				// show base up to new
 				showSections = showSections.concat( getSectionNamesForward(inNewSection, startDepth));
 				break;
@@ -646,6 +738,40 @@ class StringNodeHelper {
 				//
 		}
 		return showSections;
+	}
+	
+	/**
+	Creates a list of section names. if inSectionName is "Portfolio.Photos.Detail1" this will return a list of:
+	["Portfolio", "Portfolio.Photos", "Portfolio.Photos.Detail1"].
+	*/
+	public function getSectionPartsFromName (inSectionName:String) : Array {
+		if (inSectionName == null || inSectionName.length == 0) return null;
+		const SEPARATOR:String = ".";
+		var parts:Array = inSectionName.split(SEPARATOR);
+		var outParts:Array = new Array();
+		var base:String = "";
+		var i:uint, ilen:uint = parts.length;
+		for (i=0; i<ilen; ++i) {
+			var partName:String = parts[i];
+			if (i > 0) {
+				base += SEPARATOR;
+			}
+			base += partName;
+			if (partName.length > 0) {
+				outParts.push(base);
+			}
+		}
+		return outParts;
+	}
+	
+	/**
+	Removes potential dot chars from the beginning of a name.
+	@param inName: raw string that potentially has leading dots
+	*/
+	public function removeLeadingDots (inName:String) : String {
+		var re:RegExp = new RegExp(/\.?(.*?)$/);
+		var result:Object = re.exec(inName);
+		return result[1];
 	}
 	
 	/**
@@ -719,10 +845,15 @@ class StringNodeHelper {
 	protected function getSectionNamesBackward (inName:String, inTargetDepth:uint) : Array {
 		var sections:Array = new Array();
 		var parts:Array = inName.split(".");
+		if (parts.length == 0) return null;
 		var i:uint = parts.length, min:uint = inTargetDepth;
 		while (i > min) {
+			if (parts[i-1].length == 0) {
+				i--;
+				continue;
+			}
 			var partsCopy:Array = parts.slice(); // makes a shallow copy
-			partsCopy = partsCopy.slice(0,i);
+			partsCopy = partsCopy.slice(0,i); // take item 0 to i
 			if (partsCopy.length > 0) {
 				sections.push( partsCopy.join(".") );
 			}
@@ -737,8 +868,9 @@ class StringNodeHelper {
 	protected function getSectionNamesForward (inName:String, inStartDepth:uint) : Array {
 		var sections:Array = new Array();
 		var parts:Array = inName.split(".");
+		if (parts.length == 0) return null;
 		var i:uint = inStartDepth, max:uint = parts.length;
-		while (i <= max) {
+		while (i <= max) {			
 			var partsCopy:Array = parts.slice(); // makes a shallow copy
 			partsCopy = partsCopy.slice(0,i);
 			if (partsCopy.length > 0) {

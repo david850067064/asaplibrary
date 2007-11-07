@@ -62,6 +62,8 @@ package org.asaplibrary.management.flow {
 	*/
 	public class FlowSection extends LocalController implements IFlowSection {
 		
+		private var mName:String = "";
+		
 		/**
 		Creates a new FlowSection.
 		*/
@@ -69,6 +71,20 @@ package org.asaplibrary.management.flow {
 			super(inName);
 			visible = false;
 			FlowManager.getInstance().registerFlowSection(this);
+		}
+		
+		/**
+		Returns the name that is used to register this class to the FlowManager.
+		Override this function to set the name of a FlowSection subclass.
+		@example
+		<code>
+		public override function getName () : String {
+			return "Gallery";
+		}
+		</code>
+		*/
+		public override function getName () : String {
+			return super.getName();
 		}
 		
 		/**

@@ -30,8 +30,8 @@ package org.asaplibrary.management.flow {
 		/**
 		Creates a new FlowRule.
 		@param inName: name of the {@link IFlowSection}
-		@param inMode: the display mode, see {@link FlowSectionOptions}
-		@param inType: relation type, see {@link FlowSectionOptions}
+		@param inMode: the display mode, see {@link FlowOptions}
+		@param inType: relation type, see {@link FlowOptions}
 		@param inCallbackFunction: the function to call
 		*/
 		function FlowRule (inName:String, inMode:uint, inType:uint, inCallback:Function) {

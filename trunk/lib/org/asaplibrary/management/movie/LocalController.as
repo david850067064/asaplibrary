@@ -84,6 +84,7 @@ package org.asaplibrary.management.movie {
 		@param inName: new name of the controller
 		*/
 		public function setName (inName:String) : void {
+			if (inName == null) return;
 			mName = inName;
 		}
 
