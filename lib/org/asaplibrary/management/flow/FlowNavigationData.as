@@ -23,17 +23,19 @@ package org.asaplibrary.management.flow {
 	public class FlowNavigationData {
 		
 		public var name:String;
+		public var trigger:Object;
 		public var stopEverythingFirst:Boolean;
 		public var updateState:Boolean;
 		
-		function FlowNavigationData (inSectionName:String, inStopEverythingFirst:Boolean, inUpdateState:Boolean) : void {
+		function FlowNavigationData (inSectionName:String, inTrigger:Object, inStopEverythingFirst:Boolean, inUpdateState:Boolean) : void {
 			name = inSectionName;
+			trigger = inTrigger;
 			stopEverythingFirst = inStopEverythingFirst;
 			updateState = inUpdateState;
 		}
 		
 		public function toString () : String {
-			return "FlowNavigationData: name=" + name + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
+			return "FlowNavigationData: name=" + name + "; trigger=" + trigger + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
 		}
 		
 	}

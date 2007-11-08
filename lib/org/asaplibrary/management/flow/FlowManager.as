@@ -43,7 +43,7 @@ package org.asaplibrary.management.flow {
 	
 	The syntax to go to a new section is simply:
 	<code>
-	FlowManager.getInstance().goto("Intro");
+	FlowManager.defaultFlowManager.goto("Intro");
 	</code>
 	FlowManager finds the FlowSection with that name, and finds what sections need to be shown or hidden or even loaded.
 	
@@ -66,18 +66,18 @@ package org.asaplibrary.management.flow {
 	</code>
 	This is useful when you want to let FlowManager automatically load movies based on the section names. 
 	
-	<h2>Showing and hiding</h2>
-	Each FlowSection has 2 methods that are called: {@link FlowSection#showAction} and {@link FlowSection#hideAction}. Depending on the type of relationship between the current and the new section, either one is called, or none.
+	<h2>Starting and stopping, or showing and hiding</h2>
+	The default behavior for <code>start</code> is setting the visibility to true; for <code>stop</code> to set it to false.
 	
-	For example using the name list above, when going from 'Sections.Section1' to 'Sections.Section1.Section1_1', a CHILD relationship, the current section 'Sections.Section1' will not be hidden when showing the new section. So only the showAction of 'Sections.Section1.Section1_1' is called.
-	While between 'Intro' and 'Sections.Section1' no relationship can be found, Intro will be hidden as expected.
+	Start and stop are called from the 2 base functions {@link FlowSection#startAction} and {@link FlowSection#stopAction}. You can override the default behavior of these methods in a subclass.
 	
-	Each showAction and hideAction function may return a {@link IAction} or a subclass thereof, including an {@link ActionQueue}. Any animation is processed sequentially - an ActionQueue is first finished before the next Action is called.
-	The default behavior will just set the visibility flag.
+	When traversing from one section to the other, it depends if <code>startSection</code> or <code>stopSection</code> is called. When going to a child section, <code>stop</code> will not called on the current section. When going to a sibling section, the current stop <em>will</em> be called, and right after <code>start</code>.
 	
-	In the example demo one of the sections overrides the default showAction - it lets the clip scale from small to large in a elastic manner:
+	Each startAction and stopAction function may return a {@link IAction} or a subclass thereof, including an {@link ActionQueue}. Any animation is processed sequentially - an ActionQueue is first finished before the next Action is called.
+	
+	In the example demo one of the sections overrides the default startAction - it lets the clip scale from small to large in a elastic manner:
 	<code>
-	public override function get showAction () : IAction {
+	public override function get startAction () : IAction {
 		var queue:ActionQueue = new ActionQueue("Section1_1 show");
 		queue.addAction(new AQSet().setVisible(this, true));
 		queue.addAction(new AQSet().setScale(this, .5, .5));
@@ -89,23 +89,23 @@ package org.asaplibrary.management.flow {
 	</code>
 	
 	<h2>Rules</h2>
-	Sometimes it is desired to manage these show and hide actions from a higher level.  For example after the intro animation we want to go to section 1.
+	Sometimes it is desired to manage these start and stop actions from a higher level.  For example after the intro animation we want to go to section 1.
 	To do this Rules can be defined.
 
 	Rules are created with the {@link FlowRule} class:
 	<code>
 	var rule:FlowRule = new FlowRule (
 		"Intro",
-		OPTIONS.SHOW_END,
+		OPTIONS.START_END,
 		OPTIONS.ANY,
 		proceedToSection1
 	);
-	FlowManager.getInstance().addRule(rule);
+	FlowManager.defaultFlowManager.addRule(rule);
 	</code>
-	This rule says that for a section with name <code>Intro</code>, when encountering mode <code>SHOW_END</code> (end of the show action), and <code>ANY</code> relationship type, function <code>proceedToSection1</code> needs to be called. And that function simply has:
+	This rule says that for a section with name <code>Intro</code>, when encountering mode <code>START_END</code> (end of the start action), and <code>ANY</code> relationship type, function <code>proceedToSection1</code> needs to be called. And that function simply has:
 	<code>
 	protected function proceedToSection1 (inSection:IFlowSection) : void {
-		FlowManager.getInstance().goto("Sections.Section1", false);
+		FlowManager.defaultFlowManager.goto("Sections.Section1", this, false);
 	}
 	</code>	
 	You will notice that the current section is always passed to the callback function.
@@ -115,7 +115,7 @@ package org.asaplibrary.management.flow {
 	<code>
 	var rule:FlowRule = new FlowRule (
 		null,
-		OPTIONS.HIDE,
+		OPTIONS.STOP,
 		OPTIONS.DISTANT|OPTIONS.SIBLING,
 		doNotHide
 	);
@@ -133,7 +133,7 @@ package org.asaplibrary.management.flow {
 	</code>
 	
 	<h3>Enhancing default behavior</h3>
-	As 'man in the middle' you can control what happens before and after a showAction. In the example demo we move the stage right after showing the section. Function <code>moveSection</code> is called because of a Rule:
+	As 'man in the middle' you can control what happens before and after a startAction. In the example demo we move the stage right after starting the section. Function <code>moveSection</code> is called because of a Rule:
 	<code>
 	protected function moveSection (inSection:IFlowSection) : void {
 		var x:Number, y:Number;
@@ -144,8 +144,8 @@ package org.asaplibrary.management.flow {
 			// etcetera
 		}
 		var queue:ActionQueue = moveQueue(x, y); // creates a moving animation as ActionQueue
-		FlowManager.getInstance().addAction(inSection.showAction);
-		FlowManager.getInstance().addAction(queue);
+		FlowManager.defaultFlowManager.addAction(inSection.startAction);
+		FlowManager.defaultFlowManager.addAction(queue);
 		}
 	</code>
 	
@@ -157,7 +157,7 @@ package org.asaplibrary.management.flow {
 	protected function attachMovie (e:FlowNavigationEvent) : void {
 		if (section != null) {
 			// add child clip...
-			FlowManager.getInstance().goto(e.destination);
+			FlowManager.defaultFlowManager.goto(e.destination);
 		}
 	}
 	</code>
@@ -169,7 +169,7 @@ package org.asaplibrary.management.flow {
 	
 	In the example demo a MenuController listens for state changes. It is subscribed to changes using:
 	<code>
-	FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+	FlowManager.defaultFlowManager.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 	</code>
 	The receiving method is:
 	<code>
@@ -195,12 +195,12 @@ package org.asaplibrary.management.flow {
 		<li>Normally the main controller for each SWF is a LocalController. Now make it inherit from {@link FlowSection}, and pass the name of the section in the super constructor call.</li>
 		<li>Other navigatable sections (like nested MovieClips) also need a {@link FlowSection} class.</li>
 		<li>If your main controller is a FlowSection as well, do not forget to make it visible.</li>
-		<li>Now write <code>FlowManager.getInstance().goto( "My.starting.section" );</code> (insert your section)</li>
+		<li>Now write <code>FlowManager.defaultFlowManager.goto( "My.starting.section" );</code> (insert your section)</li>
    	</ul>
 	*/
 	public class FlowManager extends EventDispatcher {
 		
-		private static var sInstance:FlowManager;
+		private static var sDefaultFlowManager:FlowManager;
 		
 		private var mActionRunner:ActionRunner;
 		private var mSections:Object; // of type String => IFlowSection
@@ -211,14 +211,39 @@ package org.asaplibrary.management.flow {
 		private var mDownloadDirectory:String = "";
 		private var mDownloadSections:Object; // of type String => DownloadSection
 		
+		
 		/**
-		Access point for the one instance of the FlowManager.
+		Creates a new FlowManager. Use only when you need a custom FlowManager instance. For default use, call {@link #defaultFlowManager}.
 		*/
-		public static function getInstance () : FlowManager {
-			if (sInstance == null) {
-				sInstance = new FlowManager();
+		function FlowManager () {
+			super();
+			init();
+		}
+		
+		/**
+		Initializes variables.
+		*/
+		protected function init () : void {
+			mActionRunner = new ActionRunner("FlowManager");
+			mSections = new Object();
+			mRules = new Object();
+			mSectionDestinations = new Array();
+			mNavigationData = new Object();
+			mDownloadSections = new Object();
+		}
+		
+		override public function toString () : String {
+			return ";org.asaplibrary.management.flow.FlowManager";
+		}
+		
+		/**
+		@return The default global instance of the FlowManager.
+		*/
+		public static function get defaultFlowManager () : FlowManager {
+			if (sDefaultFlowManager == null) {
+				sDefaultFlowManager = new FlowManager();
 			}
-			return sInstance;
+			return sDefaultFlowManager;
 		}
 		
 		/**
@@ -273,18 +298,51 @@ package org.asaplibrary.management.flow {
 		@param inStopEverythingFirst: (optional) whether the current actions are finished first (false) or stopped halfway (true); default: true
 		@param inUpdateState: (optional) whether the state is updated when going to the new section. This is not always desirable - for instance showing a navigation bar should not update the state itself. Default: true (state is updated).
 		@example
+		To show section "Gallery", write:
 		<code>
-		FlowManager.getInstance().goto(button.id);
+		FlowManager.defaultFlowManager.goto("Gallery");
+		</code>
+		If you want to track the object or button that causes the goto call, add parameter <code>inTrigger</code>:
+		<code>
+		FlowManager.defaultFlowManager.goto("Gallery", gallery_btn);
+		</code>
+		To continue all current animations, set parameter <code>inStopEverythingFirst</code> to true:
+		<code>
+		FlowManager.defaultFlowManager.goto("Gallery", gallery_btn, true);
+		</code>
+		To prevent sending out a state update, set parameter <code>inUpdateState</code> to false:
+		<code>
+		FlowManager.defaultFlowManager.goto("Gallery", gallery_btn, true, false);
 		</code>
 		*/
-		public function goto (inSectionName:String, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
+		public function goto (inSectionName:String, inTrigger:Object = null, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
 			if (inStopEverythingFirst) {
 				reset();
 			}			
-			var sectionNavigationData:FlowNavigationData = new FlowNavigationData(inSectionName, inStopEverythingFirst, inUpdateState);
+			var sectionNavigationData:FlowNavigationData = new FlowNavigationData(inSectionName, inTrigger, inStopEverythingFirst, inUpdateState);
 			mNavigationData[inSectionName] = sectionNavigationData;
 			mSectionDestinations.push(sectionNavigationData);
 			runNextGoToSection();
+		}
+		
+		/**
+		Removes a FlowSection from the list. If the section was loaded, it will be removed.
+		@param inSectionName: name of the section to remove
+		@return True if the section was successfully removed; otherwise false.
+		@implementationNote Calls {@link MovieManager#removeMovie}.
+		*/
+		public function removeSection (inSectionName:String) : Boolean {
+			var section:FlowSection = mSections[inSectionName];
+			if (section == null) false;
+			if (inSectionName == mCurrentSectionName) {
+				reset();
+			}
+			section.die();
+			var lc:ILocalController = MovieManager.getInstance().getLocalControllerByName(inSectionName);
+			if (lc != null) {
+				return MovieManager.getInstance().removeMovie(lc);
+			}
+			return true;
 		}
 		
 		/**
@@ -316,8 +374,22 @@ package org.asaplibrary.management.flow {
 		Gets the {@link FlowNavigationData} with name inSectionName, if it has been registered (once {@link #goto} has been called).
 		@param inSectionName: name of the FlowSection
 		@return The found FlowNavigationData
+		@example
+		Use the data object to pass on the states after loading a movie:
+		<code>
+		protected function handleNavigationEvent (e:FlowNavigationEvent) : void {
+			e.stopImmediatePropagation();
+			switch (e.subtype) {
+				case FlowNavigationEvent.LOADED:
+					// attach movie...
+					var data:FlowNavigationData = FlowManager.defaultFlowManager.getFlowNavigationDataByName(e.name);
+					FlowManager.defaultFlowManager.goto(e.destination, data.trigger, data.stopEverythingFirst, data.updateState);
+					break;
+			}
+		}
+		</code>
 		*/
-		public function getSectionNavigationDataByName (inSectionName:String) : FlowNavigationData {
+		public function getFlowNavigationDataByName (inSectionName:String) : FlowNavigationData {
 			return mNavigationData[inSectionName];
 		}
 		
@@ -336,7 +408,21 @@ package org.asaplibrary.management.flow {
 		*/
 		protected function setCurrentSection (inSectionName:String) : void {
 			mCurrentSectionName = inSectionName;
-			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.UPDATE, mCurrentSectionName, this));
+			
+			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.UPDATE, mCurrentSectionName, getNavigationTrigger(inSectionName)));
+		}
+		
+		/**
+		Retrieves the object that has triggered the {@link #goto} call.
+		@param inSectionName: name of the FlowSection
+		@return The trigger object; if not specified will return FlowManager.
+		*/
+		protected function getNavigationTrigger (inSectionName:String) : Object {
+			var data:FlowNavigationData = getFlowNavigationDataByName(inSectionName);
+			if (data != null) {
+				return data.trigger;
+			}
+			return this;
 		}
 		
 		/**
@@ -357,11 +443,11 @@ package org.asaplibrary.management.flow {
 		protected function addSectionActions (inSectionName:String, inMode:uint, inType:uint, inHelper:StringNodeHelper ) : void {
 			var actions:Array = new Array();
 			var sectionNames:Array = new Array();
-			if (inMode == FlowOptions.HIDE) {
-				sectionNames = inHelper.getHideSections(inSectionName, mCurrentSectionName, inType);
+			if (inMode == FlowOptions.STOP) {
+				sectionNames = inHelper.getStopSections(inSectionName, mCurrentSectionName, inType);
 			}
-			if (inMode == FlowOptions.SHOW) {
-				sectionNames = inHelper.getShowSections(inSectionName, mCurrentSectionName, inType);
+			if (inMode == FlowOptions.START) {
+				sectionNames = inHelper.getStartSections(inSectionName, mCurrentSectionName, inType);
 			}
 			
 			// see if any FlowRule is defined for this section name
@@ -419,13 +505,13 @@ package org.asaplibrary.management.flow {
 				
 				section = mSections[sectionName];
 				if (section != null) {
-					if (inMode == FlowOptions.HIDE) {
+					if (inMode == FlowOptions.STOP) {
 						// default hide action
-						action = section.hideAction;
+						action = section.stopAction;
 					}
-					if (inMode == FlowOptions.SHOW) {
-						// default show action
-						action = section.showAction;
+					if (inMode == FlowOptions.START) {
+						// default start action
+						action = section.startAction;
 					}
 					if (action != null) {
 						sectionActions.push(action);
@@ -460,13 +546,13 @@ package org.asaplibrary.management.flow {
 			}
 			if (doUpdateState) {
 				// hide current section
-				addSectionActions( sectionName, FlowOptions.HIDE, type, helper );
-				addSectionActions( sectionName, FlowOptions.HIDE_END, type, helper );
+				addSectionActions( sectionName, FlowOptions.STOP, type, helper );
+				addSectionActions( sectionName, FlowOptions.STOP_END, type, helper );
 			}
 			
 			// show new section
-			addSectionActions( sectionName, FlowOptions.SHOW, type, helper );
-			addSectionActions( sectionName, FlowOptions.SHOW_END, type, helper );
+			addSectionActions( sectionName, FlowOptions.START, type, helper );
+			addSectionActions( sectionName, FlowOptions.START_END, type, helper );
 			
 			if (doUpdateState) {
 				// add state update action
@@ -474,7 +560,7 @@ package org.asaplibrary.management.flow {
 
 				mCurrentSectionName = sectionName;
 				
-				dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_UPDATE, sectionName, this));
+				dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_UPDATE, sectionName, getNavigationTrigger(sectionName)));
 			}
 			
 			if (!mActionRunner.isRunning()) {
@@ -544,7 +630,7 @@ package org.asaplibrary.management.flow {
 			var url:String = mDownloadDirectory + inFilePart + ".swf";
 			Log.info("loadSectionFile; trying to load file: " + url, toString());
 			var mm:MovieManager = MovieManager.getInstance();
-			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_LOAD, inSectionName, this));
+			dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.WILL_LOAD, inSectionName, getNavigationTrigger(inSectionName)));
 			mm.addEventListener( MovieManagerEvent._EVENT, onMovieEvent );
 			mm.loadMovie(url, inSectionName);
 		}
@@ -566,31 +652,13 @@ package org.asaplibrary.management.flow {
 							// void stored data
 							mDownloadSections[e.name] = null;
 						}
-						dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, e.name, this, destination));
+						dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADED, e.name, getNavigationTrigger(e.name), destination));
 					}
 					break;
 				case MovieManagerEvent.ERROR:
-					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADING_ERROR, e.name, this));
+					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADING_ERROR, e.name, getNavigationTrigger(e.name)));
 					break;
 			}
-		}
-		
-		/**
-		Supposedly private constructor
-		*/
-		function FlowManager () {
-			super();
-			
-			mActionRunner = new ActionRunner("FlowManager");
-			mSections = new Object();
-			mRules = new Object();
-			mSectionDestinations = new Array();
-			mNavigationData = new Object();
-			mDownloadSections = new Object();
-		}
-		
-		override public function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowManager";
 		}
 		
 	}
@@ -668,13 +736,13 @@ class StringNodeHelper {
 	/**
 	
 	*/
-	public function getHideSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
+	public function getStopSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
 		
 		if (inCurrentSection == null || inCurrentSection.length == 0) return null;
 		
 		var base:String = getCommonBase(inNewSection, inCurrentSection);
 		
-		var hideSections = new Array();
+		var stopSections = new Array();
 		
 		var baseDepth:uint = 0;
 		if (base != null) {
@@ -686,32 +754,32 @@ class StringNodeHelper {
 				break;
 			case FlowOptions.PARENT:
 				// hide current up to base
-				hideSections = hideSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
+				stopSections = stopSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
 				break;
 			case FlowOptions.SIBLING:
 				// hide current section
-				hideSections.push(inCurrentSection);
+				stopSections.push(inCurrentSection);
 				break;
 			case FlowOptions.DISTANT:
 			case FlowOptions.UNRELATED:
 				// hide current up to base
-				hideSections = hideSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
+				stopSections = stopSections.concat( getSectionNamesBackward(inCurrentSection, baseDepth) );
 				break;
 			default:
 				//
 		}
-		return hideSections;
+		return stopSections;
 	}
 	
 	/**
 	
 	*/
-	public function getShowSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
+	public function getStartSections (inNewSection:String, inCurrentSection:String, inType:uint) : Array {
 		
 		if (inNewSection == null || inNewSection.length == 0) return null;
 
 		var base:String = getCommonBase(inNewSection, inCurrentSection);
-		var showSections = new Array();
+		var startSections = new Array();
 		
 		var startDepth:uint = 0;
 		if (base != null) {
@@ -720,24 +788,24 @@ class StringNodeHelper {
 		switch (inType) {
 			case FlowOptions.CHILD:
 				// show current up to new
-				showSections = showSections.concat( getSectionNamesForward(inNewSection, startDepth));
+				startSections = startSections.concat( getSectionNamesForward(inNewSection, startDepth));
 				break;
 			case FlowOptions.PARENT:
 				// do nothing
 				break;
 			case FlowOptions.SIBLING:
 				// show new
-				showSections.push( inNewSection );
+				startSections.push( inNewSection );
 				break;
 			case FlowOptions.DISTANT:
 			case FlowOptions.UNRELATED:
 				// show base up to new
-				showSections = showSections.concat( getSectionNamesForward(inNewSection, startDepth));
+				startSections = startSections.concat( getSectionNamesForward(inNewSection, startDepth));
 				break;
 			default:
 				//
 		}
-		return showSections;
+		return startSections;
 	}
 	
 	/**

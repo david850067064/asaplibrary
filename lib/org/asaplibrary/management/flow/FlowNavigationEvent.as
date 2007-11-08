@@ -23,7 +23,7 @@ package org.asaplibrary.management.flow {
 	Event objects that are dispatched by {@link FlowManager}. Subscribe to type <code>_EVENT</code>.
 	@example
 	<code>
-	FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+	FlowManager.defaultFlowManager.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 	</code>
 	*/
 	public class FlowNavigationEvent extends Event {
@@ -56,34 +56,37 @@ package org.asaplibrary.management.flow {
 		
 		public var subtype:String;
 		public var name:String;
-		public var sender:Object;
+		/**
+		The trigger of the {@link FlowManager#goto} action. This can be useful to differentiate navigation actions by button.
+		*/
+		public var trigger:Object;
 		public var destination:String;
 		
 		/**
 		Creates a new FlowNavigationEvent. This event bubbles through and is cancelable.
 		@param inSubtype: either subtype, see above
 		@param inName: name of the {@link FlowSection}
-		@param inSender: sender of the event
+		@param inTrigger: trigger of the navigation action
 		@param inDestination: (optional) name of destination FlowSection; when not specified this defaults to the FlowSection name
 		*/
-		public function FlowNavigationEvent (inSubtype:String, inName:String, inSender:Object, inDestination:String = null) {
+		public function FlowNavigationEvent (inSubtype:String, inName:String, inTrigger:Object, inDestination:String = null) {
 			super(_EVENT, true, true);
 			
 			subtype = inSubtype;
 			name = inName;
-			sender = inSender;
+			trigger = inTrigger;
 			destination = inDestination != null ? inDestination : inName;
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; sender=" + sender + "; destination=" + destination;
+			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination;
 		}
 		
 		/**
 		Creates a copy of an existing FlowNavigationEvent.
 		*/
 		public override function clone() : Event {
-			return new FlowNavigationEvent(subtype, name, sender, destination);
+			return new FlowNavigationEvent(subtype, name, trigger, destination);
 		} 
 	}
 }
