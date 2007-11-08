@@ -7,7 +7,7 @@ package controller {
 		function GallerySection () {
 			super(AppSettings.GALLERY_NAME);
 			if (isStandalone()) {
-				showStandalone();
+				startStandalone();
 			}
 		}
 

@@ -12,7 +12,7 @@
 			super(inName);
 		}
 
-		public override function get showAction () : IAction {
+		public override function get startAction () : IAction {
 			var queue:ActionQueue = new ActionQueue();
 			queue.addAction(new AQSet().setAlpha(this, 0));
 			queue.addAction(new AQSet().setVisible(this, true));
@@ -21,7 +21,7 @@
 			return queue;
 		}
 		
-		public override function get hideAction () : IAction {
+		public override function get stopAction () : IAction {
 			var queue:ActionQueue = new ActionQueue();
 			const CURRENT:Number = Number.NaN;
 			queue.addAction( new AQFade().fade( this, FADE_OUT_DURATION, CURRENT, 0 ));

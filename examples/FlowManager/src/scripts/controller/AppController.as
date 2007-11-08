@@ -23,7 +23,7 @@
 		private var mLoaderAnim:Loader;
 
 		public static const OPTIONS:Class = FlowOptions;		
-		protected var FM:FlowManager = FlowManager.getInstance();
+		protected var FM:FlowManager = FlowManager.defaultFlowManager;
 		
 		function AppController () {
 			super();
@@ -31,7 +31,7 @@
 			initMenu();
 			listen();
 			initFlowManager();
-			start();
+			new FrameDelay(display); // wait one frame, otherwise we get a flickering of assets on the stage
 		}
 		
 		protected function initMenu () : void {
@@ -44,7 +44,6 @@
 			addEventListener(MouseEvent.MOUSE_UP, handleButtonClick);
 			// listen for FlowManager updates such as loaded movies
 			FM.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
-			
 		}
 		
 		protected function initFlowManager () : void {
@@ -55,7 +54,7 @@
 			// after the intro, go to section 1
 			rule = new FlowRule(
 				AppSettings.SECTION_INTRO,
-				OPTIONS.SHOW_END,
+				OPTIONS.START_END,
 				OPTIONS.ANY,
 				proceedToSection1
 			);
@@ -64,7 +63,7 @@
 			// do not hide with sibling sections
 			rule = new FlowRule(
 				null,
-				OPTIONS.HIDE,
+				OPTIONS.STOP,
 				OPTIONS.DISTANT|OPTIONS.SIBLING,
 				doNotHide
 			);
@@ -75,7 +74,7 @@
 			
 			rule = new FlowRule(
 				null,
-				OPTIONS.SHOW,
+				OPTIONS.START,
 				OPTIONS.ANY,
 				moveSection
 			);
@@ -85,14 +84,14 @@
 			);
 		}
 		
-		protected function start () : void {
+		protected function display () : void {
 			visible = true; // necessary because this is a FlowSection as well
 			FM.goto(AppSettings.SECTION_INTRO);
-			FM.goto(AppSettings.SECTION_MENU, false, false);
+			FM.goto(AppSettings.SECTION_MENU, this, false, false);
 		}
 		
 		protected function proceedToSection1 (inSection:IFlowSection) : void {
-			FM.goto(AppSettings.SECTION1, false);
+			FM.goto(AppSettings.SECTION1, this, false);
 		}
 		
 		protected function doNotHide (inSection:IFlowSection) : void {
@@ -116,7 +115,7 @@
 					break;
 			}
 			var queue:ActionQueue = moveQueue(x, y);
-			FM.addAction(inSection.showAction);
+			FM.addAction(inSection.startAction);
 			FM.addAction(queue);
 		}
 		

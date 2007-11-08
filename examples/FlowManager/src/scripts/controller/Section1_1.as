@@ -26,10 +26,10 @@
 		}
 
 		protected function handleClose (e:MouseEvent) : void {
-			FlowManager.getInstance().goto(AppSettings.SECTION1);
+			FlowManager.defaultFlowManager.goto(AppSettings.SECTION1);
 		}
 		
-		public override function get showAction () : IAction {
+		public override function get startAction () : IAction {
 			var queue:ActionQueue = new ActionQueue("Section1_1 show");
 			queue.addAction(new AQSet().setVisible(this, true));
 			queue.addAction(new AQSet().setScale(this, .5, .5));
@@ -39,7 +39,7 @@
 			return queue;
 		}
 		
-		public override function get hideAction () : IAction {
+		public override function get stopAction () : IAction {
 			var queue:ActionQueue = new ActionQueue("Section1_1 hide");
 			const CURRENT:Number = Number.NaN;
 			var effect:Function = Quadratic.easeOut;
