@@ -48,6 +48,9 @@ package org.asaplibrary.management.flow {
 			var newInstance:FlowManager = new FlowManager();
 			assertTrue("FlowManager newInstance", newInstance);
 			assertFalse("FlowManager not default instance", instance === newInstance);
+			
+			var flowSection:FlowSection = new FlowSection("SECTION", newInstance);
+			assertTrue("FlowManager newInstance", flowSection.getFlowManager() === newInstance);
 		}
 		
 		public function testAddRule() : void {
