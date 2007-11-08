@@ -7,6 +7,7 @@
 	import org.asaplibrary.data.tree.*;
 	import org.asaplibrary.data.xml.*;
 	import org.asaplibrary.management.movie.*;
+	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.*;
 	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.util.loader.*;
@@ -29,8 +30,8 @@
 			
 			// management
 			//addTest(new LocalControllerTestCase());
-			//addTest(new MovieManagerTestCase());
-			// TODO: FlowManager
+			addTest(new MovieManagerTestCase());
+			addTest(new FlowManagerTestCase());
 			
 			// util
 			//addTest(new BooleanUtilsTestCase());
