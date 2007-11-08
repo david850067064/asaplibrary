@@ -25,11 +25,9 @@ package org.asaplibrary.management.flow {
 	*/
 	public interface IFlowSection extends ILocalController {
 		
-		function get hideAction () : IAction;
-		function get showAction () : IAction;
-		function show () : void;
-		function hide () : void;
-		
+		function get stopAction () : IAction;
+		function get startAction () : IAction;
+
 	}
 
 }

@@ -30,8 +30,8 @@ package org.asaplibrary.management.flow {
 	WARNING: provided "AS IS" -- this code has not been tested on production sites!
 	</div>
 	
-	Subclasses will most likely override {@link #showAction} and {@link #hideAction}, see example below.
-	It is also possible to override {@link #show} and {@link #hide} for non-timebased actions.
+	Subclasses will most likely override {@link #startAction} and {@link #stopAction}, see example below.
+	It is also possible to override {@link #start} and {@link #stop} for non-timebased actions.
 	
 	Each FlowSection needs to have a name to be addressable by {@link FlowManager}. Simply pass the name with the super constructor call:
 	<code>
@@ -48,10 +48,10 @@ package org.asaplibrary.management.flow {
 	}
 	</code>
 	@example
-	Overriding the default hide action with a scaling animation:
+	Overriding the default stop action with a scaling animation:
 	<code>
-	public override function get hideAction () : IAction {
-		var queue:ActionQueue = new ActionQueue("Section1_1 hide");
+	public override function get stopAction () : IAction {
+		var queue:ActionQueue = new ActionQueue("Section1_1 stop");
 		const CURRENT:Number = Number.NaN;
 		var effect:Function = Quadratic.easeOut;
 		queue.addAction(new AQScale().scale(this, .3, CURRENT, CURRENT, 0, 0, effect));
@@ -69,8 +69,16 @@ package org.asaplibrary.management.flow {
 		*/
 		function FlowSection (inName:String = null) {
 			super(inName);
+			init();
+			register();
+		}
+		
+		protected function register () : void {
+			FlowManager.defaultFlowManager.registerFlowSection(this);
+		}
+		
+		protected function init () : void {
 			visible = false;
-			FlowManager.getInstance().registerFlowSection(this);
 		}
 		
 		/**
@@ -90,46 +98,46 @@ package org.asaplibrary.management.flow {
 		/**
 		The Action to be run when the section is shown. Actions are run by {@link ActionRunner}.
 		*/
-		public function get showAction () : IAction {
-			return new Action(this, show);
+		public function get startAction () : IAction {
+			return new Action(this, start);
 		}
 		
 		/**
 		The Action to be run when the section is hidden. Actions are run by {@link ActionRunner}.
 		*/
-		public function get hideAction () : IAction {
-			return new Action(this, hide);
+		public function get stopAction () : IAction {
+			return new Action(this, stop);
 		}
 		
 		/**
-		Default show function.
+		Default start function.
 		*/
-		public function show () : void {
+		public override function start () : void {
 			visible = true;
 		}
 		
 		/**
-		Default hide function.
+		Default stop function.
 		*/
-		public function hide () : void {
+		public override function stop () : void {
 			visible = false;
 		}
 		
 		/**
-		Runs {@link #showAction} stand-alone, for testing purposes. 
+		Runs {@link #startAction} stand-alone, for testing purposes. 
 		*/
-		protected function showStandalone () : void {
+		protected function startStandalone () : void {
 			var runner:ActionRunner = new ActionRunner();
-			runner.addAction(showAction);
+			runner.addAction(startAction);
 			runner.run();
 		}
 		
 		/**
-		Runs {@link #hideAction} stand-alone, for testing purposes. 
+		Runs {@link #stopAction} stand-alone, for testing purposes. 
 		*/
-		protected function hideStandalone () : void {
+		protected function stopStandalone () : void {
 			var runner:ActionRunner = new ActionRunner();
-			runner.addAction(hideAction);
+			runner.addAction(stopAction);
 			runner.run();
 		}
 		

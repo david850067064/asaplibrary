@@ -33,10 +33,10 @@ package org.asaplibrary.management.flow {
 		
 		public static const ANY:uint =       UNRELATED|ROOT|DISTANT|SIBLING|CHILD|PARENT; /**< Relation type. */
 		
-		public static const SHOW:uint =      (1<<8); /**< Display mode type. */
-		public static const SHOW_END:uint =  (1<<9); /**< Display mode type. */
-		public static const HIDE:uint =      (1<<10); /**< Display mode type. */
-		public static const HIDE_END:uint =  (1<<11); /**< Display mode type. */
+		public static const START:uint =      (1<<8); /**< Display mode type. */
+		public static const START_END:uint =  (1<<9); /**< Display mode type. */
+		public static const STOP:uint =      (1<<10); /**< Display mode type. */
+		public static const STOP_END:uint =  (1<<11); /**< Display mode type. */
 		
 	}
 }
