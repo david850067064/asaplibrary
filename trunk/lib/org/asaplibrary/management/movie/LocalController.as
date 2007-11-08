@@ -55,18 +55,21 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-
+		Default behavior: calls MovieClip.play.
 		*/
-		public function startMovie () : void {
-			play();
-		}
-
-		public function stopMovie () : void {
-			stop();
+		public function start () : void {
+			super.play();
 		}
 
 		/**
-		To be implemented by subclasses.
+		Default behavior: calls MovieClip.play.
+		*/
+		public override function stop () : void {
+			super.stop();
+		}
+
+		/**
+		No default behavior; optionally to be implemented by subclasses.
 		*/
 		public function die () : void {
 			//
