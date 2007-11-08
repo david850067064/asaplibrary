@@ -19,6 +19,8 @@ package org.asaplibrary.management.movie {
 
 	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
+	import flash.display.Loader;
+
 	import org.asaplibrary.util.loader.AssetLoader;
 	import org.asaplibrary.util.loader.AssetLoaderEvent;
 	import org.asaplibrary.management.movie.LocalController;
@@ -131,7 +133,10 @@ package org.asaplibrary.management.movie {
 			md.controller.die();
 			
 			// remove the asset from the display list
-			md.container.parent.removeChild(md.container);
+			// only if the parent node is not (still) the Loader
+			if (md.container.parent && !(md.container.parent is Loader)) {
+				md.container.parent.removeChild(md.container);
+			}
 			
 			// remove from list of data objects
 			mMovies.splice(mMovies.indexOf(md), 1);
@@ -142,13 +147,13 @@ package org.asaplibrary.management.movie {
 		/**
 		Finds a LocalController by name.
 		@param inName: name of the LocalController
-		@param inHideWarning: do not emit a Log warning if the movie is not found; default false (a warning is given)
+		@param inSuppressWarning: do not emit a Log warning if the movie is not found; default false (a warning is given)
 		@return The controller for that movie, or null if no controller could be found.
 		*/
-		public function getLocalControllerByName (inName:String, inHideWarning:Boolean = false) : ILocalController {
+		public function getLocalControllerByName (inName:String, inSuppressWarning:Boolean = false) : ILocalController {
 			var md:MovieData = getMovieDataByName(inName);
 			if (md == null) {
-				if (!inHideWarning) {
+				if (!inSuppressWarning) {
 					Log.warn("getLocalControllerByName; controller with name '" + inName + "' not found.", toString());
 				}
 				return null;
