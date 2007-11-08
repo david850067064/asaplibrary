@@ -202,6 +202,7 @@ package org.asaplibrary.management.flow {
 		
 		private static var sDefaultFlowManager:FlowManager;
 		
+		private var mName:String;
 		private var mActionRunner:ActionRunner;
 		private var mSections:Object; // of type String => IFlowSection
 		private var mRules:Object; // of type FlowRule
@@ -214,9 +215,13 @@ package org.asaplibrary.management.flow {
 		
 		/**
 		Creates a new FlowManager. Use only when you need a custom FlowManager instance. For default use, call {@link #defaultFlowManager}.
+		@param inName: (optional) identifier name of this FlowManager - used for debugging
 		*/
-		function FlowManager () {
+		function FlowManager (inName:String = "Anonymous FlowManager") {
 			super();
+			if (inName != null) {
+				mName = inName;
+			}
 			init();
 		}
 		
@@ -233,7 +238,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowManager";
+			return ";org.asaplibrary.management.flow.FlowManager:" + mName;
 		}
 		
 		/**
@@ -241,7 +246,7 @@ package org.asaplibrary.management.flow {
 		*/
 		public static function get defaultFlowManager () : FlowManager {
 			if (sDefaultFlowManager == null) {
-				sDefaultFlowManager = new FlowManager();
+				sDefaultFlowManager = new FlowManager("Default FlowManager");
 			}
 			return sDefaultFlowManager;
 		}
@@ -318,7 +323,7 @@ package org.asaplibrary.management.flow {
 		public function goto (inSectionName:String, inTrigger:Object = null, inStopEverythingFirst:Boolean = true, inUpdateState:Boolean = true) : void {
 			if (inStopEverythingFirst) {
 				reset();
-			}			
+			}
 			var sectionNavigationData:FlowNavigationData = new FlowNavigationData(inSectionName, inTrigger, inStopEverythingFirst, inUpdateState);
 			mNavigationData[inSectionName] = sectionNavigationData;
 			mSectionDestinations.push(sectionNavigationData);
@@ -532,14 +537,15 @@ package org.asaplibrary.management.flow {
 				reset();
 				return;
 			}
-			
-			var doUpdateState:Boolean = sectionNavigationData.updateState;
+
+
 			var sectionName:String = sectionNavigationData.name;
+			var doUpdateState:Boolean = sectionNavigationData.updateState;			
 			var section:IFlowSection = mSections[sectionName];
 			var helper:StringNodeHelper = new StringNodeHelper();
 			var type:uint = helper.getType(sectionName, mCurrentSectionName);
 
-			if (!section) {
+			if (section == null && sectionName != null) {
 				// not found, try to load first
 				loadSection(sectionName);
 				return;
@@ -890,7 +896,7 @@ class StringNodeHelper {
 	... have as common base 'Portfolio.Photos'.
 	*/
 	protected function getCommonBase (inNewSection:String, inCurrentSection:String) : String {
-		if (getCommonBase == null || inCurrentSection == null) {
+		if (inNewSection == null || inCurrentSection == null) {
 			return null;
 		}
 		var partsNew:Array = inNewSection.split(".");

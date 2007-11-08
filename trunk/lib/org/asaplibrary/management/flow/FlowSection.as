@@ -35,9 +35,13 @@ package org.asaplibrary.management.flow {
 	
 	Each FlowSection needs to have a name to be addressable by {@link FlowManager}. Simply pass the name with the super constructor call:
 	<code>
-	function Gallery () {
-		super( "Gallery" );
-		...
+	public class Gallery extends FlowSection {
+		
+		function Gallery () {
+			super( "Gallery" );
+			...
+		}
+	
 	}
 	</code>
 	or better:
@@ -62,23 +66,43 @@ package org.asaplibrary.management.flow {
 	*/
 	public class FlowSection extends LocalController implements IFlowSection {
 		
-		private var mName:String = "";
+		protected var mFlowManager:FlowManager;
 		
 		/**
 		Creates a new FlowSection.
+		@param inName: (optional) unique identifier for this section; you may also override {@link #getName} in a subclass
+		@param inFlowManager: (optional, but if you are using a custom FlowManager you must pass the FlowManager here)
 		*/
-		function FlowSection (inName:String = null) {
+		function FlowSection (inName:String = null, inFlowManager:FlowManager = null) {
 			super(inName);
-			init();
+			setFlowManager(inFlowManager)	
 			register();
-		}
-		
-		protected function register () : void {
-			FlowManager.defaultFlowManager.registerFlowSection(this);
-		}
-		
-		protected function init () : void {
 			visible = false;
+		}
+		
+		/**
+		Sets the FlowManager. You must call {@link #register} after setting the FlowManager.
+		@param inFlowManager: FlowManager to set
+		*/
+		public function setFlowManager (inFlowManager:FlowManager) : void {
+			mFlowManager = inFlowManager;
+		}
+		
+		/**
+		@return The FlowManager, if set with {@link #setFlowManager} or the constructor; otherwise {@link FlowManager#defaultFlowManager}.
+		*/
+		public function getFlowManager () : FlowManager {
+			if (mFlowManager != null) {
+				return mFlowManager;
+			}
+			return FlowManager.defaultFlowManager;
+		}
+		
+		/**
+		Registers this FlowSection with the FlowManager. Only call this function if you have set a non-default FlowManager in {@link #setFlowManager}.
+		*/
+		public function register () : void {
+			getFlowManager().registerFlowSection(this, getName());
 		}
 		
 		/**
