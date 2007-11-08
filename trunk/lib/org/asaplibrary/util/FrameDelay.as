@@ -21,14 +21,12 @@ package org.asaplibrary.util {
 	import org.asaplibrary.util.FramePulse;
 	
 	/**
-	Class that provides one or more frames delay. 
-	Use this when initializing a swf or a bunch of MovieClips, to enable the player to do its thing.
-	Usually a single frame delay will do the job, since the next enterFrame will come when all other jobs are finished.
-	This class will catch that next onEnterFrame and fire the function in the object passed as parameters.
-	
-	A parameter is available if the delay has to be more than one frame.
-	
+	Delay a function call with one or more frames. Use this when initializing a SWF or a bunch of DisplayObjects, to enable the player to do its thing.	Usually a single frame delay will do the job, since the next enterFrame will come when all other jobs are finished.
 	@usage
+	To execute function 'init' after 1 frame, use:
+	<code>
+	new FrameDelay(init);
+	</code>
 	To execute function 'init' after 10 frames, use:
 	<code>
 	new FrameDelay(init, 10);
