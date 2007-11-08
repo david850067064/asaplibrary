@@ -14,7 +14,7 @@ package controller {
 			super(inName);
 		}
 
-		public function get showAction () : IAction {
+		public function get startAction () : IAction {
 			var queue:ActionQueue = new ActionQueue();
 			queue.addAction(new AQSet().setAlpha(this, 0));
 			queue.addAction(new AQSet().setVisible(this, true));
@@ -23,7 +23,7 @@ package controller {
 			return queue;
 		}
 		
-		public function get hideAction () : IAction {
+		public function get stopAction () : IAction {
 			var queue:ActionQueue = new ActionQueue();
 			const CURRENT:Number = Number.NaN;
 			queue.addAction( new AQFade().fade( this, FADE_OUT_DURATION, CURRENT, 0 ));

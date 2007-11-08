@@ -16,7 +16,7 @@
 			super(AppSettings.HOME_NAME);
 			addEventListener(MouseEvent.CLICK, handleButtonClick);
 			if (isStandalone()) {
-				showStandalone();
+				startStandalone();
 			}
 		}
 
@@ -28,7 +28,7 @@
 				case tRoundedBtn:
 				case tPictureBtn:
 					e.stopImmediatePropagation();
-					FlowManager.getInstance().goto(AppSettings.GALLERY_NAME);
+					FlowManager.defaultFlowManager.goto(AppSettings.GALLERY_NAME);
 					break;
 			}
 		}

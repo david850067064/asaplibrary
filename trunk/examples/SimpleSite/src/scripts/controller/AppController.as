@@ -90,13 +90,13 @@
 				case AppSettings.GALLERY_NAME:
 					if (mCurrentController != null) {
 						// hide old
-						queue.addAction( mCurrentController.hideAction );
+						queue.addAction( mCurrentController.stopAction );
 					}
 					mCurrentController = inController as ProjectController;
 					break;
 			}
 			// show new
-			queue.addAction( inController.showAction );
+			queue.addAction( inController.startAction );
 			queue.run();
 		}
 

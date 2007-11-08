@@ -13,14 +13,14 @@
 		public var tGalleryBtn:MenuButton;
 		
 		private var mSelectedButton:MenuButton;
-		private var FM:FlowManager = FlowManager.getInstance();
+		private var FM:FlowManager = FlowManager.defaultFlowManager;
 
 		function MenuSection () {
 			super(AppSettings.MENU_NAME);
 			listen();
 			selfUpdate();
 			if (isStandalone()) {
-				showStandalone();
+				startStandalone();
 			}
 		}
 		
@@ -36,7 +36,15 @@
 		}
 		
 		protected function handleNavigationEvent (e:FlowNavigationEvent) : void {
-			updateSelectedButtonState(e.name);
+			switch (e.subtype) {
+				case FlowNavigationEvent.UPDATE:
+					// fall through
+				case FlowNavigationEvent.WILL_LOAD:
+					// fall through
+				case FlowNavigationEvent.WILL_UPDATE:
+					updateSelectedButtonState(e.name);
+					break;
+			}
 		}
 		
 		protected function updateSelectedButtonState (inState:String) : void {
@@ -53,10 +61,10 @@
 		protected function handleButtonClick (e:MouseEvent) : void {
 			switch (e.target) {
 				case tHomeBtn:
-					FM.goto(AppSettings.HOME_NAME);
+					FM.goto(AppSettings.HOME_NAME, e.target);
 					break;
 				case tGalleryBtn:
-					FM.goto(AppSettings.GALLERY_NAME);
+					FM.goto(AppSettings.GALLERY_NAME, e.target);
 					break;
 			}
 		}

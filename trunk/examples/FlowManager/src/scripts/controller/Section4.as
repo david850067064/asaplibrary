@@ -28,18 +28,18 @@
 			visible = false;
 			
 			if (isStandalone()) {
-				showStandalone();
+				startStandalone();
 			}
 		}
 
-		public override function get showAction () : IAction {
+		public override function get startAction () : IAction {
 			var queue:ActionQueue = new ActionQueue("Section4 show");
 			queue.addAction(new AQSet().setVisible(this, true));
 			const CURRENT:Number = Number.NaN;
 			var effect:Function = Quadratic.easeOut;
 			// use an asychronous action so we don't have to wait each time
 			// before this section moves into view
-			// (in AppController the showAction is called before moving the stage)
+			// (in AppController the startAction is called before moving the stage)
 			queue.addAsynchronousAction(new AQFade().fade(this, .8, CURRENT, 1, effect));
 			return queue;
 		}

@@ -16,7 +16,7 @@
 		}
 		
 		protected override function handleClose (e:MouseEvent) : void {
-			FlowManager.getInstance().goto(AppSettings.SECTION4);
+			FlowManager.defaultFlowManager.goto(AppSettings.SECTION4);
 		}
 		
 		public override function getName () : String {

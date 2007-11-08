@@ -40,7 +40,7 @@
 			x += addButton(AppSettings.SECTION3, "Three", x) + MARGIN_RIGHT;
 			x += addButton(AppSettings.SECTION4, "Four", x) + MARGIN_RIGHT;
 			x += addButton(AppSettings.SECTION4_1, "Four.1", x) + MARGIN_RIGHT;
-			FlowManager.getInstance().addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
+			FlowManager.defaultFlowManager.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 		}
 		
 		public override function getName () : String {
@@ -50,7 +50,7 @@
 		/**
 		Do not hide
 		*/
-		public override function get showAction () : IAction {
+		public override function get startAction () : IAction {
 			visible = true;
 			alpha = 0;
 			var queue:ActionQueue = new ActionQueue();
@@ -61,7 +61,7 @@
 		/**
 		Do not hide
 		*/
-		public override function get hideAction () : IAction {
+		public override function get stopAction () : IAction {
 			return null;
 		}
 		
@@ -85,7 +85,7 @@
 			var button:MenuButton = e.currentTarget as MenuButton;
 			if (button == mSelectedButton) return;
 			// do not draw yet, but wait until we receive an update event in handleNavigationEvent
-			FlowManager.getInstance().goto(button.id);
+			FlowManager.defaultFlowManager.goto(button.id, button);
 		}
 		
 		protected function setSelectedButton (inButton:MenuButton) : void {
