@@ -11,7 +11,7 @@ package org.asaplibrary.management.movie {
 
 		private static const TEST_DELAY:Number = 31;
 
-		private static const MOVIE_NAME:String = "TESTMOVIE";
+		private static const MOVIE_NAME:String = "MM_TEST_MOVIE";
 		private static const MOVIE_URL:String = "testdata/LocalControllerTestCase.swf";
 		
 		private static var sLoadedCalled:Number = 0;
@@ -58,13 +58,14 @@ package org.asaplibrary.management.movie {
 					sReadyCalled++;
 					assertTrue("handleMovieLoaded container", e.controller is LocalController);
 					assertTrue("handleMovieLoaded container", e.container is DisplayObject);
-					assertTrue("handleMovieLoaded getLocalControllerByName", MovieManager.getInstance().getLocalControllerByName("TESTMOVIE") == e.controller);
+					assertTrue("handleMovieLoaded getLocalControllerByName", MovieManager.getInstance().getLocalControllerByName(MOVIE_NAME, true) == e.controller);
 					// show
 					addChild(e.container);
 					
-					MovieManager.getInstance().removeMovie("TESTMOVIE");
+					MovieManager.getInstance().removeMovie(MOVIE_NAME);
 					
-					assertTrue("handleMovieLoaded removeMovie", MovieManager.getInstance().getLocalControllerByName("TESTMOVIE") == null);
+					assertTrue("handleMovieLoaded removeMovie", MovieManager.getInstance().getLocalControllerByName(MOVIE_NAME, true) == null);
+					MovieManager.getInstance().removeEventListener(MovieManagerEvent._EVENT, handleMovieLoaded);
 					break;
 			}
 		}
