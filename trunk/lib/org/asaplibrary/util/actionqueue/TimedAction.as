@@ -183,21 +183,27 @@ package org.asaplibrary.util.actionqueue {
 	
 			if (!mIsRunning) return;
 
+			var msNow:Number = getTimer();
 			if (mDuration != 0) {
 				// calculate percentage (1 to 0)
-				var msNow:Number = getTimer();
+				
 				if (msNow < mEndTime) {
 					percentage = (mEndTime - msNow) * mDurationFactor;
 				} else { 
 					percentage = 0;
 				}
-
 				if (mEffect != null) {
 					var params:Array = new Array(1 - percentage, mStart, mRange, 1);
 					value = Number(mEffect.apply(null, params));
 				} else {
 					value = mEnd - (percentage * mRange);
 				}
+				
+			}
+
+			var result:Boolean = mMethod.call(mOwner, value);
+			
+			if (mDuration != 0) {
 				if (msNow >= mEndTime) {
 					if (mLoop) {
 						mLoopCounter++;
@@ -209,7 +215,7 @@ package org.asaplibrary.util.actionqueue {
 					}
 				}
 			}
-			var result:Boolean = mMethod.call(mOwner, value);
+			
 			// stop when the action returns false
 			if (!result) {
 				stop();
