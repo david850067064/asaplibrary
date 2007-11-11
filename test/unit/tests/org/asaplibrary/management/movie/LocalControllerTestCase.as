@@ -1,4 +1,4 @@
-﻿package org.asaplibrary.management.movie {
+package org.asaplibrary.management.movie {
 	
 	import asunit.framework.TestCase;
 	import org.asaplibrary.management.movie.*;
@@ -19,13 +19,13 @@
 		
 		public function testStartMovie() : void {
 			var tc:TestController = new TestController(this);
-			tc.start();
-			assertTrue("LocalController start", tc.startCalled);
+			tc.startMovie();
+			assertTrue("LocalController startMovie", tc.playCalled);
 		}
 		
 		public function testStopMovie() : void {
 			var tc:TestController = new TestController(this);
-			tc.stop();
+			tc.stopMovie();
 			assertTrue("LocalController stopMovie", tc.stopCalled);
 		}	
 		
@@ -37,7 +37,7 @@ import org.asaplibrary.management.movie.*;
 class TestController extends LocalController {
 
 	private var mTestController:LocalControllerTestCase;
-	public var startCalled:Boolean;
+	public var playCalled:Boolean;
 	public var stopCalled:Boolean;
 	
 	function TestController (inTestController:LocalControllerTestCase) {
@@ -45,13 +45,19 @@ class TestController extends LocalController {
 		mTestController = inTestController;
 	}
 	
-	public override function start () : void {
-		super.start();
-		startCalled = true;
+	public override function startMovie () : void {
+		super.startMovie();
+	}
+	
+	public override function play () : void {
+		playCalled = true;
+	}
+	
+	public override function stopMovie () : void {
+		super.stopMovie();
 	}
 	
 	public override function stop () : void {
-		super.stop();
 		stopCalled = true;
 	}
 }
