@@ -42,6 +42,14 @@ package org.asaplibrary.management.flow {
 		*/
 		public static const UPDATE:String = "update";
 		/**
+		Event subtype sent before sections are stopping.
+		*/
+		public static const SECTIONS_STOPPING:String = "sectionsStopping";
+		/**
+		Event subtype sent before sections are starting.
+		*/
+		public static const SECTIONS_STARTING:String = "sectionsStarting";
+		/**
 		Event subtype sent before trying to load a section movie.
 		*/
 		public static const WILL_LOAD:String = "willLoad";
@@ -61,6 +69,8 @@ package org.asaplibrary.management.flow {
 		*/
 		public var trigger:Object;
 		public var destination:String;
+		public var stoppingSections:Array;
+		public var startingSections:Array;
 		
 		/**
 		Creates a new FlowNavigationEvent. This event bubbles through and is cancelable.
@@ -69,24 +79,26 @@ package org.asaplibrary.management.flow {
 		@param inTrigger: trigger of the navigation action
 		@param inDestination: (optional) name of destination FlowSection; when not specified this defaults to the FlowSection name
 		*/
-		public function FlowNavigationEvent (inSubtype:String, inName:String, inTrigger:Object, inDestination:String = null) {
+		public function FlowNavigationEvent (inSubtype:String, inName:String, inTrigger:Object = null, inDestination:String = null, inStoppingSections:Array = null, inStartingSections:Array = null ) {
 			super(_EVENT, true, true);
 			
 			subtype = inSubtype;
 			name = inName;
 			trigger = inTrigger;
 			destination = inDestination != null ? inDestination : inName;
+			stoppingSections = inStoppingSections;
+			startingSections = inStartingSections;
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination;
+			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination + "; stoppingSections=" + stoppingSections + "; startingSections=" + startingSections;
 		}
 		
 		/**
 		Creates a copy of an existing FlowNavigationEvent.
 		*/
 		public override function clone() : Event {
-			return new FlowNavigationEvent(subtype, name, trigger, destination);
+			return new FlowNavigationEvent(subtype, name, trigger, destination, stoppingSections, startingSections);
 		} 
 	}
 }

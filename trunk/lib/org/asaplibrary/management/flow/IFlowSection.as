@@ -17,17 +17,18 @@ limitations under the License.
 
 package org.asaplibrary.management.flow {
 
-	import org.asaplibrary.management.movie.ILocalController;
 	import org.asaplibrary.util.actionqueue.IAction;
 
 	/**
 	Building block of navigatable site sections. 
 	*/
-	public interface IFlowSection extends ILocalController {
+	public interface IFlowSection {
 		
 		function get stopAction () : IAction;
 		function get startAction () : IAction;
-
+		function getName () : String;
+		function setName (inName:String) : void;
+		
 	}
 
 }

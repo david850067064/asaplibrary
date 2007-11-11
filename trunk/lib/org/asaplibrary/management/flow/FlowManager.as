@@ -444,9 +444,9 @@ package org.asaplibrary.management.flow {
 		@param inMode: one of the modes in {@FlowOptions}
 		@param inType: one of the types in {@FlowOptions}
 		@param inHelper: reference of the used {@link StringNodeHelper}
+		@return The list of section names that are starting/stopping.
 		*/
-		protected function addSectionActions (inSectionName:String, inMode:uint, inType:uint, inHelper:StringNodeHelper ) : void {
-			var actions:Array = new Array();
+		protected function getSectionNames (inSectionName:String, inMode:uint, inType:uint, inHelper:StringNodeHelper ) : Array {
 			var sectionNames:Array = new Array();
 			if (inMode == FlowOptions.STOP) {
 				sectionNames = inHelper.getStopSections(inSectionName, mCurrentSectionName, inType);
@@ -454,17 +454,23 @@ package org.asaplibrary.management.flow {
 			if (inMode == FlowOptions.START) {
 				sectionNames = inHelper.getStartSections(inSectionName, mCurrentSectionName, inType);
 			}
-			
+			return sectionNames;
+		}
+		
+		protected function addSectionActions (inSectionName:String, inSectionNames:Array, inMode:uint, inType:uint) : void {
+
+			var actions:Array = new Array();
 			// see if any FlowRule is defined for this section name
 			var action:Action = getRuleAction(inSectionName, inMode, inType);
 			if (action != null) {
 				actions.push(action);
 			}
-			if (sectionNames != null && sectionNames.length > 0) {
-				actions = getSectionActions(sectionNames, inMode, inType);
+			if (inSectionNames != null && inSectionNames.length > 0) {
+				actions = getSectionActions(inSectionNames, inMode, inType);
 			}
 			mActionRunner.addActions(actions);
 		}
+
 		
 		/**
 		Returns an Action stored with a FlowRule, if any.
@@ -529,6 +535,8 @@ package org.asaplibrary.management.flow {
 		/**
 		Adds section actions to the ActionRunner and starts the runner.
 		@sends FlowNavigationEvent#WILL_UPDATE
+		@sends FlowNavigationEvent#SECTIONS_STOPPING
+		@sends FlowNavigationEvent#SECTIONS_STARTING
 		*/
 		protected function runNextGoToSection () : void {
 						
@@ -537,7 +545,6 @@ package org.asaplibrary.management.flow {
 				reset();
 				return;
 			}
-
 
 			var sectionName:String = sectionNavigationData.name;
 			var doUpdateState:Boolean = sectionNavigationData.updateState;			
@@ -550,15 +557,39 @@ package org.asaplibrary.management.flow {
 				loadSection(sectionName);
 				return;
 			}
+			var evt:FlowNavigationEvent;
 			if (doUpdateState) {
+
 				// hide current section
-				addSectionActions( sectionName, FlowOptions.STOP, type, helper );
-				addSectionActions( sectionName, FlowOptions.STOP_END, type, helper );
+				var stoppingSections:Array = getSectionNames( sectionName, FlowOptions.STOP, type, helper );
+				
+				// dispatch stopping section names, if any, before adding the actions to the list
+				if (stoppingSections != null) {
+					evt = new FlowNavigationEvent(FlowNavigationEvent.SECTIONS_STOPPING, sectionName, getNavigationTrigger(sectionName));
+					evt.stoppingSections = stoppingSections;
+					dispatchEvent(evt);
+				}
+				
+				addSectionActions( sectionName, stoppingSections, FlowOptions.STOP, type );
+				
+				var stopEndSections:Array = getSectionNames( sectionName, FlowOptions.STOP_END, type, helper );
+				addSectionActions( sectionName, stopEndSections, FlowOptions.STOP_END, type );
+	
 			}
 			
+			
 			// show new section
-			addSectionActions( sectionName, FlowOptions.START, type, helper );
-			addSectionActions( sectionName, FlowOptions.START_END, type, helper );
+			var startingSections:Array = getSectionNames( sectionName, FlowOptions.START, type, helper );
+			// dispatch starting sections, if any, before adding the actions to the list
+			if (startingSections != null) {
+				evt = new FlowNavigationEvent(FlowNavigationEvent.SECTIONS_STARTING, sectionName, getNavigationTrigger(sectionName));
+				evt.startingSections = startingSections;
+				dispatchEvent(evt);
+			}
+			addSectionActions( sectionName, startingSections, FlowOptions.START, type );
+
+			var startEndSections:Array = getSectionNames( sectionName, FlowOptions.START_END, type, helper );
+			addSectionActions( sectionName, startEndSections, FlowOptions.START_END, type );
 			
 			if (doUpdateState) {
 				// add state update action
