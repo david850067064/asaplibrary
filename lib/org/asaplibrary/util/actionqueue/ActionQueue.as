@@ -651,7 +651,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "ActionQueue: " + mName;
+			return ";org.asaplibrary.util.actionqueue.ActionQueue: " + mName;
 		}
 		
 		/**
