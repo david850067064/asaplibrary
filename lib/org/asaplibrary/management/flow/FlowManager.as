@@ -230,6 +230,7 @@ package org.asaplibrary.management.flow {
 		*/
 		protected function init () : void {
 			mActionRunner = new ActionRunner("FlowManager");
+			mActionRunner.addEventListener(ActionEvent._EVENT, handleActionRunnerEvent);
 			mSections = new Object();
 			mRules = new Object();
 			mSectionDestinations = new Array();
@@ -694,6 +695,18 @@ package org.asaplibrary.management.flow {
 					break;
 				case MovieManagerEvent.ERROR:
 					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.LOADING_ERROR, e.name, getNavigationTrigger(e.name)));
+					break;
+			}
+		}
+		
+		/**
+		Notifies listeners when the transition actions have been finished.
+		@sends FlowNavigationEvent#FINISHED
+		*/
+		protected function handleActionRunnerEvent (e:ActionEvent) : void {
+			switch (e.subtype) {
+				case ActionEvent.FINISHED:
+					dispatchEvent(new FlowNavigationEvent(FlowNavigationEvent.FINISHED, mCurrentSectionName, getNavigationTrigger(mCurrentSectionName)));
 					break;
 			}
 		}
