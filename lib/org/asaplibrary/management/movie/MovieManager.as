@@ -170,7 +170,7 @@ package org.asaplibrary.management.movie {
 			var md:MovieData = getMovieDataByContainer(inController as DisplayObject);
 			if (md == null) {
 				// create new data for movie
-				md = new MovieData(inController.getName());
+				md = new MovieData("");
 				mMovies.push(md);
 			}
 			// store controller only if not stored during handleMovieLoaded

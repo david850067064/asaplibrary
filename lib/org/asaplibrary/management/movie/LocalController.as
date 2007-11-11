@@ -39,11 +39,7 @@ package org.asaplibrary.management.movie {
 		Creates a new LocalController.
 		@param inName: (optional) unique identifying name
 		*/
-		public function LocalController (inName:String = null) {
-			
-			if (inName != null) {
-				setName(inName);
-			}
+		public function LocalController () {
 			
 			// initialize standalone flag
 			mIsStandalone = ((stage != null) && (parent == stage));
@@ -55,21 +51,18 @@ package org.asaplibrary.management.movie {
 		}
 
 		/**
-		Default behavior: calls MovieClip.play.
+
 		*/
-		public function start () : void {
-			super.play();
+		public function startMovie () : void {
+			play();
+		}
+
+		public function stopMovie () : void {
+			stop();
 		}
 
 		/**
-		Default behavior: calls MovieClip.play.
-		*/
-		public override function stop () : void {
-			super.stop();
-		}
-
-		/**
-		No default behavior; optionally to be implemented by subclasses.
+		To be implemented by subclasses.
 		*/
 		public function die () : void {
 			//
