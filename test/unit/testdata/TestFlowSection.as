@@ -2,12 +2,10 @@
 	
 	import org.asaplibrary.management.flow.*;
 	
-	public class TestFlowSection extends FlowSection {
-		
-		private static const NAME:String = "FlowSectionTestCase";
+	public class TestFlowSection extends LocalControllerFlowSection {
 		
 		function TestFlowSection () {
-			super(NAME);
+			super("FlowSectionTestCase");
 			start();
 		}
 
