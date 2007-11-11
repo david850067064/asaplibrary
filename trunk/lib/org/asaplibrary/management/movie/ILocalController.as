@@ -20,15 +20,12 @@ Interface for the LocalController class. See {@link LocalController} for details
 */
 
 package org.asaplibrary.management.movie {
-
 	public interface ILocalController {
-	
-		function start () : void;
-		function stop () : void;
+		function startMovie () : void;
+		function stopMovie () : void;
 		function die () : void;
 		function getName () : String;
 		function setName (inName:String) : void;
-		
+		function isStandalone () : Boolean;
 	}
-
 }
