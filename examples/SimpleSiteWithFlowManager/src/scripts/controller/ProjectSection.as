@@ -3,7 +3,7 @@
 	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.actionqueue.*;
 
-	public class ProjectSection extends FlowSection {
+	public class ProjectSection extends LocalControllerFlowSection {
 
 		private static const FADE_OUT_DURATION:Number = .2;
 		private static const FADE_IN_DURATION:Number = .7;
