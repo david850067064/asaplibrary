@@ -19,7 +19,6 @@ package org.asaplibrary.management.flow {
 
 	import flash.display.MovieClip;
 	
-	import org.asaplibrary.management.movie.*;
 	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.actionqueue.*;
 	
@@ -64,8 +63,9 @@ package org.asaplibrary.management.flow {
 	}
 	</code> 
 	*/
-	public class FlowSection extends LocalController implements IFlowSection {
+	public class FlowSection extends MovieClip implements IFlowSection {
 		
+		protected var mName:String = "";
 		protected var mFlowManager:FlowManager;
 		
 		/**
@@ -74,9 +74,9 @@ package org.asaplibrary.management.flow {
 		@param inFlowManager: (optional, but if you are using a custom FlowManager you must pass the FlowManager here)
 		*/
 		function FlowSection (inName:String = null, inFlowManager:FlowManager = null) {
-			super(inName);
-			setFlowManager(inFlowManager)	
-			register();
+			setName(inName);
+			setFlowManager(inFlowManager);
+			registerWithFlowManager();
 			visible = false;
 		}
 		
@@ -99,10 +99,14 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Registers this FlowSection with the FlowManager. Only call this function if you have set a non-default FlowManager in {@link #setFlowManager}.
+		Registers this FlowSection with the FlowManager - only if {@link #getName} returns a valid name (not null).
+		This method is called automatically by the constructor.
+		Only call this function if you have set a non-default FlowManager in {@link #setFlowManager}, or if you don't pass a name in the constuctor.
 		*/
-		public function register () : void {
-			getFlowManager().registerFlowSection(this, getName());
+		public function registerWithFlowManager () : void {
+			var name:String = getName();
+			if (name == null) return;
+			getFlowManager().registerFlowSection(this, name);
 		}
 		
 		/**
@@ -115,8 +119,24 @@ package org.asaplibrary.management.flow {
 		}
 		</code>
 		*/
-		public override function getName () : String {
-			return super.getName();
+		public function getName () : String {
+			return mName;
+		}
+		
+		/**
+		Sets the name of the section
+		@param inName: new name of the FlowSection
+		*/
+		public function setName (inName:String) : void {
+			if (inName == null) return;
+			mName = inName;
+		}
+		
+		/**
+		To be implemented by subclasses.
+		*/
+		public function die () : void {
+			//
 		}
 		
 		/**
@@ -136,7 +156,7 @@ package org.asaplibrary.management.flow {
 		/**
 		Default start function.
 		*/
-		public override function start () : void {
+		public function start () : void {
 			visible = true;
 		}
 		
