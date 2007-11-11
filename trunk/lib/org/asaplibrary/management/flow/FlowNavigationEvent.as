@@ -42,6 +42,10 @@ package org.asaplibrary.management.flow {
 		*/
 		public static const UPDATE:String = "update";
 		/**
+		Event subtype sent after changing state actions have been finished.
+		*/
+		public static const FINISHED:String = "finished";
+		/**
 		Event subtype sent before sections are stopping.
 		*/
 		public static const SECTIONS_STOPPING:String = "sectionsStopping";
