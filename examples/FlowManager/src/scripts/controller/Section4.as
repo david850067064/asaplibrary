@@ -9,7 +9,7 @@
 	import data.AppSettings;
 	import ui.GenericButton;
 
-	public class Section4 extends FlowSection {
+	public class Section4 extends LocalControllerFlowSection {
 
 		public var Show_Section2:GenericButton;
 		public var Show_Section3:GenericButton;
