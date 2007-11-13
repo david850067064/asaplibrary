@@ -30,8 +30,8 @@
 			
 			// management
 			//addTest(new LocalControllerTestCase());
-			addTest(new MovieManagerTestCase());
-			addTest(new FlowManagerTestCase());
+			//addTest(new MovieManagerTestCase());
+			//addTest(new FlowManagerTestCase());
 			
 			// util
 			//addTest(new BooleanUtilsTestCase());
@@ -40,10 +40,10 @@
 			//addTest(new StageUtilsTestCase(AsUnitTestRunner.canvas));
 			
 			// util.actionqueue
-			//addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
-			//addTest(new ActionRunnerTestCase());
-			//addTest(new ActionTestCase());
-			//addTest(new TimedActionTestCase());
+			addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
+			addTest(new ActionRunnerTestCase());
+			addTest(new ActionTestCase());
+			//saddTest(new TimedActionTestCase());
 			//addTest(new ConditionTestCase());
 			//addTest(new ConditionManagerTestCase());
 			

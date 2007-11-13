@@ -72,6 +72,7 @@
 			doTestIsFinished();
 			doTestPauseAndContinue();
 			doTestTogglePlay();
+			doTestAddWait();
 			doTestSkip();
 
 			doTestFade();
@@ -201,6 +202,12 @@
 			assertFalse("ActionQueueTestCase toggle play 2", queue.isPaused());
 			queue.togglePlay();
 			assertTrue("ActionQueueTestCase toggle play 1", queue.isPaused());
+		}
+		
+		private function doTestAddWait () : void {
+			var queue = new ActionQueue("addWait");
+			queue.addWait(0.1);
+			queue.run();
 		}
 		
 		private function doTestSkip () : void {

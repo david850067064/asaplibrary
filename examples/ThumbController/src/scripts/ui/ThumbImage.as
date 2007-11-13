@@ -7,14 +7,14 @@
 	public class ThumbImage extends MovieClip {
 		
 		private var mId:String;
-		private var mDelegate:ButtonBehaviorDelegate;
+		private var mDelegate:ButtonBehavior;
 		private static const S:Class = ButtonStates;
 
 		public var tBorder:MovieClip;
 				
 		function ThumbImage () {
-			mDelegate = new ButtonBehaviorDelegate(this);
-			mDelegate.addEventListener(ButtonBehaviorDelegateEvent._EVENT, update);
+			mDelegate = new ButtonBehavior(this);
+			mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, update);
 			tBorder.visible = false;
 			select(false);
 		}
@@ -31,7 +31,7 @@
 			mId = inId;
 		}
 		
-		private function update (e:ButtonBehaviorDelegateEvent) : void {
+		private function update (e:ButtonBehaviorEvent) : void {
 		
 			switch (e.state) {
 				case S.SELECTED:
