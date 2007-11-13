@@ -64,7 +64,6 @@ package org.asaplibrary.util.actionqueue {
   		private var mVisitedMarkerHash:Object; // quick lookup for occurrence of visited markers
   		private var mCurrentMarker:Marker;
   		private var mLoopHash:Object; // quick lookup for occurrence of loops; objects of type Loop
-		private var mFinished:Boolean;
 		private var mPaused:Boolean;
 
 		/**

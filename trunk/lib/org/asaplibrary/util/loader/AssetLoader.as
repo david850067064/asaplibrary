@@ -16,16 +16,15 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
-
-	import flash.events.EventDispatcher;
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.net.URLRequest;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
-
-	import org.asaplibrary.util.debug.Log;
+	import flash.net.URLRequest;
+	
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	@todo stop, stopAll
@@ -47,7 +46,7 @@ package org.asaplibrary.util.loader {
 		* Constructor
 		* @param	inLoaderCount: number of parallel loaders
 		*/
-		public function AssetLoader (inLoaderCount:Number = 1) {
+		public function AssetLoader (inLoaderCount:Number = DEFAULT_LOADER_COUNT) {
 			mLoaderCount = inLoaderCount;
 		}
 		
@@ -236,7 +235,6 @@ package org.asaplibrary.util.loader {
 }
 
 import flash.display.Loader;
-import flash.display.LoaderInfo;
 
 class FileData {
 

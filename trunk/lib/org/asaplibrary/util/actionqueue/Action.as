@@ -29,9 +29,8 @@ package org.asaplibrary.util.actionqueue {
 		protected var mMethod:Function;
 		protected var mOwner:Object;
 		protected var mArgs:Array;
-		
-		//protected var mUndoMethod:Function;
-		//protected var mUndoArgs:Array;
+		protected var mUndoMethod:Function;
+		protected var mUndoArgs:Array;
 		
 		/**
 		Creates a new Action.
@@ -50,8 +49,8 @@ package org.asaplibrary.util.actionqueue {
 			mMethod = inMethod;
 			mOwner = inOwner;
 			mArgs = inArgs;
-			//mUndoMethod = inUndoMethod;
-			//mUndoArgs = inUndoArgs;
+			mUndoMethod = inUndoMethod;
+			mUndoArgs = inUndoArgs;
 		}
 		
 		/**
