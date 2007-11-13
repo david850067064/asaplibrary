@@ -18,8 +18,8 @@ limitations under the License.
 package org.asaplibrary.management.movie {
 	
 	import flash.display.MovieClip;
-	import org.asaplibrary.management.movie.MovieManager;
-	import org.asaplibrary.util.debug.Log;
+	
+	import org.asaplibrary.management.movie.MovieManager;	
 
 	/**
 	(Virtual) base class for controlling movies locally, either independently or embedded.

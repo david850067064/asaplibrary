@@ -16,12 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.lang {
-
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	
 	import org.asaplibrary.data.xml.*;
-	import org.asaplibrary.util.debug.Log;
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	Class for managing language dependencies in an application.
@@ -312,7 +311,7 @@ package org.asaplibrary.management.lang {
 
 /**
 Helper class for storing information about IMultiLanguageTextContainer vs. ID
-*/
+ */
 import org.asaplibrary.management.lang.IMultiLanguageTextContainer;
 
 class MultiLanguageContainerData {
