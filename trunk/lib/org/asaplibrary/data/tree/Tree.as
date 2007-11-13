@@ -70,7 +70,7 @@ package org.asaplibrary.data.tree {
 		*/
 		public function addChild (inName:String, inData:Object = null) : Tree {
 		
-			var childNode = new Tree(inName, this);
+			var childNode:Tree = new Tree(inName, this);
 			if (mChildren == null) mChildren = new Array();
 			mChildren.push(childNode);
 			
