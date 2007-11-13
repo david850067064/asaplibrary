@@ -16,15 +16,14 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
-
+	
 	import flash.display.DisplayObject;
-	import flash.events.EventDispatcher;
 	import flash.display.Loader;
-
-	import org.asaplibrary.util.loader.AssetLoader;
-	import org.asaplibrary.util.loader.AssetLoaderEvent;
-	import org.asaplibrary.management.movie.LocalController;
+	import flash.events.EventDispatcher;
+	
 	import org.asaplibrary.util.debug.Log;
+	import org.asaplibrary.util.loader.AssetLoader;
+	import org.asaplibrary.util.loader.AssetLoaderEvent;	
 
 	/**
 	MovieManager handles administration, loading and retrieving of separate SWF movies.
@@ -86,7 +85,7 @@ package org.asaplibrary.management.movie {
 								   inName:String,
 								   inIsVisible:Boolean = true) : Boolean {
 			// try adding
-			if (!addMovie(inURL, inName)) {
+			if (!addMovie(inName)) {
 				return false;
 			}
 			// start loading
@@ -186,7 +185,7 @@ package org.asaplibrary.management.movie {
 		@param inName: unique identifying name for the movie to be loaded
 		@return False if another movie with the same name exists in the list; otherwise true.
 		*/
-		private function addMovie (inURL:String, inName:String) : Boolean {
+		private function addMovie (inName:String) : Boolean {
 			var md:MovieData = getMovieDataByName(inName);
 			if (md != null) {
 				Log.error("addMovie; movie with name '" + inName + "' is already added to MovieManager", toString());
@@ -262,9 +261,6 @@ package org.asaplibrary.management.movie {
 			var evt:MovieManagerEvent = new MovieManagerEvent(MovieManagerEvent.ERROR, e.name);
 			evt.error = e.error;
 			dispatchEvent(evt);
-		}
-		
-		private function handleMovieLoadingStarted (e:AssetLoaderEvent) : void {
 		}
 		
 		/**
@@ -346,11 +342,11 @@ package org.asaplibrary.management.movie {
 			return ";org.asaplibrary.management.movie.MovieManager";
 		}
 	}
-	
 }
 
-import org.asaplibrary.management.movie.*;
 import flash.display.DisplayObject;
+
+import org.asaplibrary.management.movie.*;
 
 /**
 Helper data container.
