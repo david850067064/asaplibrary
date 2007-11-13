@@ -100,7 +100,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		protected function initDoCallDynamic () : TimedAction {
-			mStartValue = mCallStartValueFunction.apply(mObject);
+			mStartValue = mCallStartValueFunction.apply(mObject, null);
 			return new TimedAction(this, doCall, mDuration, mEffect);
 		}
 		

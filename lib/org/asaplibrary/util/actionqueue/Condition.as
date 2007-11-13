@@ -92,14 +92,14 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Executes a "evaluation met" function (as passed to {@link #Condition}.
 		*/
-		protected function callMethodMet(inMethod:Function, index:int,	arr:Array) : void {
+		protected function callMethodMet(inMethod:Function, inIndex:int, inArr:Array) : void {
 			inMethod.call(null);
 		}
 		
 		/**
 		Executes a "evaluation not met" function (as passed to {@link #Condition}.
 		*/
-		protected function callMethodNotMet(inMethod:Function, index:int,	arr:Array) : void {
+		protected function callMethodNotMet(inMethod:Function, inIndex:int, inArr:Array) : void {
 			inMethod.call(null);
 		}
 	}

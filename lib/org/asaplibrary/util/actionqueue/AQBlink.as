@@ -16,12 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-
+	
 	import flash.display.DisplayObject;
 	
-	import org.asaplibrary.util.actionqueue.*;
-	import org.asaplibrary.util.NumberUtils;
-	
+	import org.asaplibrary.util.actionqueue.*;	
+
 	/**
 	Action method to control the timed blinking (making more or less visible) of a DisplayObject.
 	Options are:

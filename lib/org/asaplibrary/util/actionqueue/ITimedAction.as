@@ -16,8 +16,6 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
-	import flash.events.*;
 
 	/**
 	Abstract type for timed Actions.

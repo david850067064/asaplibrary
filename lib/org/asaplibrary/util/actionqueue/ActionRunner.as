@@ -33,7 +33,6 @@ package org.asaplibrary.util.actionqueue {
 		private var mActions:Array;
 		private var mCurrentStep:uint;
 		private var mNextStep:uint;
-		private var mRegistered:Boolean = false;
 		private var mFinished:Boolean = false;
 		private var mPaused:Boolean = false;
 		private var mRunning:Boolean = false;		

@@ -86,7 +86,7 @@ package org.asaplibrary.util.actionqueue {
 		Performs deletion of a condition from the 'to delete list'.
 		@param inCondition: condition to delete
 		*/
-		protected function deleteCondition (inCondition:Condition, index:int, arr:Array) : void {
+		protected function deleteCondition (inCondition:Condition, inIndex:int, inArr:Array) : void {
 			var index:int = mConditions.indexOf(inCondition);
 			if (index != -1) {
 				mConditions.splice(index, 1);
@@ -110,7 +110,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inCondition: Condition to evaluate
 		@sends ConditionEvent#CONDITION_MET
 		*/
-		protected function evaluate (inCondition:Condition, index:int,	arr:Array) : void {
+		protected function evaluate (inCondition:Condition, inIndex:int, inArr:Array) : void {
 			var doesMeet:Boolean = inCondition.run();
 			if (doesMeet) {
 				dispatchEvent(new ConditionEvent(ConditionEvent.CONDITION_MET, inCondition));
