@@ -18,7 +18,7 @@ limitations under the License.
 package org.asaplibrary.ui.buttons {
 
 	/**
-	Button state options used by {@link ButtonBehaviorDelegate}. The state options use bitwise operators to allow combinations of values.
+	Button state options used by {@link ButtonBehavior}. The state options use bitwise operators to allow combinations of values.
 	
 	Bitwise operators are AND (&), OR (|) and XOR (^).
 	@example

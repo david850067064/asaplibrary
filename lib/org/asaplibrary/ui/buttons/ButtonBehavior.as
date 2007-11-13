@@ -21,12 +21,12 @@ package org.asaplibrary.ui.buttons {
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	
-	import org.asaplibrary.ui.buttons.ButtonBehaviorDelegateEvent;
+	import org.asaplibrary.ui.buttons.ButtonBehaviorEvent;
 	import org.asaplibrary.ui.buttons.ButtonStates;
 	
 	/**
-	Helper class to manage button states (mouse over, selected, enabled, etcetera) so the button class can be freed from state management. This lets the button just do the drawing of its mouse states.
-	This also makes mouse behaviour pluggable - see for instance {@link DelayButtonBehaviorDelegate} for a time-oriented delegate.
+	Delegate class to manage button states (mouse over, selected, enabled, etcetera) to free the button class from state management and let it just do the drawing of its mouse states.
+	This also makes mouse behaviour pluggable - see for instance {@link DelayButtonBehavior} for a time-oriented delegate.
 	@example
 	This example shows how to set up a button class that receives its update changes from its delegate:
 	<code>
@@ -36,15 +36,15 @@ package org.asaplibrary.ui.buttons {
 	public class MyButton extends MovieClip {
 	
 		private static const S:Class = ButtonStates; // shorthand
-		private var mDelegate:DelayButtonBehaviorDelegate;
+		private var mDelegate:DelayButtonBehavior;
 		
 		public var tBorder:MovieClip; // a border clip shows the button state
 
 		public function MyButton () {
-			mDelegate = new DelayButtonBehaviorDelegate(this);
+			mDelegate = new DelayButtonBehavior(this);
 			// listen for changes
 			// button updates will be redirected to method 'update':
-			mDelegate.addEventListener(ButtonBehaviorDelegateEvent.UPDATE, update);
+			mDelegate.addEventListener(ButtonBehaviorEvent.UPDATE, update);
 		}
 		
 		// pass any button change setter state to the delegate
@@ -52,7 +52,7 @@ package org.asaplibrary.ui.buttons {
 			mDelegate.select(inState);
 		}
 		
-		private function update (e:ButtonBehaviorDelegateEvent) : void {
+		private function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
 				case S.SELECTED:
 				case S.OVER:
@@ -71,7 +71,7 @@ package org.asaplibrary.ui.buttons {
 	}
 	</code>
 	*/
-	public class ButtonBehaviorDelegate extends EventDispatcher {
+	public class ButtonBehavior extends EventDispatcher {
 		
 		/**
 		The selected button state. Usually this means the button will be highlighted and not clickable.
@@ -104,7 +104,7 @@ package org.asaplibrary.ui.buttons {
 		@param inButton: the owner button
 		@todo Implement CLICK, DOUBLE_CLICK, MOUSE_WHEEL (if necessary)
 		*/
-		public function ButtonBehaviorDelegate (inButton:MovieClip) {
+		public function ButtonBehavior (inButton:MovieClip) {
 			inButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 			inButton.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
 			inButton.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
@@ -120,7 +120,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.ButtonBehaviorDelegate";
+			return ";org.asaplibrary.ui.buttons.ButtonBehavior";
 		}
 		
 		/**
@@ -193,7 +193,7 @@ package org.asaplibrary.ui.buttons {
 		Sends out the updated state to listeners (the owner button). A change event is only sent at a change.
 		@param e: (optional) the mouse event - will not always be present
 		@param inState: (optional) the button state
-		@sends ButtonBehaviorDelegateEvent#_EVENT - in case the new state differs from the previous one
+		@sends ButtonBehaviorEvent#_EVENT - in case the new state differs from the previous one
 		*/
 		protected function update (e:MouseEvent = null, inState:uint = ButtonStates.NONE) : void {
 			var drawState:uint = inState;
@@ -203,8 +203,8 @@ package org.asaplibrary.ui.buttons {
 			
 			if (mState == drawState) return;
 		
-			dispatchEvent(new ButtonBehaviorDelegateEvent(
-				ButtonBehaviorDelegateEvent._EVENT,
+			dispatchEvent(new ButtonBehaviorEvent(
+				ButtonBehaviorEvent._EVENT,
 				drawState,
 				mSelected,
 				mEnabled,

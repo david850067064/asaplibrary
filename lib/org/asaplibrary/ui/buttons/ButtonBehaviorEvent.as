@@ -21,25 +21,25 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.MouseEvent;
 
 	/**
-	Passes events for {@link ButtonBehaviorDelegate} (and subclasses thereof). Subscribe to type <code>_EVENT</code>.
+	Passes events for {@link ButtonBehavior} (and subclasses thereof). Subscribe to type <code>_EVENT</code>.
 	@example
 	<code>
-	mDelegate.addEventListener(ButtonBehaviorDelegateEvent._EVENT, handleUpdate);
+	mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, handleUpdate);
 	</code>
 	Listen for delegate events:
 	<code>
-	private function handleUpdate (e:ButtonBehaviorDelegateEvent) : void {
+	private function handleUpdate (e:ButtonBehaviorEvent) : void {
 		if (e.state == ButtonStates.OVER) grow();
 		if (e.state == ButtonStates.OUT) shrink();
 	}
 	</code>
 	*/
-	public class ButtonBehaviorDelegateEvent extends Event {
+	public class ButtonBehaviorEvent extends Event {
 	
 		/** Event type. */
-		public static const _EVENT:String = "buttonBehaviorDelegateEvent";
+		public static const _EVENT:String = "buttonBehaviorEvent";
 		/** Event subtype. */
-		public static const UPDATE:String = "buttonBehaviorDelegateUpdate";
+		public static const UPDATE:String = "buttonUpdate";
 		
 		public var subtype:String;
 		public var state:uint;
@@ -49,7 +49,7 @@ package org.asaplibrary.ui.buttons {
 		public var mouseEvent:MouseEvent;
 
 		/**
-		Creates a new ButtonBehaviorDelegateEvent.
+		Creates a new ButtonBehaviorEvent.
 		@param inSubtype: "UPDATE"
 		@param inState: one of the options in {@link ButtonStates}
 		@param inSelected: the selected button state
@@ -57,7 +57,7 @@ package org.asaplibrary.ui.buttons {
 		@param inPressed: the pressed button state
 		@param inMouseEvent: the mouse event; might be null in case no mouse event has triggered the update
 		*/
-		public function ButtonBehaviorDelegateEvent (inSubtype:String,
+		public function ButtonBehaviorEvent (inSubtype:String,
 													 inState:uint,
 													 inSelected:Boolean,
 													 inEnabled:Boolean,
@@ -73,14 +73,14 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.ui.buttons.ButtonBehaviorDelegateEvent; state=" + state + "; selected=" + selected + "; enabled=" + enabled + "; pressed=" + pressed + "; mouseEvent=" + mouseEvent;
+			return ";org.asaplibrary.ui.buttons.ButtonBehaviorEvent; state=" + state + "; selected=" + selected + "; enabled=" + enabled + "; pressed=" + pressed + "; mouseEvent=" + mouseEvent;
 		}
 		
 		/**
-		Creates a copy of an existing ButtonBehaviorDelegateEvent.
+		Creates a copy of an existing ButtonBehaviorEvent.
 		*/
 		public override function clone() : Event {
-			return new ButtonBehaviorDelegateEvent(subtype, state, selected, enabled, pressed, mouseEvent);
+			return new ButtonBehaviorEvent(subtype, state, selected, enabled, pressed, mouseEvent);
 		} 
 	}	
 }
