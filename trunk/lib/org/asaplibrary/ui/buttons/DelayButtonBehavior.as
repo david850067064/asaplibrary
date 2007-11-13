@@ -18,17 +18,16 @@ limitations under the License.
 package org.asaplibrary.ui.buttons {
 	
 	import flash.display.MovieClip;
-	import flash.utils.Timer;
-	import flash.events.Event;
-	import flash.utils.getTimer;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;
 	
-	import org.asaplibrary.ui.buttons.ButtonBehaviorDelegate;
-	import org.asaplibrary.ui.buttons.ButtonStates;
-	
+	import org.asaplibrary.ui.buttons.ButtonBehavior;
+	import org.asaplibrary.ui.buttons.ButtonStates;	
+
 	/**
-	Helper class to manage timing control over mouse over and mouse out events. This is useful for navigation menus where the menu items should "remember" its state for a brief moment even when the mouse has moved out of its click region. In interface design this effect is called hysteresis - see also <a href="http://www.mackido.com/Interface/hysteresis.html">time delay in hierarchical menus</a>.
+	Delegate class to manage timing control over mouse over and mouse out events. This is useful for navigation menus where the menu items should "remember" its state for a brief moment even when the mouse has moved out of its click region. In interface design this effect is called hysteresis - see also <a href="http://www.mackido.com/Interface/hysteresis.html">time delay in hierarchical menus</a>.
 	
 	Another use is to prevent buttons to activate when the mouse moves very quickly over them. A activation delay will cause the button to activate only when the mouse stays for a little bit longer.
 
@@ -44,10 +43,10 @@ package org.asaplibrary.ui.buttons {
 	
 	public class MyButton extends MovieClip {
 		
-		private var mDelegate:DelayButtonBehaviorDelegate;
+		private var mDelegate:DelayButtonBehavior;
 				
 		public function MyButton () {		
-			mDelegate = new DelayButtonBehaviorDelegate(this);
+			mDelegate = new DelayButtonBehavior(this);
 			mDelegate.addEventListener(ButtonStateDelegateEvent.UPDATE, update);
 
 			// set the timing:
@@ -62,7 +61,7 @@ package org.asaplibrary.ui.buttons {
 	}
 	</code>
 	*/
-	public class DelayButtonBehaviorDelegate extends ButtonBehaviorDelegate {
+	public class DelayButtonBehavior extends ButtonBehavior {
 	
 		// Delay variables
 		protected var mInDelay:Number = 0;		/**< Delay before mouse over is performed, in seconds. */
@@ -76,10 +75,10 @@ package org.asaplibrary.ui.buttons {
 		protected var mAfterDelayTimer:Timer;
 		
 		/**
-		Creates a new DelayButtonBehaviorDelegate.
+		Creates a new DelayButtonBehavior.
 		@param inButton: the owner button
 		*/
-		public function DelayButtonBehaviorDelegate (inButton:MovieClip) {
+		public function DelayButtonBehavior (inButton:MovieClip) {
 
 			super(inButton);
 			
@@ -97,7 +96,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.DelayButtonBehaviorDelegate";
+			return ";org.asaplibrary.ui.buttons.DelayButtonBehavior";
 		}
 		
 		/**
