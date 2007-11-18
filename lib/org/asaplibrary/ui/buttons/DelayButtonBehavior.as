@@ -133,7 +133,7 @@ package org.asaplibrary.ui.buttons {
 		Called at MouseEvent.MOUSE_OVER.
 		@param e: the mouse event
 		*/
-		override protected function mouseOverHandler (e:MouseEvent = null) : void {
+		override protected function mouseOverHandler (e:MouseEvent) : void {
 			mOutDelayTimer.reset();
 			
 			if (!mEnabled) return;
@@ -155,7 +155,7 @@ package org.asaplibrary.ui.buttons {
 		Called at MouseEvent.MOUSE_OUT.
 		@param e: the mouse event
 		*/
-		override protected function mouseOutHandler (e:MouseEvent = null) : void {	
+		override protected function mouseOutHandler (e:MouseEvent) : void {	
 			resetTimers();
 	
 			if (mOutDelay == 0) {
