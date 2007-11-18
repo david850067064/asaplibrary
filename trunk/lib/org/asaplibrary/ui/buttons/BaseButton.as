@@ -24,7 +24,8 @@ package org.asaplibrary.ui.buttons {
 		public var tHitarea:MovieClip;
 		
 		public function BaseButton () {
-			// act as button
+		
+		// act as button
 			buttonMode = true;
 			
 			// set and hide hit area

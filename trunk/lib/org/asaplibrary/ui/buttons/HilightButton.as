@@ -16,12 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
-
-	import flash.events.Event;
-	import flash.events.MouseEvent;
 	
-	import org.asaplibrary.util.FramePulse;
+	import flash.events.Event;
+	
 	import org.asaplibrary.ui.buttons.*;
+	import org.asaplibrary.util.FramePulse;	
 
 	/**
 	Button with highlight behavior.
@@ -32,20 +31,19 @@ package org.asaplibrary.ui.buttons {
 	Frames scenario:
 	1. No interaction: the button has stopped at the first frame
 	2. Mouse moves over button: the playhead moves to frame "over", optionally goes through the frames, and ends on frame "on"
-	3. Mouse moves away from button: the playhead moves to frame "out", optionally goes through the frames, and wraps to the first frame
+	3. Mouse moves away from button: the playhead moves to frame "out", optionally goes through the frames, and wraps to the first frame. When moving out, scenario step 2 is always finished first.
 	*/
 	public class HilightButton extends BaseButton {
 	
-		private static var LABEL_UP:String = "up";
-		private static var LABEL_OVER:String = "over";
-		private static var LABEL_ON:String = "on";
-		private static var LABEL_OUT:String = "out";
+		private static const LABEL_UP:String = "up";
+		private static const LABEL_OVER:String = "over";
+		private static const LABEL_ON:String = "on";
+		private static const LABEL_OUT:String = "out";
 		
 		private var mBehavior:DelayButtonBehavior;
 
 		private var mAnimatingOver:Boolean;
 		private var mDoOutAnimation:Boolean;
-		private var mForceHilightAnimate:Boolean;
 
 		public function HilightButton () {
 			super();
@@ -70,22 +68,20 @@ package org.asaplibrary.ui.buttons {
 		
 		/**
 		Go to hilight frame
-		@param inDoAnimate: if true, change will be animated, otherwise immediate
+		@param inDoAnimate: if true, the playhead will be moved from "over" to "on"; otherwise the playhead will be set to "on" immediately
 		*/
 		public function hilight (inDoAnimate:Boolean = false) : void {
-
-			mForceHilightAnimate = inDoAnimate;			
-			if (!inDoAnimate) drawOn();
 			if (inDoAnimate) drawOver();
+			if (!inDoAnimate) drawOn();
 		}
 		
 		/**
-		 * Go directly to the "up" frame
-		 * @param inAnimate: if true, change will be animated, otherwise immediate
+		Go directly to the "up" frame
+		@param inDoAnimate: if true, the playhead will be moved from "on" to "out" to "up"; otherwise the playhead will be set to up" immediately
 		 */
-		public function unHilight (inAnimate:Boolean = false) : void {
-			if (!inAnimate) drawUp();
-			if (inAnimate) drawOut();
+		public function unHilight (inDoAnimate:Boolean = false) : void {
+			if (inDoAnimate) drawOut();
+			if (!inDoAnimate) drawUp();
 		}
 		
 		/**
@@ -139,8 +135,8 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		 * enterFrame handler that checks if animation has to continue
-		 */
+		Continually checks if out animation has finished. Stops at frame "on".
+		*/
 		protected function checkAnimation (e:Event) : void {
 			if (currentLabel == LABEL_ON) {
 				mAnimatingOver = false;
