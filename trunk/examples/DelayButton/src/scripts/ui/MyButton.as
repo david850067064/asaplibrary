@@ -53,8 +53,13 @@
 		}
 		
 		private function update (e:ButtonBehaviorEvent) : void {
+			if (e.state == ButtonStates.ADDED) init();
 			if (e.state == ButtonStates.OVER) grow();
 			if (e.state == ButtonStates.OUT) shrink();
+		}
+		
+		private function init () : void {
+			// not used
 		}
 		
 		private function grow () : void {
