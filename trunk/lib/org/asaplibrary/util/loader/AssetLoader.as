@@ -32,7 +32,7 @@ package org.asaplibrary.util.loader {
 	public class AssetLoader extends EventDispatcher {
 	
 		/** Default number of loaders before queueing */
-		private static var DEFAULT_LOADER_COUNT:Number = 1;
+		private static const DEFAULT_LOADER_COUNT:Number = 1;
 		
 		/** FileData */
 		private var mWaitingStack:Array = new Array();
