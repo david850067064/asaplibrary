@@ -19,6 +19,7 @@ package org.asaplibrary.ui.buttons {
 	
 	import flash.events.EventDispatcher;
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import org.asaplibrary.ui.buttons.ButtonBehaviorEvent;
@@ -73,6 +74,8 @@ package org.asaplibrary.ui.buttons {
 	*/
 	public class ButtonBehavior extends EventDispatcher {
 		
+		protected var mButton:MovieClip;
+		
 		/**
 		The selected button state. Usually this means the button will be highlighted and not clickable.
 		*/
@@ -105,15 +108,15 @@ package org.asaplibrary.ui.buttons {
 		@todo Implement CLICK, DOUBLE_CLICK, MOUSE_WHEEL (if necessary)
 		*/
 		public function ButtonBehavior (inButton:MovieClip) {
-			inButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
-			inButton.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
-			inButton.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
-			inButton.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
-			//inButton.addEventListener(MouseEvent.CLICK, clickHandler);
-			//inButton.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
-			//inButton.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-			
-			update();
+			mButton = inButton;
+			mButton.addEventListener(Event.ADDED, addedHandler);
+			mButton.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
+			mButton.addEventListener(MouseEvent.MOUSE_OUT, mouseOutHandler);
+			mButton.addEventListener(MouseEvent.MOUSE_OVER, mouseOverHandler);
+			mButton.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
+			//mButton.addEventListener(MouseEvent.CLICK, clickHandler);
+			//mButton.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
+			//mButton.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 		}
 	
 		/**
@@ -148,10 +151,20 @@ package org.asaplibrary.ui.buttons {
 		}
 
 		/**
+		Called at Event.ADDED. Will be called once for the button.
+		@param e: the event
+		*/
+		protected function addedHandler (e:Event) : void {
+			// only call "added" once
+			mButton.removeEventListener(Event.ADDED, addedHandler);
+			update(null, ButtonStates.ADDED);
+		}
+		
+		/**
 		Called at MouseEvent.MOUSE_DOWN.
 		@param e: the mouse event
 		*/
-		protected function mouseDownHandler (e:MouseEvent = null) : void {
+		protected function mouseDownHandler (e:MouseEvent) : void {
 			mPressed = true;
 			mMouseOver = true;
 			if (mSelected || !mEnabled) return;
@@ -162,7 +175,7 @@ package org.asaplibrary.ui.buttons {
 		Called at MouseEvent.MOUSE_OUT.
 		@param e: the mouse event
 		*/
-		protected function mouseOutHandler (e:MouseEvent = null) : void {
+		protected function mouseOutHandler (e:MouseEvent) : void {
 			mPressed = false;
 			mMouseOver = false;
 			if (mSelected || !mEnabled) return;
@@ -173,7 +186,7 @@ package org.asaplibrary.ui.buttons {
 		Called at MouseEvent.MOUSE_OVER.
 		@param e: the mouse event
 		*/
-		protected function mouseOverHandler (e:MouseEvent = null) : void {
+		protected function mouseOverHandler (e:MouseEvent) : void {
 			mMouseOver = true;
 			if (mSelected || !mEnabled) return;
 			update(e, ButtonStates.OVER);
@@ -183,7 +196,7 @@ package org.asaplibrary.ui.buttons {
 		Called at MouseEvent.MOUSE_UP.
 		@param e: the mouse event
 		*/
-		protected function mouseUpHandler (e:MouseEvent = null) : void {
+		protected function mouseUpHandler (e:MouseEvent) : void {
 			mPressed = false;
 			if (mSelected || !mEnabled) return;
 			update(e, ButtonStates.OVER);
