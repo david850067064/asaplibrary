@@ -47,12 +47,14 @@ package org.asaplibrary.ui.buttons {
 		public static const SELECTED:uint =     (1<<6);
 		public static const DESELECTED:uint =   (1<<7);
 		
+		public static const ADDED:uint =        (1<<8);
+		
 		// not used yet
-		public static const UP:uint =           (1<<8);
-		public static const PRESSED:uint =      (1<<9);
-		public static const CLICK:uint =        (1<<10);
-		public static const DOUBLE_CLICK:uint = (1<<11);
-		public static const MOUSE_WHEEL:uint =  (1<<12);
+		public static const UP:uint =           (1<<9);
+		public static const PRESSED:uint =      (1<<10);
+		public static const CLICK:uint =        (1<<11);
+		public static const DOUBLE_CLICK:uint = (1<<12);
+		public static const MOUSE_WHEEL:uint =  (1<<13);
 
 	}
 }
