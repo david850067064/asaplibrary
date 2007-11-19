@@ -1,17 +1,14 @@
 package controller {
+	import org.asaplibrary.management.movie.LocalController;
+	import org.asaplibrary.util.actionqueue.*;	
 
-	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.movie.*;
-	import org.asaplibrary.util.actionqueue.*;
-	
 	public class ProjectController extends LocalController {
 		
 		private static const FADE_OUT_DURATION:Number = .2;
 		private static const FADE_IN_DURATION:Number = .7;
 		
-		function ProjectController (inName:String = "") {
-			super(inName);
+		function ProjectController () {
+			super();
 		}
 
 		public function get startAction () : IAction {

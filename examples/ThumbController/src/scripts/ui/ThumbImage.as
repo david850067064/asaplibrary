@@ -8,7 +8,6 @@
 		
 		private var mId:String;
 		private var mDelegate:ButtonBehavior;
-		private static const S:Class = ButtonStates;
 
 		public var tBorder:MovieClip;
 				
@@ -34,13 +33,13 @@
 		private function update (e:ButtonBehaviorEvent) : void {
 		
 			switch (e.state) {
-				case S.SELECTED:
-				case S.OVER:
+				case ButtonStates.SELECTED:
+				case ButtonStates.OVER:
 					tBorder.visible = true;
 					break;
-				case S.NORMAL:
-				case S.OUT:
-				case S.DESELECTED:
+				case ButtonStates.NORMAL:
+				case ButtonStates.OUT:
+				case ButtonStates.DESELECTED:
 					tBorder.visible = false;
 					break;
 				default:

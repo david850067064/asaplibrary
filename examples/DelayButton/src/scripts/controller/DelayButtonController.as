@@ -1,10 +1,12 @@
 ﻿package controller {
-
-	import fl.controls.NumericStepper;
-	import flash.events.Event; 
+	import flash.events.Event;
+	
 	import org.asaplibrary.management.movie.LocalController;
-	import ui.MyButton;
-		
+	
+	import fl.controls.NumericStepper;
+	
+	import ui.MyButton;	
+
 	public class DelayButtonController extends LocalController {
 		
 		public var tInDelayNS:NumericStepper;

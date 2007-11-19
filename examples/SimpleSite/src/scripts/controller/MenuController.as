@@ -1,13 +1,12 @@
 ﻿package controller {
-
 	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.movie.*;
-
-	import data.AppSettings;
-	import event.NavigationEvent;
-	import ui.MenuButton;
 	
+	import data.AppSettings;
+	
+	import event.NavigationEvent;
+	
+	import ui.MenuButton;	
+
 	public class MenuController extends ProjectController {
 	
 		public var tHomeBtn:MenuButton;
@@ -16,7 +15,7 @@
 		private var mSelectedButton:MenuButton;
 					
 		function MenuController () {
-			super(AppSettings.MENU_NAME);
+			super();
 			listen();
 			selfUpdate();
 		}

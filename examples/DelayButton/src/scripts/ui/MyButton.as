@@ -1,14 +1,14 @@
 ﻿package ui {
-
 	import flash.display.MovieClip;
-	import fl.transitions.easing.*;
-	import org.asaplibrary.util.actionqueue.*;
 	
 	import org.asaplibrary.ui.buttons.*;
+	import org.asaplibrary.util.actionqueue.*;
 	
+	import fl.transitions.easing.*;	
+
 	public class MyButton extends MovieClip {
 		
-		private var mDelegate:DelayButtonBehavior;
+		private var mBehavior:DelayButtonBehavior;
 		
 		public var tHitarea:MovieClip;
 		public var tPulseRing:MovieClip;
@@ -16,15 +16,14 @@
 		private static const CURRENT:Number = Number.NaN;
 		private static const MAX_SCALE:Number = 2;
 		private static const IN_ANIMATION_DURATION:Number = 1.1;
-		private static const OUT_ANIMATION_DURATION:Number = 1.1;
 		
 		private var mPulseQueue:ActionQueue;
 		private var mScaleQueue:ActionQueue;
 
 		public function MyButton () {
 		
-			mDelegate = new DelayButtonBehavior(this);
-			mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, update);
+			mBehavior = new DelayButtonBehavior(this);
+			mBehavior.addEventListener(ButtonBehaviorEvent._EVENT, update);
 			
 			// don't handle mouse events on children
 			mouseChildren = false;
@@ -41,15 +40,15 @@
 		}
 		
 		public function set indelay (inValue:Number) : void {
-			mDelegate.indelay = inValue;
+			mBehavior.indelay = inValue;
 		}
 		
 		public function set outdelay (inValue:Number) : void {
-			mDelegate.outdelay = inValue;
+			mBehavior.outdelay = inValue;
 		}
 		
 		public function set afterdelay (inValue:Number) : void {
-			mDelegate.afterdelay = inValue;
+			mBehavior.afterdelay = inValue;
 		}
 		
 		private function update (e:ButtonBehaviorEvent) : void {

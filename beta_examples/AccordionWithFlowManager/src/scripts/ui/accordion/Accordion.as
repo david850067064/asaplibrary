@@ -1,10 +1,10 @@
 ﻿package ui.accordion {
-
 	import flash.display.MovieClip;
-	import fl.motion.easing.*;
 	
 	import org.asaplibrary.management.flow.*;
-		
+	
+	import fl.motion.easing.Cubic;	
+
 	public class Accordion extends MovieClip {
 		
 		protected const DEFAULT_DURATION:Number = .5;

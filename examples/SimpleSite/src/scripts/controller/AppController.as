@@ -1,14 +1,14 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
-
+	
 	import org.asaplibrary.management.movie.*;
 	import org.asaplibrary.util.actionqueue.*;
-
-	import event.NavigationEvent;
+	
 	import data.AppSettings;
 	
-	public class AppController extends LocalController {
+	import event.NavigationEvent;	
+
+	public class AppController extends MovieClip {
 		
 		private var mCurrentController:ProjectController;
 		
@@ -17,7 +17,7 @@
 		public var tMenuHolder:MovieClip;
 		
 		function AppController () {
-			super(AppSettings.MAIN_NAME);
+			super();
 			listen();
 			loadMenu();
 			gotoHome();
@@ -42,7 +42,7 @@
 		/**
 		Handles MovieManagerEvents.
 		*/
-		protected function onMovieEvent (e:MovieManagerEvent) {
+		protected function onMovieEvent (e:MovieManagerEvent) : void {
 			if (e.subtype == MovieManagerEvent.MOVIE_READY) {
 				showMovie(e.controller);
 			}
@@ -58,7 +58,7 @@
 			// else: a new state
 			navMan.setState(state);
 			
-			var lc:LocalController = MovieManager.getInstance().getLocalControllerByName(state, true);
+			var lc:ILocalController = MovieManager.getInstance().getLocalControllerByName(state, true);
 			if (lc != null) {
 				// already loaded
 				showMovie(lc);
@@ -67,36 +67,37 @@
 			}
 		}
 		
-		protected function showMovie (inController:LocalController) : void {
-
-			switch (inController.getName()) {
+		protected function showMovie (inController:ILocalController) : void {
+			var pc:ProjectController = inController as ProjectController;
+			var name:String = inController.getName();
+			switch (name) {
 				case AppSettings.MENU_NAME:
-					tMenuHolder.addChild(inController);
+					tMenuHolder.addChild(pc);
 					break;
 				case AppSettings.HOME_NAME:
-					tHomeHolder.addChild(inController);
+					tHomeHolder.addChild(pc);
 					break;
 				case AppSettings.GALLERY_NAME:
-					tGalleryHolder.addChild(inController);
+					tGalleryHolder.addChild(pc);
 					break;
 			}
-			inController.alpha = 0;
-			inController.visible = true;
+			pc.alpha = 0;
+			pc.visible = true;
 			
 			var queue:ActionQueue = new ActionQueue();
 						
-			switch (inController.getName()) {
+			switch (name) {
 				case AppSettings.HOME_NAME:
 				case AppSettings.GALLERY_NAME:
 					if (mCurrentController != null) {
 						// hide old
 						queue.addAction( mCurrentController.stopAction );
 					}
-					mCurrentController = inController as ProjectController;
+					mCurrentController = pc;
 					break;
 			}
 			// show new
-			queue.addAction( inController.startAction );
+			queue.addAction( pc.startAction );
 			queue.run();
 		}
 
