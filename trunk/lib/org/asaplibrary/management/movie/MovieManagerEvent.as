@@ -33,6 +33,11 @@ package org.asaplibrary.management.movie {
 			showMovie(e.controller);
 		}
 	}
+	
+	protected function showMovie (inController:ILocalController) : void {
+		var lc:LocalController = inController as LocalController;
+		// etcetera
+	}
 	</code>
 	*/
 	public class MovieManagerEvent extends Event {
