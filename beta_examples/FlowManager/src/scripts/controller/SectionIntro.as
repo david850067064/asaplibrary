@@ -1,11 +1,10 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
 	
-	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.management.flow.*;
+	import org.asaplibrary.util.actionqueue.*;
 	
-	import data.AppSettings;
+	import data.AppSettings;	
 
 	public class SectionIntro extends FlowSection {
 		
@@ -23,7 +22,7 @@
 
 			var endOfAnimationCheck:Function = function () : Boolean {
 				return (tIntroAnim.currentLabel == "end");
-			}
+			};
 			var condition:Condition = new Condition (this, endOfAnimationCheck);
 						
 			var queue:ActionQueue = new ActionQueue("SectionIntro");

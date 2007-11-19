@@ -1,13 +1,12 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
-	import fl.transitions.easing.*;
 	
 	import org.asaplibrary.management.flow.*;
-
-	import data.AppSettings;
-	import ui.GenericButton;
 	
+	import data.AppSettings;
+	
+	import ui.GenericButton;	
+
 	public class Section1 extends FlowSection {
 		
 		public var tNumber:MovieClip;

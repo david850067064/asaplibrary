@@ -1,14 +1,12 @@
 ﻿package ui.accordion {
-
-	import flash.events.*;
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
+	import flash.events.*;
 	import flash.events.MouseEvent;
-	import fl.motion.easing.*;
-
-	import org.asaplibrary.ui.buttons.*;
+	
 	import org.asaplibrary.management.flow.*;
-	import org.asaplibrary.util.actionqueue.*;
+	import org.asaplibrary.ui.buttons.*;
+	import org.asaplibrary.util.actionqueue.*;	
 
 	public class Pane extends FlowSection implements IPaneContent {
 		
@@ -23,7 +21,7 @@
 		protected var mHeight:Number = 0; /**< Current height. */
 		protected var mIndex:int = -1; /**< Index number in accordion. */
 		protected var mDelegate:ButtonBehavior;
-		protected var mMoveQueue:ActionQueue;;
+		protected var mMoveQueue:ActionQueue;
 		
 		function Pane (inAccordion:Accordion, inIndex:int, inParent:Pane, inPrevious:Pane, inFlowManager:FlowManager) {
 			super(null, inFlowManager);
@@ -246,12 +244,13 @@
 			var current:String = getFlowManager().getCurrentSectionName();
 			if (current != name) {
 				if (!isOpen()) {
-					return getFlowManager().goto(name);
+					getFlowManager().goto(name);
+					return;
 				}
 			}
 			// so close current: back to parent
 			// unless there is no parent: back to null (close all)
-			var parentName = null;
+			var parentName:String = null;
 			if (mParent != null) {
 				parentName = mParent.getName();
 			}

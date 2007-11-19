@@ -1,21 +1,18 @@
 ﻿
 package ui {
-
 	import flash.display.MovieClip;
+	import flash.geom.ColorTransform;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.geom.ColorTransform;
 	
-	import org.asaplibrary.ui.buttons.*;
-	import org.asaplibrary.management.flow.*;
-	
+	import org.asaplibrary.ui.buttons.*;	
+
 	/**
 	
 	*/
 	public class GenericButton extends MovieClip {
 	
 		protected var mDelegate:ButtonBehavior;
-		protected static const S:Class = ButtonStates;
 		protected static const MAGIC_TEXTWIDTH_PADDING:Number = 5;
 		
 		protected var mId:String;
@@ -61,13 +58,13 @@ package ui {
 		*/
 		protected function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
-				case S.SELECTED:
-				case S.OVER:
+				case ButtonStates.SELECTED:
+				case ButtonStates.OVER:
 					drawOverState();
 					break;
-				case S.NORMAL:
-				case S.OUT:
-				case S.DESELECTED:
+				case ButtonStates.NORMAL:
+				case ButtonStates.OUT:
+				case ButtonStates.DESELECTED:
 					drawUpState();
 					break;
 				default:

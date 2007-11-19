@@ -1,15 +1,14 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.movie.LocalController;
+	
 	import org.asaplibrary.management.flow.*;
-	import org.asaplibrary.util.actionqueue.*;	
-
-	import ui.MenuButton;
+	import org.asaplibrary.util.actionqueue.*;
+	
 	import data.AppSettings;
 	
+	import ui.MenuButton;	
+
 	public class MenuController extends FlowSection {
 		
 		private static const XPOS:Number = 10;
@@ -23,7 +22,6 @@
 		
 		private var mSelectedButton:MenuButton;
 		private var mButtons:Object;
-		private var mLeft:Number = XPOS;
 		
 		function MenuController () {
 			super();

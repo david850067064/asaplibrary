@@ -1,13 +1,10 @@
 ﻿package controller {
-
-	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.flow.*;
-
-	import data.AppSettings;
-	import ui.CloseButton;
 	
+	import org.asaplibrary.management.flow.*;
+	
+	import data.AppSettings;	
+
 	public class Section4_1 extends Section1_1 {
 		
 		function Section4_1 () {

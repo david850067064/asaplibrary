@@ -1,13 +1,12 @@
 ﻿
 package ui {
-
 	import flash.display.MovieClip;
+	import flash.geom.ColorTransform;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.geom.ColorTransform;
 	
-	import org.asaplibrary.ui.buttons.*;
-	
+	import org.asaplibrary.ui.buttons.*;	
+
 	/**
 	
 	*/
@@ -33,15 +32,15 @@ package ui {
 		*/
 		protected override function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
-				case S.SELECTED:
+				case ButtonStates.SELECTED:
 					drawSelectedState();
 					break;
-				case S.OVER:
+				case ButtonStates.OVER:
 					drawOverState();
 					break;
-				case S.NORMAL:
-				case S.OUT:
-				case S.DESELECTED:
+				case ButtonStates.NORMAL:
+				case ButtonStates.OUT:
+				case ButtonStates.DESELECTED:
 					drawUpState();
 					break;
 				default:

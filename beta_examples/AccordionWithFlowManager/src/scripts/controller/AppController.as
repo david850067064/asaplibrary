@@ -1,14 +1,15 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
-
-	import org.asaplibrary.management.movie.*;
-	import org.asaplibrary.management.flow.*;
+	
+	import org.asaplibrary.management.flow.FlowManager;
+	import org.asaplibrary.management.flow.FlowNavigationEvent;
 	import org.asaplibrary.util.StageUtils;
-	import org.asaplibrary.util.actionqueue.*;
-
+	import org.asaplibrary.util.actionqueue.AQFade;
+	import org.asaplibrary.util.actionqueue.AQSet;
+	import org.asaplibrary.util.actionqueue.ActionQueue;
+	
 	import ui.*;
-	import ui.accordion.*;
+	import ui.accordion.*;	
 	
 	public class AppController extends MovieClip {
 		
@@ -34,7 +35,7 @@
 			mFlowManager.goto("0.0.1");
 		}
 		
-		private function createAccordion (inFlowManager:FlowManager) : Accordion {
+		private function createAccordion (inFlowManager:FlowManager) : DemoAccordion {
 			var accordion:DemoAccordion = new DemoAccordion("", inFlowManager);
 			addChild(accordion);
 			accordion.setupPanes(4, null);
@@ -69,6 +70,9 @@
 		private function handleNavigationEvent (e:FlowNavigationEvent) : void {
 						
 			switch (e.subtype) {
+				case FlowNavigationEvent.WILL_UPDATE:
+					hideFinishedNote();
+					break;
 				case FlowNavigationEvent.FINISHED:
 					showFinishedNote();
 					break;
@@ -84,6 +88,11 @@
 			mFinishedFadeQueue.addAction(new AQFade().fade(tFinishedNote, 1, 1, 0));
 			mFinishedFadeQueue.addAction(new AQSet().setVisible(tFinishedNote, false));
 			mFinishedFadeQueue.run();
+		}
+		
+		private function hideFinishedNote () : void {
+			mFinishedFadeQueue.reset();
+			tFinishedNote.visible = false;
 		}
 			
 	}

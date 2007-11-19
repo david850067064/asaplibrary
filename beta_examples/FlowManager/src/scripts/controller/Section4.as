@@ -1,13 +1,12 @@
 ﻿package controller {
-
-	import flash.display.MovieClip;
-	import fl.motion.easing.*;
-	
 	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.actionqueue.*;
-
+	
 	import data.AppSettings;
-	import ui.GenericButton;
+	
+	import fl.motion.easing.*;
+	
+	import ui.GenericButton;	
 
 	public class Section4 extends LocalControllerFlowSection {
 

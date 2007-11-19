@@ -1,20 +1,15 @@
 ﻿
 package ui {
-
 	import flash.display.MovieClip;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import flash.geom.ColorTransform;
 	
-	import org.asaplibrary.ui.buttons.*;
-	
+	import org.asaplibrary.ui.buttons.*;	
+
 	/**
 	
 	*/
 	public class CloseButton extends MovieClip {
 
 		protected var mDelegate:ButtonBehavior;
-		protected static const S:Class = ButtonStates;
 		
 		public function CloseButton () {
 			mDelegate = new ButtonBehavior(this);
@@ -26,13 +21,13 @@ package ui {
 		
 		protected function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
-				case S.SELECTED:
-				case S.OVER:
+				case ButtonStates.SELECTED:
+				case ButtonStates.OVER:
 					drawOverState();
 					break;
-				case S.NORMAL:
-				case S.OUT:
-				case S.DESELECTED:
+				case ButtonStates.NORMAL:
+				case ButtonStates.OUT:
+				case ButtonStates.DESELECTED:
 					drawUpState();
 					break;
 				default:
