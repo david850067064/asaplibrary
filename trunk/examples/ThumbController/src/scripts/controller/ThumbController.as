@@ -1,25 +1,24 @@
 ﻿
 package controller {
 	
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.movie.LocalController;
-	import org.asaplibrary.util.actionqueue.*;
-	import org.asaplibrary.util.loader.*;
+	
 	import org.asaplibrary.data.array.ArrayEnumerator;
 	import org.asaplibrary.data.array.TraverseArrayEnumerator;
 	import org.asaplibrary.data.array.TraverseArrayEnumeratorEvent;
+	import org.asaplibrary.util.actionqueue.*;
+	import org.asaplibrary.util.loader.*;
 	
+	import ui.ImagePlaceholder;
 	import ui.NextButton;
 	import ui.ThumbImage;
-	import ui.ImagePlaceholder;
-	
+		
 	/**
 	This demo illustrates the use of a TraverseArrayEnumerator as a "thumb pager". The enumerator traverses a list of image ids, to be fetched with <code>getCurrentObject</code>, <code>getNextObject</code> and <code>getPreviousObject</code>. The "previous" and "next" buttons are activated/deactivated by events.
 	*/
-	public class ThumbController extends LocalController {
+	public class ThumbController extends MovieClip {
 		
 		public static const IMAGE_LIST:Array = ["Agave.jpg", "Clown-Fish.jpg", "Daisies.jpg", "Dandelion-Seeds.jpg", "Dandelion.jpg", "Faux-Fur.jpg"];
 		public static const IMAGE_URL_FOLDER:String = "../img/big/";
@@ -219,10 +218,10 @@ package controller {
 		private function handleNextClick (e:MouseEvent) : void {
 			var oldThumb:ThumbImage = mThumbPager.getCurrentObject();
 			var newThumb:ThumbImage;
-			if (e.currentTarget.name == "tNext") {
+			if (MovieClip(e.currentTarget).name == "tNext") {
 				newThumb = mThumbPager.getNextObject();
 			}
-			if (e.currentTarget.name == "tPrevious") {
+			if (MovieClip(e.currentTarget).name == "tPrevious") {
 				newThumb = mThumbPager.getPreviousObject();
 			}
 			if (newThumb != null) {

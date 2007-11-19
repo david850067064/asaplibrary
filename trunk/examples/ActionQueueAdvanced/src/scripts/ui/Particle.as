@@ -1,11 +1,10 @@
 ﻿package ui {
-
-	import flash.display.Sprite;
-	import flash.utils.Timer;
-	import flash.events.TimerEvent;
 	import flash.display.Shape;
+	import flash.display.Sprite;
+	import flash.events.TimerEvent;
 	import flash.filters.*;
-	import flash.utils.getTimer;
+	import flash.utils.Timer;
+	import flash.utils.getTimer;	
 
 	public class Particle extends Sprite {
 	

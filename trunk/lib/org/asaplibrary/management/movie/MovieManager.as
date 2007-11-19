@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
-	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;

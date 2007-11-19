@@ -1,18 +1,15 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
-	import flash.display.Stage;
-	import fl.controls.Button;
 	import flash.events.MouseEvent;
-	import fl.motion.easing.*;
 	
-	// ASAP classes
-	import org.asaplibrary.management.movie.LocalController;
 	import org.asaplibrary.util.actionqueue.*;
 	
-	import ui.Particle;
+	import fl.controls.Button;
+	import fl.motion.easing.*;
 	
-	public class Controller extends LocalController {	
+	import ui.Particle;	
+
+	public class Controller extends MovieClip {	
 		
 		// Synchronize markers
 		public var pause_btn:Button;
@@ -68,7 +65,6 @@
 		private var eventsQueue:ActionQueue;
 		
 		function Controller () {
-			super();
 			
 			pause_btn.addEventListener(MouseEvent.MOUSE_DOWN, handlePause);
 			start_btn.addEventListener(MouseEvent.MOUSE_DOWN, handleStart);
@@ -120,21 +116,21 @@
 				return (q1.didVisitMarker("BAR1")
 					 && q2.didVisitMarker("BAR1")
 					 && q3.didVisitMarker("BAR1"));
-			}
+			};
 			var condition1:Condition = new Condition (this, bar1Condition, null);
 				
 			var bar2Condition:Function = function () : Boolean {
 				return (q1.didVisitMarker("BAR2")
 					 && q2.didVisitMarker("BAR2")
 					 && q3.didVisitMarker("BAR2"));
-			}
+			};
 			var condition2:Condition = new Condition (this, bar2Condition, null);
 				
 			var bar3Condition:Function = function () : Boolean {
 				return (q1.didVisitMarker("BAR3")
 					 && q2.didVisitMarker("BAR3")
 					 && q3.didVisitMarker("BAR3"));
-			}
+			};
 			var condition3:Condition = new Condition (this, bar3Condition, null);
 			
 			var duration1:Number = .4 + Math.random() * MAX_DURATION;
@@ -193,7 +189,7 @@
 				return (q1.isFinished()
 					 && q2.isFinished()
 					 && q3.isFinished());
-			}
+			};
 			var fadeCondition:Condition = new Condition (this, fadeConditionCheck);
 
 			fadeLinesQueue = new ActionQueue("lines queue");

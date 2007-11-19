@@ -1,20 +1,19 @@
 package controller {
-
 	import flash.events.MouseEvent;
-
-	import org.asaplibrary.management.movie.*;
-
-	import data.AppSettings;
-	import event.NavigationEvent;
-	import ui.SimpleButton;
 	
+	import data.AppSettings;
+	
+	import event.NavigationEvent;
+	
+	import ui.SimpleButton;	
+
 	public class HomeController extends ProjectController {
 		
 		public var tRoundedBtn:SimpleButton;
 		public var tPictureBtn:SimpleButton;
 		
 		function HomeController () {
-			super(AppSettings.HOME_NAME);
+			super();
 			addEventListener(MouseEvent.CLICK, handleButtonClick);
 		}
 

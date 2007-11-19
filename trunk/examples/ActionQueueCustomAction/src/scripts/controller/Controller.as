@@ -1,15 +1,13 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-	import fl.motion.easing.*;
 	
-	// ASAP classes
-	import org.asaplibrary.management.movie.LocalController;
-	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.util.NumberUtils;
+	import org.asaplibrary.util.actionqueue.*;
+	
+	import fl.motion.easing.Elastic;	
 
-	public class Controller extends LocalController {	
+	public class Controller extends MovieClip {	
 	
 		public var tClip:MovieClip;
 		private var mClipData:ClipData;
