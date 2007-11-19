@@ -1,14 +1,12 @@
 ﻿package controller {
-
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
-
-	import org.asaplibrary.management.movie.*;
-	import org.asaplibrary.management.flow.*;
-
-	import data.AppSettings;
+	import flash.display.MovieClip;
 	
-	public class AppController extends FlowSection {
+	import org.asaplibrary.management.flow.*;
+	
+	import data.AppSettings;
+		
+	public class AppController extends MovieClip {
 
 		private var FM:FlowManager = FlowManager.defaultFlowManager;
 		
@@ -17,7 +15,7 @@
 		public var tMenuHolder:MovieClip;
 		
 		function AppController () {
-			super("AppController");
+			super();
 			listen();
 			display();
 		}
@@ -28,7 +26,6 @@
 		}
 		
 		protected function display () : void {
-			visible = true;
 			FM.goto(AppSettings.HOME_NAME);
 			FM.goto(AppSettings.MENU_NAME, this, false, false);
 		}

@@ -1,12 +1,11 @@
 ﻿package ui.accordion {
-
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;	
 
 	public class PaneContent extends MovieClip implements IPaneContent {
 				
 		public function setContent (inObject:Object) : void {
-			var displayObject = inObject as DisplayObject;
+			var displayObject:DisplayObject = inObject as DisplayObject;
 			if (displayObject == null) return;
 			try {
 				removeChildAt(0);

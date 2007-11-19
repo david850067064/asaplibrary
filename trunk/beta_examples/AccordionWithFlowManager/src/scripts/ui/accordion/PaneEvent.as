@@ -1,9 +1,6 @@
 ﻿package ui.accordion {
-	
-	import flash.events.Event;
-	
-	import ui.Pane;
-	
+	import flash.events.Event;	
+
 	public class PaneEvent extends Event {
 	
 		public static const _EVENT:String = "paneEvent";

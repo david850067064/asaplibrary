@@ -1,15 +1,16 @@
 ﻿package controller {
-
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
-	import fl.motion.easing.*;
-
+	
 	import org.asaplibrary.management.flow.*;
 	import org.asaplibrary.util.actionqueue.*;
-
-	import data.AppSettings;
-	import ui.CloseButton;
 	
+	import data.AppSettings;
+	
+	import fl.motion.easing.*;
+	
+	import ui.CloseButton;	
+
 	public class Section1_1 extends FlowSection {
 		
 		public var tNumber:MovieClip;

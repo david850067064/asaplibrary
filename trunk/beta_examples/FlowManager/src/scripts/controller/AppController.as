@@ -1,20 +1,20 @@
 ﻿package controller {
-
-	import flash.display.MovieClip;
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import fl.motion.easing.*;
-
-	import org.asaplibrary.management.movie.LocalController;
+	
 	import org.asaplibrary.management.flow.*;
-	import org.asaplibrary.util.actionqueue.*;	
 	import org.asaplibrary.util.FrameDelay;
 	import org.asaplibrary.util.StageUtils;
+	import org.asaplibrary.util.actionqueue.*;
 	
 	import data.AppSettings;
-	import ui.*;
 	
+	import fl.motion.easing.Quadratic;
+	
+	import ui.*;	
+
 	public class AppController extends FlowSection {
 		
 		public var tSections:MovieClip;
@@ -22,7 +22,6 @@
 
 		private var mLoaderAnim:Loader;
 
-		public static const OPTIONS:Class = FlowOptions;		
 		protected var FM:FlowManager = FlowManager.defaultFlowManager;
 		
 		function AppController () {
@@ -54,8 +53,8 @@
 			// after the intro, go to section 1
 			rule = new FlowRule(
 				AppSettings.SECTION_INTRO,
-				OPTIONS.START_END,
-				OPTIONS.ANY,
+				FlowOptions.START_END,
+				FlowOptions.ANY,
 				proceedToSection1
 			);
 			FM.addRule(rule);
@@ -63,8 +62,8 @@
 			// do not hide with sibling sections
 			rule = new FlowRule(
 				null,
-				OPTIONS.STOP,
-				OPTIONS.DISTANT|OPTIONS.SIBLING,
+				FlowOptions.STOP,
+				FlowOptions.DISTANT|FlowOptions.SIBLING,
 				doNotHide
 			);
 			FM.addRuleForSections (
@@ -74,8 +73,8 @@
 			
 			rule = new FlowRule(
 				null,
-				OPTIONS.START,
-				OPTIONS.ANY,
+				FlowOptions.START,
+				FlowOptions.ANY,
 				moveSection
 			);
 			FM.addRuleForSections (
@@ -109,7 +108,7 @@
 					break;
 				case AppSettings.SECTION3:
 					x = 0; y = -260;
-					break
+					break;
 				case AppSettings.SECTION4:
 					x = -400; y = -260;
 					break;
@@ -122,7 +121,7 @@
 		protected function moveQueue (inX:Number, inY:Number) : ActionQueue {
 			var queue:ActionQueue = new ActionQueue("moveToSection");
 			var CURRENT:Number = Number.NaN;
-			var effect:Function = Quadratic.easeInOut;
+			var effect:Function = fl.motion.easing.Quadratic.easeInOut;
 			queue.addAction(new AQMove().move(tSections, .5, CURRENT, CURRENT, inX, inY, effect));
 			return queue;
 		}
