@@ -21,7 +21,7 @@ package org.asaplibrary.ui.buttons {
 	
 	public class BaseButton extends MovieClip {
 	
-		public var tHitarea:MovieClip;
+		public var tHitArea:MovieClip;
 		
 		public function BaseButton () {
 		
@@ -29,9 +29,9 @@ package org.asaplibrary.ui.buttons {
 			buttonMode = true;
 			
 			// set and hide hit area
-			if (tHitarea != null) {
-				hitArea = tHitarea;
-				tHitarea.visible = false;
+			if (tHitArea != null) {
+				hitArea = tHitArea;
+				tHitArea.visible = false;
 			}
 			
 			// don't handle mouse events on children
