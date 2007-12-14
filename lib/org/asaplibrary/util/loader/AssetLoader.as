@@ -180,6 +180,8 @@ package org.asaplibrary.util.loader {
 				// notify we're done loading this file
 				evt = new AssetLoaderEvent(AssetLoaderEvent.COMPLETE, fd.name);
 				evt.loader = fd.loader;
+				evt.loaderInfo = info;
+				evt.url = fd.url;
 				evt.asset = fd.loader.content;
 			}
 			dispatchEvent(evt);
