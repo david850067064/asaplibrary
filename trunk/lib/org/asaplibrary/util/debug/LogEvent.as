@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -35,7 +35,7 @@ package org.asaplibrary.util.debug {
 		Creates a new LogEvent.
 		
 		*/
-		function LogEvent (inLevel:String, inText:String, inSender:String) {
+		public function LogEvent (inLevel:String, inText:String, inSender:String) {
 			super(_EVENT);
 			
 			level = inLevel;

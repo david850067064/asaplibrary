@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
-
+	import flash.display.LoaderInfo;	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.Event;
@@ -46,8 +46,10 @@ package org.asaplibrary.util.loader {
 		public var loadedBytesCount : uint;
 		public var error:String;
 		public var loader:Loader;
+		public var loaderInfo : LoaderInfo;
 		public var asset:DisplayObject;
-	
+		public var url : String;
+
 		/**
 		Creates a new AssetLoaderEvent.
 		@param inSubtype: either subtype; see above
