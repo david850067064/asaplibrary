@@ -16,16 +16,16 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.xml {
-
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
-	import flash.events.EventDispatcher;
-	import flash.net.URLRequest;
-	import flash.net.URLVariables;
 	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	
-	import org.asaplibrary.util.debug.Log;
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	Loads XML data.
@@ -62,12 +62,14 @@ package org.asaplibrary.data.xml {
 		/**
 		* Load XML
 		* @param	inURL: source url of the XML
-		* @param	inName: unique identifying name
+		* @param	inName: (optional) unique identifying name
 		* @param	inVariables: (optional) {@link URLVariables} object to be sent to the server
+		* @param inRequestMethod: (optional) {@link URLRequestMethod} POST or GET; default: GET
 		*/
 		public function loadXML (inURL:String,
 								 inName:String = "",
-								 inVariables:URLVariables = null) : void {
+								 inVariables:URLVariables = null,
+								 inRequestMethod:String = URLRequestMethod.GET) : void {
 			// Check if url is valid
 			if ((inURL== null) || (inURL.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());
@@ -79,7 +81,7 @@ package org.asaplibrary.data.xml {
 				return;
 			}
 
-			var xld:XMLLoaderData = new XMLLoaderData(inURL, inName, inVariables);
+			var xld:XMLLoaderData = new XMLLoaderData(inURL, inName, inVariables, inRequestMethod);
 			mWaitingStack.push(xld);
 			
 			loadNext();
@@ -107,6 +109,7 @@ package org.asaplibrary.data.xml {
 			// create request
 			var request:URLRequest = new URLRequest(xld.url);
 			if (xld.variables != null) request.data = xld.variables;
+			request.method = xld.requestMethod;
 			
 			// store loader in data
 			xld.loader = loader;
@@ -197,19 +200,21 @@ package org.asaplibrary.data.xml {
 	}	
 }
 
-
-import flash.net.URLVariables;
 import flash.net.URLLoader;
+import flash.net.URLRequestMethod;
+import flash.net.URLVariables;
 
 class XMLLoaderData {
 	public var url:String;
 	public var name:String;
 	public var variables:URLVariables;
 	public var loader:URLLoader;
+	public var requestMethod:String;
 	
-	public function XMLLoaderData (inURL:String, inName:String, inVariables:URLVariables = null) {
+	public function XMLLoaderData (inURL:String, inName:String, inVariables:URLVariables = null, inRequestMethod:String = URLRequestMethod.GET) {
 		url = inURL;
 		name = inName;
 		variables = inVariables;
+		requestMethod = inRequestMethod;
 	}
 }
