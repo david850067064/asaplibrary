@@ -46,7 +46,7 @@ package org.asaplibrary.management.flow {
 
 		/**
 		Creates a new LocalControllerFlowSection.
-		@param inName: (optional) unique identifier for this section; you may also override {@link #getName} in a subclass
+		@param inName: (optional) unique identifier for this section; to pass the section name you may also override {@link FlowSection#getName} in a subclass
 		@param inFlowManager: (optional, but if you are using a custom FlowManager you must pass the FlowManager here)
 		*/
 		function LocalControllerFlowSection (inName:String = null, inFlowManager:FlowManager = null) {

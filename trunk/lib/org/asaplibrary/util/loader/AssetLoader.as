@@ -90,7 +90,7 @@ package org.asaplibrary.util.loader {
 		
 		/**
 		Stops loading of asset with name inName.
-		@param inName:	identifying name as passed to {@link loadAsset}
+		@param inName:	identifying name as passed to {@link #loadAsset}
 		*/
 		public function stopLoadingAsset (inName:String) : void {
 			var i:int, ilen:int = mLoadingStack.length;

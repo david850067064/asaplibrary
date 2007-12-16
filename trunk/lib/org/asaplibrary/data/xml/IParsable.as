@@ -19,7 +19,6 @@ package org.asaplibrary.data.xml {
 
 	/**
 	Interface to implement in DataValueObject classes that get their data through the {@link Parser} class.
-	The {@link Parser} class calls the {@link #parseObject} function with data from {@link XML2Object#parseXML}. The implementing class is expected to use this Object to retrieve data from.
 	*/
 	public interface IParsable {
 		/**

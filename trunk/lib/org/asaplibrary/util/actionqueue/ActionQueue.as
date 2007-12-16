@@ -187,7 +187,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Creates an Action object from the argument list (see {@link #action}).
+		Creates an Action object from the argument list (see {@link #addAction}).
 		*/
 		protected function createAction (inArgs:Array) : IAction {
 

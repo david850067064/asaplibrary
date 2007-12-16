@@ -19,7 +19,7 @@ package org.asaplibrary.data.xml {
 
 	/**
 	Class for parsing XML data into DataValueObject classes.
-	The class provides static functions for calling {@link IParsable#parseObject} on newly created objects of a specified type, either for single data blocks or for an array of similar data.
+	The class provides static functions for calling {@link IParsable#parseXML} on newly created objects of a specified type, either for single data blocks or for an array of similar data.
 	The Parser removes the tedious for-loop from the location where the XML data is loaded, and moves the parsing of the XML data to the location where it's used for the first time: the DataValueObject class. Your application can use this data, that contains typed variables, without ever caring about the original source of the data.
 	When the XML structure is changed, only the parsing function in the DataValueObject class has to be changed, thereby facilitating maintenance and development.
 

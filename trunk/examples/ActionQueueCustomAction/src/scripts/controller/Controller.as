@@ -6,6 +6,7 @@
 	import org.asaplibrary.util.actionqueue.*;
 	
 	import fl.motion.easing.Elastic;	
+	import fl.motion.BezierEase;
 
 	public class Controller extends MovieClip {	
 	
@@ -51,6 +52,7 @@
 			tClip.scaleX = tClip.scaleY = NumberUtils.percentageValue(1, mClipData.endscale, percentage);
 			
 			return true; // if false the action will stop
+			
 		}
 		
 		public function resetClip () : void {
