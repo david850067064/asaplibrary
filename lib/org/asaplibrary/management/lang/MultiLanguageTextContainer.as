@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -45,8 +45,8 @@ package org.asaplibrary.management.lang {
 		
 		
 		public function MultiLanguageTextContainer () {
-			addEventListener(Event.ADDED, handleAdded);
-			addEventListener(Event.REMOVED, handleRemoved);
+			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
+			addEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
 		}
 		
 		/**
@@ -74,7 +74,7 @@ package org.asaplibrary.management.lang {
 		 * @param	e
 		 */
 		private function handleAdded (e : Event) : void {
-			var id : uint = parseInt(name.substring(name.lastIndexOf("_") + 1), 10);
+			var id : String = name.substring(name.lastIndexOf("_") + 1);
 
 			LanguageManager.getInstance().addContainer(id, this);
 		}
