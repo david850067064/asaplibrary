@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -28,7 +28,7 @@ package org.asaplibrary.management.lang {
 	public class TextItemData implements IParsable {
 		
 		public var text : String;
-		public var id : uint;
+		public var id : String;
 		public var isHTML : Boolean = true;
 		
 		/**
@@ -36,7 +36,7 @@ package org.asaplibrary.management.lang {
 		@param inID: unique id of item
 		@param inText: text for item
 		 */
-		public function TextItemData (inID : uint = 0, inText : String = null) {
+		public function TextItemData (inID : String = null, inText : String = null) {
 			id = inID;
 			text = inText;
 		}
@@ -47,7 +47,7 @@ package org.asaplibrary.management.lang {
 		 * @return true if parsing went ok, otherwise false
 		 */
 		public function parseXML (o : XML) : Boolean {
-			id = parseInt(o.@id, 10);
+			id = o.@id;
 			isHTML = o.@html != "false";
 			text = o.toString();
 			

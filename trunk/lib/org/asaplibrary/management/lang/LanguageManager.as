@@ -21,16 +21,15 @@ package org.asaplibrary.management.lang {
 	
 	import org.asaplibrary.data.xml.*;
 	import org.asaplibrary.util.debug.Log;	
-
 	/**
 	Class for managing language dependencies in an application.
 	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
 	<code>
 	<texts>
-	<text id="1">Hello World</text>
-	<text id="2">&lt;[!CDATA[<b>Hello</b> World with bold Hello]]&gt;</text>
-	<text id="3" html="false">&lt;[!CDATA[<b>Hello</b> World with visible html tags]]&gt;</text>
-	<text id="4">&lt;[!CDATA[>>>Hello World<<<]]&gt;</text>
+		<text id="1">Hello World</text>
+		<text id="2"><![CDATA[<b>Hello</b> World with bold Hello]]></text>
+		<text id="3" html="false"><![CDATA[<b>Hello</b> World with visible html tags]]></text>
+		<text id="4" html="false"><![CDATA[>>>Hello World<<<]]></text>
 	</texts>
 	</code>
 	The 'id' attribute is mandatory, and has to be a number.
@@ -109,9 +108,9 @@ package org.asaplibrary.management.lang {
 		private static const XML_NAME:String = "languagexml";
 
 		/** objects of type TextItemData */
-		private var mTextDataItems:Array;
+		private var mTextDataItemMap:Object;
 		/** objects of type MultiLanguageContainerData */
-		private var mTextClips:Array;
+		private var mTextContainers:Array;
 			
 		private var mXMLLoader:XMLLoader;
 		private var mGenerateDebugText:Boolean = false;
@@ -119,18 +118,12 @@ package org.asaplibrary.management.lang {
 		private var mURL : String;
 
 		// singleton instance
-		private static var mInstance : LanguageManager = null;
-		private static var mIsCreating : Boolean = false;
+		private static var mInstance : LanguageManager = new LanguageManager();
 
 		/**
 		@return The singleton instance of the LanguageManager
 		*/
 		public static function getInstance () : LanguageManager {
-			if (mInstance == null) {
-				mIsCreating = true;
-				mInstance = new LanguageManager();
-				mIsCreating = false;
-			}
 			return mInstance;
 		}
 
@@ -159,10 +152,10 @@ package org.asaplibrary.management.lang {
 		* @param inID: the id to be associated with the container
 		* @param inContainer: instance of a class implementing {@link IMultiLanguageTextContainer}
 		*/
-		public function addContainer (inID:uint, inContainer:IMultiLanguageTextContainer) : void {
+		public function addContainer (inID:String, inContainer:IMultiLanguageTextContainer) : void {
 			if (getClipDataByContainer(inContainer) == null) {
 				var mlcd:MultiLanguageContainerData = new MultiLanguageContainerData(inID, inContainer);
-				mTextClips.push(mlcd);
+				mTextContainers.push(mlcd);
 			}
 			inContainer.setData(getDataByID(inID));
 		}
@@ -174,7 +167,7 @@ package org.asaplibrary.management.lang {
 		public function removeContainer (inContainer:IMultiLanguageTextContainer) : void {
 			var index:uint = getClipDataIndexByContainer(inContainer); 
 			if (!isNaN(index)) {
-				mTextClips.splice(index, 1);
+				mTextContainers.splice(index, 1);
 			}
 		}
 			
@@ -185,11 +178,12 @@ package org.asaplibrary.management.lang {
 		*/
 		public function addText (inData:TextItemData) : void {
 			// store item at location of id
-			mTextDataItems[inData.id] = inData;
+			mTextDataItemMap[inData.id] = inData;
 
-			var len:uint = mTextClips.length;
+			var len:uint = mTextContainers.length;
 			for (var i:uint = 0; i < len; ++i) {
-				var md:MultiLanguageContainerData = mTextClips[i] as MultiLanguageContainerData;
+				var md:MultiLanguageContainerData = mTextContainers[i] as MultiLanguageContainerData;
+				
 				if (md.id == inData.id) {				
 					md.container.setData(inData);
 				}
@@ -201,7 +195,7 @@ package org.asaplibrary.management.lang {
 		* @param inID: the id for the text to be found
 		* @return the text if found, an empty string if generateDebugText is set to false, or '>> id = ' + id if generateDebugText is set to true
 		*/
-		public function getTextByID (inID:uint) : String {
+		public function getTextByID (inID:String) : String {
 			return getDataByID(inID).text;
 		}
 
@@ -210,15 +204,15 @@ package org.asaplibrary.management.lang {
 		* @param inID: the id for the text to be found
 		* @return the text data with the right text if found, with an empty string if generateDebugText is set to false, or with '>> id = ' + id if generateDebugText is set to true
 		*/
-		public function getDataByID (inID:uint) : TextItemData {
-			if (mTextDataItems[inID] == undefined) {
+		public function getDataByID (inID:String) : TextItemData {
+			if (mTextDataItemMap[inID] == undefined) {
 				if (mGenerateDebugText) {
 					return new TextItemData(inID, ">> id = " + inID);
 				} else {
 					return new TextItemData(inID, "");
 				}
 			} else {
-				return TextItemData(mTextDataItems[inID]);
+				return TextItemData(mTextDataItemMap[inID]);
 			}
 		}
 		
@@ -227,9 +221,9 @@ package org.asaplibrary.management.lang {
 		* @return the data block for the clip, or null if none was found
 		*/
 		private function getClipDataByContainer (inContainer:IMultiLanguageTextContainer) : MultiLanguageContainerData {
-			var len:uint = mTextClips.length;
+			var len:uint = mTextContainers.length;
 			for (var i:uint = 0; i < len; ++i) {
-				var md:MultiLanguageContainerData = mTextClips[i] as MultiLanguageContainerData;
+				var md:MultiLanguageContainerData = mTextContainers[i] as MultiLanguageContainerData;
 				if (md.container == inContainer) return md;
 			}
 			return null;
@@ -240,9 +234,9 @@ package org.asaplibrary.management.lang {
 		* @return the index of the data block, or NaN if none was found
 		*/
 		private function getClipDataIndexByContainer (inContainer:IMultiLanguageTextContainer) : uint {
-			var len:uint = mTextClips.length;
+			var len:uint = mTextContainers.length;
 			for (var i:uint = 0; i < len; ++i) {
-				var md:MultiLanguageContainerData = mTextClips[i] as MultiLanguageContainerData;
+				var md:MultiLanguageContainerData = mTextContainers[i] as MultiLanguageContainerData;
 				if (md.container == inContainer) return i;
 			}
 			return NaN;
@@ -292,13 +286,13 @@ package org.asaplibrary.management.lang {
 		*/
 		public function LanguageManager() {
 			// check if constructor was called internally
-			if (!mIsCreating) throw new Error("Do not use the constructor of this class!" + toString());
+			if (mInstance) throw new Error("Do not use the constructor of this class!" + toString());
 			
 			mXMLLoader = new XMLLoader();
 			mXMLLoader.addEventListener(XMLLoaderEvent._EVENT, handleXMLLoaded);
 			
-			mTextDataItems = new Array();
-			mTextClips = new Array();
+			mTextDataItemMap = new Object();
+			mTextContainers = new Array();
 		}
 		
 		override public function toString () : String {
@@ -312,11 +306,12 @@ package org.asaplibrary.management.lang {
 /**
 Helper class for storing information about IMultiLanguageTextContainer vs. ID
  */
+
 import org.asaplibrary.management.lang.IMultiLanguageTextContainer;
 
 class MultiLanguageContainerData {
 
-	public var id:uint;	
+	public var id:String;	
 	public var container:IMultiLanguageTextContainer;
 	
 	/**
@@ -324,7 +319,7 @@ class MultiLanguageContainerData {
 	@param inID: the id of the text assigned to the container
 	@param inContainer: instance of a class implementing {@link IMultiLanguageTextContainer}
 	*/
-	public function MultiLanguageContainerData (inID:uint, inContainer:IMultiLanguageTextContainer) {
+	public function MultiLanguageContainerData (inID:String, inContainer:IMultiLanguageTextContainer) {
 		id = inID;
 		container = inContainer;
 	}
