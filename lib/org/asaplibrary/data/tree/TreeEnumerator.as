@@ -112,7 +112,7 @@ package org.asaplibrary.data.tree {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "(TreeEnumerator) - root node = " + mRootNode;
+			return "org.asaplibrary.data.TreeEnumeratorl root node=" + mRootNode;
 		}
 		
 		/**

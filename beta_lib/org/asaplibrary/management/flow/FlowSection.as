@@ -81,7 +81,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		/**
-		Sets the FlowManager. You must call {@link #register} after setting the FlowManager.
+		Sets the FlowManager. You must call {@link #registerWithFlowManager} after setting the FlowManager.
 		@param inFlowManager: FlowManager to set
 		*/
 		public function setFlowManager (inFlowManager:FlowManager) : void {

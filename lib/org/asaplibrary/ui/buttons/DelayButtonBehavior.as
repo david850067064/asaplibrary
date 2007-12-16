@@ -197,7 +197,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		/**
-		If {@link afterdelay} has been set, starts the timer.
+		If {@link #afterdelay} has been set, starts the timer.
 		*/
 		protected function doAfterDelay () : void {
 			if (mAfterDelay > 0) {

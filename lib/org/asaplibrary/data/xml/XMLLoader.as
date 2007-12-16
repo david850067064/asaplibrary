@@ -63,8 +63,8 @@ package org.asaplibrary.data.xml {
 		* Load XML
 		* @param	inURL: source url of the XML
 		* @param	inName: (optional) unique identifying name
-		* @param	inVariables: (optional) {@link URLVariables} object to be sent to the server
-		* @param inRequestMethod: (optional) {@link URLRequestMethod} POST or GET; default: GET
+		* @param	inVariables: (optional) <code>URLVariables</code> object to be sent to the server
+		* @param inRequestMethod: (optional) <code>URLRequestMethod</code> POST or GET; default: GET
 		*/
 		public function loadXML (inURL:String,
 								 inName:String = "",

@@ -53,6 +53,13 @@ package org.asaplibrary.data {
 			//
 		}
 		
+		/**
+		@exclude
+		*/
+		public override function toString () : String {
+			return "org.asaplibrary.data.BaseEnumerator";
+		}
+		
 	}
 	
 }
