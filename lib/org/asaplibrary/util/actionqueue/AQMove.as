@@ -70,7 +70,7 @@ package org.asaplibrary.util.actionqueue {
 			mStartY = (!isNaN(mParamStartY)) ? mParamStartY : mDO.y;
 			mEndX = (!isNaN(mParamEndX)) ? mParamEndX : mDO.x; 
 			mEndY = (!isNaN(mParamEndY)) ? mParamEndY : mDO.y;
-			return new TimedAction(this, doMove, mDuration, mEffect);
+			return new TimedAction(doMove, mDuration, mEffect);
 		}
 		
 		/**

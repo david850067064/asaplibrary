@@ -17,38 +17,38 @@
 		public function AllTests () {
 			super();
 			
-			// data
-			//addTest(new BaseEnumeratorTestCase());
-			//addTest(new ArrayEnumeratorTestCase());
-			//addTest(new TraverseArrayEnumeratorTestCase());
+			/* data */
+			addTest(new BaseEnumeratorTestCase());
+			addTest(new ArrayEnumeratorTestCase());
+			addTest(new TraverseArrayEnumeratorTestCase());
 
-			//addTest(new URLDataTestCase());
-			//addTest(new XMLLoaderTestCase());
-			//addTest(new ParserTestCase());
-			//addTest(new TreeTestCase());
-			//addTest(new TreeEnumeratorTestCase());
+			addTest(new URLDataTestCase());
+			addTest(new XMLLoaderTestCase());
+			addTest(new ParserTestCase());
+			addTest(new TreeTestCase());
+			addTest(new TreeEnumeratorTestCase());
 			
-			// management
-			//addTest(new LocalControllerTestCase());
-			//addTest(new MovieManagerTestCase());
-			//addTest(new FlowManagerTestCase());
+			/* management */
+			addTest(new LocalControllerTestCase());
+			addTest(new MovieManagerTestCase());
+			addTest(new FlowManagerTestCase());
 			
-			// util
-			//addTest(new BooleanUtilsTestCase());
-			//addTest(new FramePulseTestCase());
-			//addTest(new FrameDelayTestCase());
-			//addTest(new StageUtilsTestCase(AsUnitTestRunner.canvas));
+			/* util */
+			addTest(new BooleanUtilsTestCase());
+			addTest(new FramePulseTestCase());
+			addTest(new FrameDelayTestCase());
+			addTest(new StageUtilsTestCase(AsUnitTestRunner.canvas));
 			
-			// util.actionqueue
+			/* util.actionqueue */
 			addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
 			addTest(new ActionRunnerTestCase());
 			addTest(new ActionTestCase());
-			//saddTest(new TimedActionTestCase());
-			//addTest(new ConditionTestCase());
-			//addTest(new ConditionManagerTestCase());
+			addTest(new TimedActionTestCase());
+			addTest(new ConditionTestCase());
+			addTest(new ConditionManagerTestCase());
 			
-			//addTest(new NumberUtilsTestCase());
-			//addTest(new AssetLoaderTestCase());
+			addTest(new NumberUtilsTestCase());
+			addTest(new AssetLoaderTestCase());
 		}
 	}
 	

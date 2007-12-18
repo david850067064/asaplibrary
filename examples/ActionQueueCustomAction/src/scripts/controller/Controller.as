@@ -35,11 +35,11 @@
 			var effect:Function = Elastic.easeOut;
 			
 			var queue:ActionQueue = new ActionQueue("Move and Scale");
-			var action:TimedAction = new TimedAction(this, doMoveAndScale, duration, effect);
+			var action:TimedAction = new TimedAction(doMoveAndScale, duration, effect);
 			queue.addAction(action);
 			queue.addWait(.35);
 			// reset position
-			queue.addAction(this, resetClip);
+			queue.addAction(resetClip);
 			queue.run();
 		}
 		

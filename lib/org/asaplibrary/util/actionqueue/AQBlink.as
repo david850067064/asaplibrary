@@ -155,7 +155,7 @@ package org.asaplibrary.util.actionqueue {
 			
 			var cycleDuration:Number = 1.0 / mFrequency; // in seconds
 			
-			var frameAction:TimedAction = new TimedAction(this, doMaskBlink, cycleDuration, mEffect);
+			var frameAction:TimedAction = new TimedAction(doMaskBlink, cycleDuration, mEffect);
 			var loopCount:uint = calculateLoopCount(mCount, mDuration, cycleDuration);
 			frameAction.setLoop(true); // loops loopCount or infinite if mDuration == 0
 			frameAction.setLoopCount(loopCount);

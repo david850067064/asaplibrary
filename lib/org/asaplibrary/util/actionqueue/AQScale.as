@@ -77,7 +77,7 @@ package org.asaplibrary.util.actionqueue {
 			mEndScaleX = (!isNaN(mParamEndScaleX)) ? mParamEndScaleX : mDO.scaleX;
 			mEndScaleY = (!isNaN(mParamEndScaleY)) ? mParamEndScaleY : mDO.scaleY;
 			
-			return new TimedAction(this, doScale, mDuration, mEffect);
+			return new TimedAction(doScale, mDuration, mEffect);
 		}
 		
 		/**

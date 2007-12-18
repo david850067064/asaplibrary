@@ -34,7 +34,7 @@ package org.asaplibrary.util.actionqueue {
 		public function setLoc (inDO:DisplayObject,
 								inX:Number = Number.NaN,
 								inY:Number = Number.NaN) : Action {
-			return new Action(this, doSetLoc, [inDO, inX, inY]);
+			return new Action(doSetLoc, [inDO, inX, inY]);
 		}
 		
 		protected function doSetLoc (inDO:DisplayObject,
@@ -54,7 +54,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setVisible (inDO:DisplayObject,
 									inFlag:Boolean) : Action {
-			return new Action(this, doSetVisible, [inDO, inFlag]);
+			return new Action(doSetVisible, [inDO, inFlag]);
 		}
 		
 		protected function doSetVisible (inDO:DisplayObject,
@@ -70,7 +70,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setAlpha (inDO:DisplayObject,
 								  inAlpha:Number) : Action {
-			return new Action(this, doSetAlpha, [inDO, inAlpha]);
+			return new Action(doSetAlpha, [inDO, inAlpha]);
 		}
 		
 		protected function doSetAlpha (inDO:DisplayObject,
@@ -88,7 +88,7 @@ package org.asaplibrary.util.actionqueue {
 		public function setScale (inDO:DisplayObject,
 								  inScaleX:Number = Number.NaN,
 								  inScaleY:Number = Number.NaN) : Action {
-			return new Action(this, doSetScale, [inDO, inScaleX, inScaleY]);
+			return new Action(doSetScale, [inDO, inScaleX, inScaleY]);
 		}
 		
 		protected function doSetScale (inDO:DisplayObject,
@@ -106,7 +106,7 @@ package org.asaplibrary.util.actionqueue {
 		@return The performing Action.
 		*/
 		public function setToMouse (inDO:DisplayObject) : Action {
-			return new Action(this, doSetToMouse, [inDO]);
+			return new Action(doSetToMouse, [inDO]);
 		}
 		
 		protected function doSetToMouse (inDO:DisplayObject) : void {
@@ -123,7 +123,7 @@ package org.asaplibrary.util.actionqueue {
 		public function centerOnStage (inDO:DisplayObject,
 								  	   inOffsetX:Number = Number.NaN,
 								   	   inOffsetY:Number = Number.NaN) : Action {
-			return new Action(this, doCenterOnStage, [inDO, inOffsetX, inOffsetY]);
+			return new Action(doCenterOnStage, [inDO, inOffsetX, inOffsetY]);
 		}
 		
 		protected function doCenterOnStage (inDO:DisplayObject,
@@ -147,7 +147,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function setEnabled (inMC:MovieClip,
 									inState:Boolean) : Action {
-			return new Action(this, doSetEnabled, [inMC, inState]);
+			return new Action(doSetEnabled, [inMC, inState]);
 		}
 		
 		protected function doSetEnabled (inMC:MovieClip,

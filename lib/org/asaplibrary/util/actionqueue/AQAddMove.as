@@ -53,7 +53,7 @@ package org.asaplibrary.util.actionqueue {
 		protected function initAddMove() : TimedAction {
 			mTravelledX = 0;
 			mTravelledY = 0;
-			return new TimedAction(this, doAddMove, mDuration, mEffect);
+			return new TimedAction(doAddMove, mDuration, mEffect);
 		}
 		
 		/**

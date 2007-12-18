@@ -23,7 +23,7 @@ package org.asaplibrary.util.actionqueue {
 	Conditions may be used in {@link ActionQueue ActionQueues} or {@link ActionRunner ActionRunners} - see {@link ActionQueue#addCondition}.
 	@use
 	<code>
-	var condition:Condition = new Condition(this, evaluateInput, [1]);
+	var condition:Condition = new Condition(evaluateInput, [1]);
 	condition.run();
 	trace(condition.isMet()); // true
 			
@@ -41,14 +41,13 @@ package org.asaplibrary.util.actionqueue {
 		
 		/**
 		Creates a new Condition. Optionally add parameters to the evaluating method; optionally add a list of functions that should be called when the condition is met; or another list of functions that should be called when the condition is not met.
-		@param inEvaluationMethodOwner: owner object of the evaluation method
 		@param inEvaluationMethod: evaluation method; this method will be called each frame pulse
 		@param inArgs: (optional) arguments that are passed to the evaluation method
 		@param inOnConditionMetCallFunctions: (optional) a list of functions to be called when the condition is met; NOTE: pausing and resuming ActionQueues and ActionRunners are dealt with automatically
 		@param inOnConditionNotMetCallFunctions: (optional) a list of functions to be called when the condition is NOT met
 		*/
-		function Condition (inEvaluationMethodOwner:Object, inEvaluationMethod:Function, inArgs:Array = null, inOnConditionMetCallFunctions:Array = null, inOnConditionNotMetCallFunctions:Array = null) {
-			super(inEvaluationMethodOwner, inEvaluationMethod, inArgs);
+		function Condition (inEvaluationMethod:Function, inArgs:Array = null, inOnConditionMetCallFunctions:Array = null, inOnConditionNotMetCallFunctions:Array = null) {
+			super(inEvaluationMethod, inArgs);
 			mOnConditionMetCallFunctions = inOnConditionMetCallFunctions;
 			mOnConditionNotMetCallFunctions = inOnConditionNotMetCallFunctions;
 			mRegisteredObjects = {};
@@ -75,7 +74,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public override function run () : * {
 			if (mMet) return true;
-			var conditionMet:Boolean = mMethod.apply(mOwner, mArgs);
+			var conditionMet:Boolean = mMethod.apply(null, mArgs);
 			if (conditionMet) {
 				mMet = true;
 				if (mOnConditionMetCallFunctions) {

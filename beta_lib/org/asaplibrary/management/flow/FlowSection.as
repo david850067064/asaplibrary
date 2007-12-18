@@ -143,14 +143,14 @@ package org.asaplibrary.management.flow {
 		The Action to be run when the section is shown. Actions are run by {@link ActionRunner}.
 		*/
 		public function get startAction () : IAction {
-			return new Action(this, start);
+			return new Action(start);
 		}
 		
 		/**
 		The Action to be run when the section is hidden. Actions are run by {@link ActionRunner}.
 		*/
 		public function get stopAction () : IAction {
-			return new Action(this, stop);
+			return new Action(stop);
 		}
 		
 		/**

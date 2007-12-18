@@ -54,7 +54,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		protected function initDoCall () : TimedAction {
-			return new TimedAction(this, doCall, mDuration, mEffect);
+			return new TimedAction(doCall, mDuration, mEffect);
 		}
 
 		/**
@@ -101,7 +101,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function initDoCallDynamic () : TimedAction {
 			mStartValue = mCallStartValueFunction.apply(mObject, null);
-			return new TimedAction(this, doCall, mDuration, mEffect);
+			return new TimedAction(doCall, mDuration, mEffect);
 		}
 		
 	}

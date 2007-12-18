@@ -85,7 +85,7 @@
 			doTestBlink();
 			doTestPulse();
 			doTestEvents();
-			
+
 			new FrameDelay(startTests, TEST_DELAY);
 		}
 		
@@ -97,7 +97,7 @@
 		}
 		
 		public function testEvaluateResult () : void {
-			
+
 			assertTrue("ActionQueueTestCase sAddActionCalled", sAddActionCalled == EXPECTED_ADD_ACTION_CALLED_COUNT);
 
 			assertTrue("ActionQueueTestCase sAddActionParams", sAddActionParams == EXPECTED_ADD_ACTIONS_PARAMS);
@@ -129,7 +129,7 @@
 			var queueAddAction:ActionQueue = new ActionQueue("ActionQueueTestCase addAction");
 			queueAddAction.addAction( performAddAction, "A" );
 			
-			var action:Action = new Action(this, performAddAction);
+			var action:Action = new Action(performAddAction);
 			queueAddAction.addAction(action);
 			
 			queueAddAction.run();
@@ -141,9 +141,9 @@
 		}
 		
 		private function doTestAddActionBeforeAndAfter () : void {
-
+trace("START doTestAddActionBeforeAndAfter");
 			var queue:ActionQueue = new ActionQueue("ActionQueueTestCase addActionBeforeAndAfter");
-			queue.addAction( mInstance, performTestaddAction2 ); // increment by to 1
+			queue.addAction( performTestaddAction2 ); // increment by to 1
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 2
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 3
 			queue.run();
@@ -152,6 +152,7 @@
 		}
 		
 		public function performTestaddAction2 () : void {
+			trace("performTestaddAction2");
 			sTestaddActionCount++;
 		}
 		
@@ -212,9 +213,9 @@
 		
 		private function doTestSkip () : void {
 			var skipQueue = new ActionQueue("skip");
-			skipQueue.addAction( this, addToSkip );
+			skipQueue.addAction( addToSkip );
 			//skipQueue.addWait(.1);
-			skipQueue.addAction( this, addToSkip );
+			skipQueue.addAction( addToSkip );
 			skipQueue.skip();
 			skipQueue.run();
 			
@@ -476,7 +477,7 @@
 		
 		private function doTestEvents () : void {
 			var queue:ActionQueue = new ActionQueue();
-			queue.addAction(new Action(this, dummyFunc));
+			queue.addAction(new Action(dummyFunc));
 			queue.addEventListener(ActionEvent._EVENT, onActionEvent);
 			queue.run();
 			queue.pause();
