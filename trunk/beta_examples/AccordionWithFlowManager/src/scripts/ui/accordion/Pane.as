@@ -135,7 +135,7 @@
 		
 		public override function get startAction () : IAction {
 			mMoveQueue.addAction(mDelegate.select, true);
-			mMoveQueue.addAction(new AQFunction().call(this, setHeight, mAccordion.getDuration(), getContentHeight(), tContent.height, mAccordion.getEffect()));
+			mMoveQueue.addAction(new AQFunction().call(setHeight, mAccordion.getDuration(), getContentHeight(), tContent.height, mAccordion.getEffect()));
 			mMoveQueue.addAction(setState, PaneOptions.OPEN);
 			return mMoveQueue;
 		}
@@ -149,7 +149,7 @@
 			}
 			// else (no closing parent)
 			mMoveQueue.addAction(mDelegate.select, false);
-			mMoveQueue.addAction(new AQFunction().call(this, setHeight, mAccordion.getDuration(), getContentHeight(), 0, mAccordion.getEffect()));
+			mMoveQueue.addAction(new AQFunction().call(setHeight, mAccordion.getDuration(), getContentHeight(), 0, mAccordion.getEffect()));
 			mMoveQueue.addAction(setClosed);
 			return mMoveQueue;
 		}

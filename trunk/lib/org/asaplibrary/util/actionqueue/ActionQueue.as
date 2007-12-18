@@ -139,7 +139,7 @@ package org.asaplibrary.util.actionqueue {
 		{@link AQMove}
 		{@link AQMoveRel}
 		{@link AQPulse}
-		{@link AQReturnValue}
+		{@link AQFunction}
 		{@link AQScale}
 		{@link AQSet}
 		{@link AQSpring}
@@ -660,7 +660,7 @@ package org.asaplibrary.util.actionqueue {
 				
 		/**
 		Received by ActionRunners. 
-		@sends ActionEvent#FINISHED - if the main ActionRunner has finished
+		@sends ActionEvent#FINISHED
 		*/
 		protected function onActionEvent (e:ActionEvent) : void {
 			switch (e.subtype) {
