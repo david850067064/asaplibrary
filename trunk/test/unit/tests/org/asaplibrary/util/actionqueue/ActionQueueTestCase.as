@@ -12,7 +12,7 @@
 	import org.asaplibrary.util.debug.Log;
 	
 	/**
-	@todo Markers, Looping
+	@todo Markers
 	*/
 	public class ActionQueueTestCase extends TestCase {
 		
@@ -46,6 +46,9 @@
 		// Not tested yet
 		private static var sEventMARKER_PASSEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_MARKER_PASSED_CALLED:uint = 0;
+		
+		private static var sLoopCalled:Number = 0;
+		private static const EXPECTED_LOOP_CALLED:Number = 3;
 		
 		private static const TEST_DELAY:Number = 31;
 		private static const CURRENT:Number = Number.NaN;
@@ -85,7 +88,9 @@
 			doTestBlink();
 			doTestPulse();
 			doTestEvents();
-
+			
+			doTestLoops();
+			
 			new FrameDelay(startTests, TEST_DELAY);
 		}
 		
@@ -123,6 +128,8 @@
 			
 			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sEventMARKER_PASSEDCalled == EXPECTED_EVENT_MARKER_PASSED_CALLED));
 
+			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sLoopCalled == EXPECTED_LOOP_CALLED));
+
 		}
 		
 		private function doTestAddAction () : void {
@@ -152,7 +159,6 @@ trace("START doTestAddActionBeforeAndAfter");
 		}
 		
 		public function performTestaddAction2 () : void {
-			trace("performTestaddAction2");
 			sTestaddActionCount++;
 		}
 		
@@ -484,6 +490,18 @@ trace("START doTestAddActionBeforeAndAfter");
 			queue.resume();
 			queue.stop();
 			queue.quit();
+		}
+		
+		private function doTestLoops () : void {
+			var queue:ActionQueue = new ActionQueue();
+			queue.addStartLoop("LOOP", 3);
+			queue.addAction(loopCalled);
+			queue.addEndLoop("LOOP");
+			queue.run();
+		}
+		
+		private function loopCalled () : void {
+			sLoopCalled++;
 		}
 		
 		private function onActionEvent (e:ActionEvent) : void {
