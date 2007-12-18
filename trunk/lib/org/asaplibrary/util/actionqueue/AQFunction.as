@@ -22,7 +22,6 @@ package org.asaplibrary.util.actionqueue {
 	*/
 	public class AQFunction {
 	
-		private var mObject:*;
 		private var mCallFunction:Function;
 		private var mDuration:Number;
 		private var mStartValue:Number;
@@ -31,16 +30,21 @@ package org.asaplibrary.util.actionqueue {
 		
 		/**
 		Calls function inCallFunction over a period of time, with a start value changing to an end value. The function should accept 1 numeric value. 
-		@param inObject: object to call the function of
 		@param inCallFunction: function to call
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
 		@param inStartValue : the start value to call inCallFunction with
 		@param inEndValue : the end value to call inCallFunction with
 		@param inEffect : (optional) an effect function, for instance one of the fl.motion.easing methods
+		@example
+		This queue calls function <code>setHeight</code> for a duration of 2 seconds with a value between <code>getCurrentHeight()</code> and the projected <code>tContent.height</code>. If no effect is applied, <code>setHeight</code> will be half the projected height at 1 second:
+		<code>
+		var queue:ActionQueue = new ActionQueue();
+		queue.addAction(new AQFunction().call(setHeight, 2.0, getCurrentHeight(), tContent.height));
+		queue.run();
+		</code>
 		*/
-		public function call (inObject:*, inCallFunction:Function, inDuration:Number, inStartValue:Number, inEndValue:Number, inEffect:Function = null): Function {
+		public function call (inCallFunction:Function, inDuration:Number, inStartValue:Number, inEndValue:Number, inEffect:Function = null): Function {
 		
-			mObject = inObject;
 			mCallFunction = inCallFunction;
 			mDuration = inDuration;
 			mStartValue = inStartValue;
@@ -62,7 +66,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function doCall (inValue:Number) : Boolean {
 			var value:Number = percentageValue(mStartValue, mEndValue, 1-inValue);
-			mCallFunction.apply(mObject, [value]);
+			mCallFunction.apply(null, [value]);
 			return true;
 		}
 		
@@ -77,16 +81,14 @@ package org.asaplibrary.util.actionqueue {
 
 		/**
 		Like {@link #call}, but the start value is now being looked up with inCallStartValueFunction.
-		@param inObject: object to call the function of
 		@param inCallFunction: function to call
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
 		@param inCallStartValueFunction : the function that will return the the start value to call inCallFunction with
 		@param inEndValue : the end value to call inCallFunction with
 		@param inEffect : (optional) an effect function, for instance one of the fl.motion.easing methods
 		*/
-		public function callDynamic (inObject:*, inCallFunction:Function, inDuration:Number, inCallStartValueFunction:Function, inEndValue:Number, inEffect:Function = null): Function {
+		public function callDynamic (inCallFunction:Function, inDuration:Number, inCallStartValueFunction:Function, inEndValue:Number, inEffect:Function = null): Function {
 		
-			mObject = inObject;
 			mCallFunction = inCallFunction;
 			mDuration = inDuration;
 			mCallStartValueFunction = inCallStartValueFunction;
@@ -100,7 +102,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		protected function initDoCallDynamic () : TimedAction {
-			mStartValue = mCallStartValueFunction.apply(mObject, null);
+			mStartValue = mCallStartValueFunction.apply(null, null);
 			return new TimedAction(doCall, mDuration, mEffect);
 		}
 		
