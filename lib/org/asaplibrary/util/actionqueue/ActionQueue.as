@@ -65,7 +65,9 @@ package org.asaplibrary.util.actionqueue {
   		private var mCurrentMarker:Marker;
   		private var mLoopHash:Object; // quick lookup for occurrence of loops; objects of type Loop
 		private var mPaused:Boolean;
-
+		private var mLoopedCount:int;
+		private var mMaxLoopCount:int;
+		
 		/**
 		Creates a new ActionQueue.
 		@param inName: (optional) identifier name of this queue - used for debugging
@@ -522,13 +524,14 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Adds a "start of loop" marker to the queue.
 		@param inLoopName: name of the loop (should be unique for this queue)
+		@param inLoopCount: (optional) the number of times the looped section should run; default 0 (infinite)
 		@see #addEndLoop
 		@example
-		This example shows how to set loop markers:
+		This example shows how to set loop markers to run a section 3 times:
 		<code>
 		var queue:ActionQueue = new ActionQueue();
 		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y));
-		queue.addStartLoop("MY_LOOP");
+		queue.addStartLoop("MY_LOOP", 3);
 		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker2_mc.x, marker2_mc.y));
 		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker3_mc.x, marker3_mc.y));
 		queue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y));
@@ -536,10 +539,12 @@ package org.asaplibrary.util.actionqueue {
 		queue.run();
 		</code>
 		*/
-		public function addStartLoop (inLoopName:String) : void {
+		public function addStartLoop (inLoopName:String, inLoopCount:int = 0) : void {
 			var index:int = mActions.length;
 			var loop:Loop = new Loop(inLoopName, index);
 			mLoopHash[inLoopName] = loop;
+			mMaxLoopCount = inLoopCount;
+			mLoopedCount = 0;
 		}
 
 		/**
@@ -582,6 +587,11 @@ package org.asaplibrary.util.actionqueue {
 		protected function doGoToLoopStart (inLoopName:String) : void {
 			var loop:Loop = mLoopHash[inLoopName];
 			if (loop.isLooping) {
+				mLoopedCount++;
+				if (mMaxLoopCount != 0 && mLoopedCount >= mMaxLoopCount) {
+					endLoop(inLoopName);
+					return;
+				}
 				mMainActionRunner.gotoStep(loop.startIndex);
 			}
 		}

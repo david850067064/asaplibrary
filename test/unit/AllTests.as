@@ -40,7 +40,7 @@
 			addTest(new StageUtilsTestCase(AsUnitTestRunner.canvas));
 			
 			/* util.actionqueue */
-			addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas));
+			addTest(new ActionQueueTestCase(AsUnitTestRunner.canvas)); // TODO: markers
 			addTest(new ActionRunnerTestCase());
 			addTest(new ActionTestCase());
 			addTest(new TimedActionTestCase());
