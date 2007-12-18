@@ -129,7 +129,7 @@
 			assertFalse("doTestRun after run isRunning", runner.isRunning());
 			// feed an action
 			var actions:Array = [];
-			var action:Action = new Action(this, dummyFunc);
+			var action:Action = new Action(dummyFunc);
 			actions.push(action);
 			runner.setActions(actions);
 			runner.run();
@@ -140,7 +140,7 @@
 		private function doTestSetActions () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			var action:Action = new Action(this, testFunc);
+			var action:Action = new Action(testFunc);
 			actions.push(action);
 			runner.setActions(actions);
 			runner.run();
@@ -153,7 +153,7 @@
 		private function doTestPauseAndResume () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			var action:Action = new Action(this, pauseFunc);
+			var action:Action = new Action(pauseFunc);
 			actions.push(action);
 			runner.setActions(actions);
 			assertFalse("doTestPauseAndResume paused", runner.isPaused());
@@ -170,8 +170,8 @@
 		private function doTestStop () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, stopFunc));
-			actions.push(new Action(this, stopFunc));
+			actions.push(new Action(stopFunc));
+			actions.push(new Action(stopFunc));
 			runner.setActions(actions);
 			runner.stop();
 			assertFalse("doTestStop after stop", runner.isRunning());
@@ -182,7 +182,7 @@
 		private function doTestQuit () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, quitFunc));
+			actions.push(new Action(quitFunc));
 			runner.setActions(actions);
 			runner.quit();
 			assertFalse("doTestQuit after stop", runner.isRunning());
@@ -193,7 +193,7 @@
 		private function doTestIsFinished () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			var action:Action = new Action(this, dummyFunc);
+			var action:Action = new Action(dummyFunc);
 			actions.push(action);
 			runner.setActions(actions);
 			assertFalse("doTestIsFinished before run", runner.isFinished());
@@ -204,8 +204,8 @@
 		private function doTestSkip () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, skipFunc));
-			actions.push(new Action(this, skipFunc));
+			actions.push(new Action(skipFunc));
+			actions.push(new Action(skipFunc));
 			runner.setActions(actions);
 			runner.skip();
 			runner.run();
@@ -214,8 +214,8 @@
 		private function doTestGoToStep () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, gotoStepFunc));
-			actions.push(new Action(this, gotoStepFunc));
+			actions.push(new Action(gotoStepFunc));
+			actions.push(new Action(gotoStepFunc));
 			runner.setActions(actions);
 			runner.gotoStep(1);
 			runner.run();
@@ -224,7 +224,7 @@
 		private function doTestReset () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, resetFunc));
+			actions.push(new Action(resetFunc));
 			runner.setActions(actions);
 			runner.run();
 			runner.reset();
@@ -234,7 +234,7 @@
 		private function doTestEvents () : void {
 			var runner:ActionRunner = new ActionRunner();
 			var actions:Array = [];
-			actions.push(new Action(this, dummyFunc));
+			actions.push(new Action(dummyFunc));
 			runner.setActions(actions);
 			runner.addEventListener(ActionEvent._EVENT, onActionEvent);
 			runner.run();

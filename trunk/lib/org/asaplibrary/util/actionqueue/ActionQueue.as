@@ -86,19 +86,19 @@ package org.asaplibrary.util.actionqueue {
 
 		<b>Adding an Action object</b>
 		You can add any object of type {@link Action}, {@link IAction}, {@link TimedAction} and {@link ITimedAction} - including complete ActionQueues!
-		<code>public function addAction ( inAction:IAction ) : void</code>
+		<code>public function addAction (inAction:IAction) : void</code>
 		
 		Example:
 		<code>
 		var queue:ActionQueue = new ActionQueue();
-		var action:Action = new Action(this, createShapes, 10);
+		var action:Action = new Action(createShapes, 10);
 		queue.addAction(action);	
 		queue.run();
 		</code>
 		
 		<b>Adding a local function</b>
 		Will be called in local scope.
-		<code>public function addAction ( inFunction:Function, argument1, argument2, ... ) : void</code>
+		<code>public function addAction (inFunction:Function, argument1, argument2, ...) : void</code>
 	
 		Example:
 		<code>
@@ -109,18 +109,18 @@ package org.asaplibrary.util.actionqueue {
 		
 		<b>Adding a object's method</b>
 		Will be called in the object's scope.
-		<code>public function addAction ( inMethodOwner:Object, inMethod:Function, argument1, argument2, ... ) : void</code>
+		<code>public function addAction (inMethod:Function, argument1, argument2, ...) : void</code>
 		
 		Example:
 		<code>
 		var queue:ActionQueue = new ActionQueue();
-		queue.addAction(mShapeCreator, mShapeCreator.createShapes, 10);	
+		queue.addAction(mShapeCreator.createShapes, 10);
 		queue.run();
 		</code>
 		
 		<b>Adding a object's method by name</b>
 		Will be called in the object's scope. The method must have public access.
-		<code>public function addAction ( inMethodOwner:Object, inMethodName:String, argument1, argument2, ... ) : void</code>
+		<code>public function addAction (inMethodOwner:Object, inMethodName:String, argument1, argument2, ...) : void</code>
 		
 		Example:
 		<code>
@@ -159,7 +159,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		Example:
 		<code>
-		var action:TimedAction = new TimedAction(this, doMoveAndScale, duration, effect);
+		var action:TimedAction = new TimedAction(doMoveAndScale, duration, effect);
 		queue.addAction(action);
 		</code>
 		... where function <code>doMoveAndScale</code> performs the animation based on the percentage value it receives:
@@ -191,7 +191,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function createAction (inArgs:Array) : IAction {
 
-			var action:IAction;
+			var action:IAction = null;
 			var firstParam:* = inArgs[0];
 			if (firstParam is ITimedAction) {
 				action = firstParam;
@@ -199,13 +199,8 @@ package org.asaplibrary.util.actionqueue {
 				action = firstParam;
 			} else if (firstParam is Function) {
 				action = createActionFromFunction(inArgs);
-			} else if (firstParam is Object) {
-				if (inArgs[1] is String) {
-					action = createActionFromMethodName(inArgs);
-				} else {
-					inArgs.shift();
-					action = createActionFromObjectMethod(firstParam, inArgs);
-				}
+			} else if (firstParam is Object && inArgs[1] is String) {
+				action = createActionFromMethodName(inArgs);
 			}
 			return action;
 		}
@@ -284,7 +279,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inDuration: waiting time in seconds
 		*/
 		public function addWait (inDuration:Number) : void {
-			addAction(doWait, this, inDuration);
+			addAction(doWait, inDuration);
 		}
 		
 		/**
@@ -302,7 +297,7 @@ package org.asaplibrary.util.actionqueue {
 				 && q2.didVisitMarker("BAR1")
 				 && q3.didVisitMarker("BAR1"));
 		}
-		var condition:Condition = new Condition (this, condition);
+		var condition:Condition = new Condition (condition);
 
 		var rightPos:Number = 800;
 		var duration:Number = 4.0;
@@ -326,8 +321,8 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		Internal function, called by {@link #addWait}.
 		*/
-		protected function doWait (inOwner:Object, inDuration:Number) : TimedAction {
-			return new TimedAction(inOwner, idle, inDuration);
+		protected function doWait (inDuration:Number) : TimedAction {
+			return new TimedAction(idle, inDuration);
 		}
 		
 		/**
@@ -682,8 +677,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function createActionFromFunction (inArgs:Array) : Action {
 			var method:Function = inArgs.shift();
-			var owner:Object = mMainActionRunner;
-			return new Action(owner, method, inArgs);
+			return new Action(method, inArgs);
 		}
 		
 		/**
@@ -697,20 +691,9 @@ package org.asaplibrary.util.actionqueue {
 			var methodName:String = inArgs.shift();
 			
 			var method:Function = owner[methodName];
-			return new Action(owner, method, inArgs);
+			return new Action(method, inArgs);
 		}
-				
-		/**
-		Creates an {@link Action} object from an argument list where the first item is a method reference.
-		@param inOwner: method owner
-		@param inArgs: arguments
-		@return A new Action object.
-		*/
-		protected function createActionFromObjectMethod (inOwner:Object,
-														 inArgs:Array) : Action {
-			var method:Function = inArgs.shift();
-			return new Action(inOwner, method, inArgs);
-		}
+
 	}
 }
 

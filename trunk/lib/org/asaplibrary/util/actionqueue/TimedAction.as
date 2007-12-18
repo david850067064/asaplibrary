@@ -48,20 +48,18 @@ package org.asaplibrary.util.actionqueue {
 	
 		/**
 		Creates a new TimedAction.
-		@param inOwner: method owner (the method will be called in the owner's scope)
 		@param inMethod: function reference
 		@param inDuration: (optional) duration of the time period in seconds;  the duration may be set to 0 - the action will then last indefinite
 		@param inUndoMethod: (optional) not implemented yet
 		@param inUndoArgs: (optional) not implemented yet
 		*/
-		public function TimedAction (inOwner:Object,
-									 inMethod:Function,
+		public function TimedAction (inMethod:Function,
 									 inDuration:Number = Number.NaN,
 									 inEffect:Function = null,
 									 inUndoMethod:Function = null,
 									 inUndoArgs:Array = null) {
 			
-			super(inOwner, inMethod, null, inUndoMethod, inUndoArgs);
+			super(inMethod, null, inUndoMethod, inUndoArgs);
 
 			mDuration = inDuration;
 			mRange = mEnd - mStart;
@@ -115,7 +113,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString() : String {
-			return ";org.asaplibrary.util.actionqueue.TimedAction; owner=" + mOwner + "; duration=" + mDuration + "; start=" + mStart + "; end=" + mEnd;
+			return ";org.asaplibrary.util.actionqueue.TimedAction; duration=" + mDuration + "; start=" + mStart + "; end=" + mEnd;
 		}
 		
 		/**
@@ -201,7 +199,7 @@ package org.asaplibrary.util.actionqueue {
 				
 			}
 
-			var result:Boolean = mMethod.call(mOwner, value);
+			var result:Boolean = mMethod.call(null, value);
 			
 			if (mDuration != 0) {
 				if (msNow >= mEndTime) {

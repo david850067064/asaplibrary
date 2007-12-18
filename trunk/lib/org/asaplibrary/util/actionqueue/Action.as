@@ -27,27 +27,23 @@ package org.asaplibrary.util.actionqueue {
 	public class Action extends EventDispatcher implements IAction {
 		
 		protected var mMethod:Function;
-		protected var mOwner:Object;
 		protected var mArgs:Array;
 		protected var mUndoMethod:Function;
 		protected var mUndoArgs:Array;
 		
 		/**
 		Creates a new Action.
-		@param inOwner: method owner (the method will be called in the owner's scope)
 		@param inMethod: function reference
 		@param inArgs: (optional) arguments to pass to the method
 		@param inUndoMethod: (optional) not implemented yet
 		@param inUndoArgs: (optional) not implemented yet
 		*/
-		function Action (inOwner:Object,
-						 inMethod:Function,
+		function Action (inMethod:Function,
 						 inArgs:Array = null,
 						 inUndoMethod:Function = null,
 						 inUndoArgs:Array = null) {
 						 
 			mMethod = inMethod;
-			mOwner = inOwner;
 			mArgs = inArgs;
 			mUndoMethod = inUndoMethod;
 			mUndoArgs = inUndoArgs;
@@ -58,7 +54,7 @@ package org.asaplibrary.util.actionqueue {
 		@return The result of the called method.
 		*/
 		public function run () : * {
-			var result:* = mMethod.apply(mOwner, mArgs);
+			var result:* = mMethod.apply(null, mArgs);
 			dispatchEvent(new ActionEvent(ActionEvent.FINISHED, this));
 			return result;
 		}

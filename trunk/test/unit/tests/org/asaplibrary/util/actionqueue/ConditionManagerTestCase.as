@@ -64,20 +64,20 @@
 		
 		public function doTestRegisterCondition () : void {
 			var manager:ConditionManager = new ConditionManager();
-			var condition:Condition = new Condition(this, funcTestRegisterCondition);
+			var condition:Condition = new Condition(funcTestRegisterCondition);
 			manager.registerCondition(condition);
 		}
 		
 		public function doTestUnRegisterCondition () : void {
 			var manager:ConditionManager = new ConditionManager();
-			var condition:Condition = new Condition(this, funcTestUnRegisterCondition);
+			var condition:Condition = new Condition(funcTestUnRegisterCondition);
 			manager.registerCondition(condition);
 			manager.unRegisterCondition(condition);
 		}
 		
 		public function doTestReset () : void {
 			var manager:ConditionManager = new ConditionManager();
-			var condition:Condition = new Condition(this, funcTestUnRegisterCondition);
+			var condition:Condition = new Condition(funcTestUnRegisterCondition);
 			manager.registerCondition(condition);
 			manager.reset();
 		}

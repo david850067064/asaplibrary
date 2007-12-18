@@ -23,7 +23,7 @@
 			var endOfAnimationCheck:Function = function () : Boolean {
 				return (tIntroAnim.currentLabel == "end");
 			};
-			var condition:Condition = new Condition (this, endOfAnimationCheck);
+			var condition:Condition = new Condition (endOfAnimationCheck);
 						
 			var queue:ActionQueue = new ActionQueue("SectionIntro");
 			queue.addAction(new AQSet().setVisible(this, true));

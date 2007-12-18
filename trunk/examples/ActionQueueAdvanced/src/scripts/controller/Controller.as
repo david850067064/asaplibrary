@@ -117,21 +117,21 @@
 					 && q2.didVisitMarker("BAR1")
 					 && q3.didVisitMarker("BAR1"));
 			};
-			var condition1:Condition = new Condition (this, bar1Condition, null);
+			var condition1:Condition = new Condition (bar1Condition, null);
 				
 			var bar2Condition:Function = function () : Boolean {
 				return (q1.didVisitMarker("BAR2")
 					 && q2.didVisitMarker("BAR2")
 					 && q3.didVisitMarker("BAR2"));
 			};
-			var condition2:Condition = new Condition (this, bar2Condition, null);
+			var condition2:Condition = new Condition (bar2Condition, null);
 				
 			var bar3Condition:Function = function () : Boolean {
 				return (q1.didVisitMarker("BAR3")
 					 && q2.didVisitMarker("BAR3")
 					 && q3.didVisitMarker("BAR3"));
 			};
-			var condition3:Condition = new Condition (this, bar3Condition, null);
+			var condition3:Condition = new Condition (bar3Condition, null);
 			
 			var duration1:Number = .4 + Math.random() * MAX_DURATION;
 			var duration2:Number = .4 + Math.random() * MAX_DURATION;
@@ -190,7 +190,7 @@
 					 && q2.isFinished()
 					 && q3.isFinished());
 			};
-			var fadeCondition:Condition = new Condition (this, fadeConditionCheck);
+			var fadeCondition:Condition = new Condition (fadeConditionCheck);
 
 			fadeLinesQueue = new ActionQueue("lines queue");
 			fadeLinesQueue.addCondition(fadeCondition);

@@ -76,31 +76,31 @@
 		}
 		
 		public function testConstructor () : void {
-			var action:TimedAction = new TimedAction(this, funcDummy, .2);
+			var action:TimedAction = new TimedAction(funcDummy, .2);
 			assertTrue("TimedAction testConstructor", action);
 		}
 		
 		public function doTestRun () : void {
-			var action:TimedAction = new TimedAction(this, funcRun, .2);
+			var action:TimedAction = new TimedAction(funcRun, .2);
 			action.run();
 			assertTrue("TimedAction isRunning", action.isRunning());
 		}
 		
 		public function doTestPause () : void {
-			var action:TimedAction = new TimedAction(this, funcResume, .2);
+			var action:TimedAction = new TimedAction(funcResume, .2);
 			action.pause();
 			action.resume();
 			action.run();
 		}
 		
 		public function doTestStop () : void {
-			var action:TimedAction = new TimedAction(this, funcStop, .2);
+			var action:TimedAction = new TimedAction(funcStop, .2);
 			action.run();
 			action.stop();
 		}
 		
 		public function doTestFinish () : void {
-			var action:TimedAction = new TimedAction(this, funcFinish, .2);
+			var action:TimedAction = new TimedAction(funcFinish, .2);
 			action.run();
 			action.finish();
 		}
@@ -111,13 +111,13 @@
 		}
 		
 		public function doTestEventFinished () : void {
-			var action:TimedAction = new TimedAction(this, funcFinishedEvent, .2);
+			var action:TimedAction = new TimedAction(funcFinishedEvent, .2);
 			action.addEventListener(ActionEvent._EVENT, onActionEvent);
 			action.run();
 		}
 		
 		public function doTestEventStopped () : void {
-			var action:TimedAction = new TimedAction(this, funcStoppedEvent, .2);
+			var action:TimedAction = new TimedAction(funcStoppedEvent, .2);
 			action.addEventListener(ActionEvent._EVENT, onActionEvent);
 			action.run();
 			action.stop();
@@ -133,7 +133,7 @@
 		}
 		
 		public function doTestLooped () : void {
-			var action:TimedAction = new TimedAction(this, funcLooped, .05);
+			var action:TimedAction = new TimedAction(funcLooped, .05);
 			action.setLoopCount(1);
 			action.run();
 			assertTrue("TimedAction doesLoop", action.doesLoop());

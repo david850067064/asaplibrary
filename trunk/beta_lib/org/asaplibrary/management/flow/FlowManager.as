@@ -489,7 +489,7 @@ package org.asaplibrary.management.flow {
 			}
 			if (rule != null && (rule.type & inType)) {
 				var section:IFlowSection = mSections[inSectionName];
-				action = new Action(null, rule.callback, [section]);
+				action = new Action(rule.callback, [section]);
 			}
 			return action;
 		}
@@ -594,7 +594,7 @@ package org.asaplibrary.management.flow {
 			
 			if (doUpdateState) {
 				// add state update action
-				mActionRunner.addAction(new Action(this, setCurrentSection, [sectionName]));
+				mActionRunner.addAction(new Action(setCurrentSection, [sectionName]));
 
 				mCurrentSectionName = sectionName;
 				

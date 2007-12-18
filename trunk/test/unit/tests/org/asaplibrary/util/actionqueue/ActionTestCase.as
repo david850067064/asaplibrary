@@ -21,24 +21,24 @@
 		}
 		
 		public function testConstructor () : void {
-			var action:Action = new Action(this, testMethod);
+			var action:Action = new Action(testMethod);
 			assertTrue("ActionTestCase testConstructor", action);
 		}
 		
 		public function testRun () : void {
-			var action:Action = new Action(this, testMethod);
+			var action:Action = new Action(testMethod);
 			var result:Boolean = action.run();
 			assertTrue("ActionTestCase testRun", result);
 		}
 		
 		public function testRunWithArguments () : void {
-			var action:Action = new Action(this, testAddition, [10, 20]);
+			var action:Action = new Action(testAddition, [10, 20]);
 			var result:int = action.run();
 			assertTrue("ActionTestCase testRun", result == 30);
 		}
 		
 		public function testIsRunning () : void {
-			var action:Action = new Action(this, testMethod);
+			var action:Action = new Action(testMethod);
 			assertFalse("ActionTestCase testIsRunning", action.isRunning());
 		}
 		

@@ -29,7 +29,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/	
 		public function gotoAndPlay (inMC:MovieClip, inFrame:Object = null) : Action {
-			return new Action(this, doGotoAndPlay, [inMC, inFrame]);
+			return new Action(doGotoAndPlay, [inMC, inFrame]);
 		}
 		
 		protected function doGotoAndPlay (inMC:MovieClip, inFrame:Object = null) : void {
@@ -43,7 +43,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inFrame : (optional) frame number (Number) or frame label (String); default frame number 1
 		*/
 		public function gotoAndStop (inMC:MovieClip, inFrame:Object = null) : Action {
-			return new Action(this, doGotoAndStop, [inMC, inFrame]);
+			return new Action(doGotoAndStop, [inMC, inFrame]);
 		}
 		
 		protected function doGotoAndStop (inMC:MovieClip, inFrame:Object = null) : void {
