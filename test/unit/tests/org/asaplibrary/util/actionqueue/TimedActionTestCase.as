@@ -133,7 +133,7 @@
 		}
 		
 		public function doTestLooped () : void {
-			var action:TimedAction = new TimedAction(funcLooped, .05);
+			var action:TimedAction = new TimedAction(funcLooped, .04);
 			action.setLoopCount(1);
 			action.run();
 			assertTrue("TimedAction doesLoop", action.doesLoop());

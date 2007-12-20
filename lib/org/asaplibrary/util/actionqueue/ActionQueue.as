@@ -347,7 +347,7 @@ package org.asaplibrary.util.actionqueue {
 		Internal function, called by {@link #addPause}.
 		*/
 		protected function doPause () : void {
-			pause();
+			pause(true);
 		}
 		
 		/**
@@ -355,7 +355,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		public function togglePlay () : void {
 			if (!mPaused) {
-				pause();
+				pause(true);
 			} else {
 				resume();
 			}
