@@ -66,7 +66,7 @@ package org.asaplibrary.util.actionqueue {
 		*/
 		protected function doCall (inValue:Number) : Boolean {
 			var value:Number = percentageValue(mStartValue, mEndValue, 1-inValue);
-			mCallFunction.apply(null, [value]);
+			mCallFunction(value);
 			return true;
 		}
 		
@@ -80,7 +80,7 @@ package org.asaplibrary.util.actionqueue {
 		private var mCallStartValueFunction:Function;
 
 		/**
-		Like {@link #call}, but the start value is now being looked up with inCallStartValueFunction.
+		Like {@link #call}, but the start value is now being looked up just before the action starts (using inCallStartValueFunction).
 		@param inCallFunction: function to call
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
 		@param inCallStartValueFunction : the function that will return the the start value to call inCallFunction with
@@ -102,7 +102,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		*/
 		protected function initDoCallDynamic () : TimedAction {
-			mStartValue = mCallStartValueFunction.apply(null, null);
+			mStartValue = mCallStartValueFunction();
 			return new TimedAction(doCall, mDuration, mEffect);
 		}
 		

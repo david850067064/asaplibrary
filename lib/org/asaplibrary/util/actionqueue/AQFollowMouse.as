@@ -35,20 +35,35 @@ package org.asaplibrary.util.actionqueue {
 		private var mLocDiv:Number;
 		private var mOffsetX:Number;
 		private var mOffsetY:Number;
-		private var mCallbackObject:Object;
-		private var mCallBackMethod:Function;
+		private var mCallBackFunction:Function;
 		
 		private var mX:Number;
 		private var mY:Number;
-				
+		
+		/**
+		Lets a DisplayObject follow mouse movements. Control parameters:
+		<ul>
+			<li>a time variable for delay effect</li>
+			<li>location variable for multiply effect</li>
+			<li>offset variable for setting a fixed distance to the mouse</li>
+			<li>callback function to get location feedback</li>
+		</ul>
+		@param inDO: DisplayObject to move
+		@param inDuration: (optional) the number of seconds that the DisplayObject should move; default is 0 (infinite); use -1 for instant change
+		@param inTimeDiv: (optional) the reaction speed to mouse changes. Use 1.0 to set the inDO at the mouse location without delay. Use anything between 1.0 and 0 for a slowed down effect; default is 1.0.
+		@param inLocDiv : (optional) the translation factor of the mouse movements, relative to its parent's center point; an inLocDiv of 2 multiplies all x and y (difference) locations by 2. The visual effect works best if the parent has its (0,0) location at its center. The value should not be smaller than inTimeDiv (and is set automatically to the value of inTimeDiv if it is smaller); default (when nothing is set) is 1.0.
+		@param inOffsetX: (optional) the number of pixels to offset the clip horizontally from the mouse
+		@param inOffsetY: (optional) the number of pixels to offset the clip vertically from the mouse
+		@param inCallBackFunction: (optional) function reference to which the calculated value will be returned; this callback function passes 3 arguments: (DO, x, y )
+		@return A reference to {@link #initDoFollowMouse} that in turn returns the performing move {@link TimedAction}.
+		*/
 		public function followMouse (inDO:DisplayObject,
 									 inDuration:Number = Number.NaN,
 									 inTimeDiv:Number = Number.NaN,
 									 inLocDiv:Number = Number.NaN,
 									 inOffsetX:Number = Number.NaN,
 									 inOffsetY:Number = Number.NaN,
-									 inCallbackObject:Object = null,
-									 inCallBackMethod:Function = null) : Function {
+									 inCallBackFunction:Function = null) : Function {
 	
 			mDO = inDO;
 			mDuration = inDuration;
@@ -61,14 +76,13 @@ package org.asaplibrary.util.actionqueue {
 
 			mOffsetX = !isNaN(inOffsetX) ? inOffsetX : 0;
 			mOffsetY = !isNaN(inOffsetY) ? inOffsetY : 0;
-			mCallbackObject = inCallbackObject;
-			mCallBackMethod = inCallBackMethod;
+			mCallBackFunction = inCallBackFunction;
 			
 			return initDoFollowMouse;
 		}
 		
 		/**
-		
+		Initializes the starting values.
 		*/
 		protected function initDoFollowMouse () : TimedAction {
 			mX = mDO.x;
@@ -77,13 +91,15 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-
+		Calculates and sets the position of the DisplayObject. If a callback function is set: calls the callback function with parameters (DO, x, y).
+		@param inValue: the percentage value, dependent on the duration of the animation
+		@return True (the animation will not be interrupted).
 		*/
 		protected function doFollowMouse (inValue:Number) : Boolean {
 			mX -= ( (1 / mLocDiv) * (mX - mOffsetX) - mDO.parent.mouseX) * mTimeDiv;
 			mY -= ( (1 / mLocDiv) * (mY - mOffsetY) - mDO.parent.mouseY) * mTimeDiv;
-			if (mCallBackMethod != null) {
-				mCallBackMethod.call( mCallbackObject, mDO, mX, mY );
+			if (mCallBackFunction != null) {
+				mCallBackFunction( mDO, mX, mY );
 			} else {
 				mDO.x = mX;
 				mDO.y = mY;

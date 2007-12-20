@@ -443,7 +443,7 @@
 			
 			var queue:ActionQueue = new ActionQueue("doTestFollowMouseBallBack");
 			var NULL:Number = Number.NaN;
-			queue.addAction( new AQFollowMouse().followMouse(shape, 0, .15, NULL, 25, 0, this, followMouseCallBackFunc ));
+			queue.addAction( new AQFollowMouse().followMouse(shape, 0, .15, NULL, 25, 0, followMouseCallBackFunc ));
 			queue.run();
 		}
 		

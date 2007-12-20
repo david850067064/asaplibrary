@@ -81,7 +81,7 @@ package org.asaplibrary.util {
 			if (mIsDone) {
 				FramePulse.removeEnterFrameListener(handleEnterFrame);
 				if (mParams == null) {
-					mCallback.apply(null, null);
+					mCallback();
 				} else {
 					mCallback.apply(null, mParams);
 				}

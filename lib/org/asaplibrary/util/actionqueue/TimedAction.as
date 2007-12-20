@@ -191,15 +191,14 @@ package org.asaplibrary.util.actionqueue {
 					mPercentage = 0;
 				}
 				if (mEffect != null) {
-					var params:Array = new Array(1 - mPercentage, mStart, mRange, 1);
-					mValue = Number(mEffect.apply(null, params));
+					mValue = Number(mEffect(1 - mPercentage, mStart, mRange, 1));
 				} else {
 					mValue = mEnd - (mPercentage * mRange);
 				}
 				
 			}
 
-			var result:Boolean = mMethod.call(null, mValue);
+			var result:Boolean = mMethod(mValue);
 
 			if (mDuration != 0) {
 				if (msNow >= mEndTime) {
