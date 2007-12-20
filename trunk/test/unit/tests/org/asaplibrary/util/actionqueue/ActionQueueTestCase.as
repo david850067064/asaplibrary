@@ -34,7 +34,7 @@
 		private static var sEventSTARTEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_STARTED_CALLED:uint = 1;
 		private static var sEventFINISHEDCalled:uint = 0;
-		private static const EXPECTED_EVENT_FINISHED_CALLED:uint = 1;
+		private static const EXPECTED_EVENT_FINISHED_CALLED:uint = 2;
 		private static var sEventQUITCalled:uint = 0;
 		private static const EXPECTED_EVENT_QUIT_CALLED:uint = 1;
 		private static var sEventPAUSEDCalled:uint = 0;
@@ -67,7 +67,7 @@
 		List tests that should be run first - before any function starting with 'test'.
 		*/
 		public override function run() : void {
-			
+
 			doTestAddAction();
 			doTestAddActionBeforeAndAfter();
 			doTestReset();
@@ -88,7 +88,6 @@
 			doTestBlink();
 			doTestPulse();
 			doTestEvents();
-			
 			doTestLoops();
 			
 			new FrameDelay(startTests, TEST_DELAY);
@@ -148,7 +147,6 @@
 		}
 		
 		private function doTestAddActionBeforeAndAfter () : void {
-trace("START doTestAddActionBeforeAndAfter");
 			var queue:ActionQueue = new ActionQueue("ActionQueueTestCase addActionBeforeAndAfter");
 			queue.addAction( performTestaddAction2 ); // increment by to 1
 			queue.addAction( mInstance, "performTestaddAction2" ); // increment to 2
@@ -506,19 +504,26 @@ trace("START doTestAddActionBeforeAndAfter");
 		
 		private function onActionEvent (e:ActionEvent) : void {
 			switch (e.subtype) {
-				case ActionEvent.STARTED: sEventSTARTEDCalled++;
+				case ActionEvent.STARTED:
+					sEventSTARTEDCalled++;
 					break;
-				case ActionEvent.FINISHED: sEventFINISHEDCalled++; 
+				case ActionEvent.FINISHED:
+					sEventFINISHEDCalled++;
 					break;
-				case ActionEvent.QUIT: sEventQUITCalled++; 
+				case ActionEvent.QUIT:
+					sEventQUITCalled++; 
 					break;
-				case ActionEvent.PAUSED: sEventPAUSEDCalled++; 
+				case ActionEvent.PAUSED:
+					sEventPAUSEDCalled++; 
 					break;
-				case ActionEvent.RESUMED: sEventRESUMEDCalled++; 
+				case ActionEvent.RESUMED:
+					sEventRESUMEDCalled++; 
 					break;
-				case ActionEvent.STOPPED: sEventSTOPPEDCalled++; 
+				case ActionEvent.STOPPED:
+					sEventSTOPPEDCalled++; 
 					break;
-				case ActionEvent.MARKER_VISITED: sEventMARKER_PASSEDCalled++; 
+				case ActionEvent.MARKER_VISITED:
+					sEventMARKER_PASSEDCalled++; 
 					break;
 			}
 		}

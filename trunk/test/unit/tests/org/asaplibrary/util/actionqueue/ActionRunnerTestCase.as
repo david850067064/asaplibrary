@@ -45,7 +45,7 @@
 		private static var sEventSTARTEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_STARTED_CALLED:uint = 1;
 		private static var sEventFINISHEDCalled:uint = 0;
-		private static const EXPECTED_EVENT_FINISHED_CALLED:uint = 1;
+		private static const EXPECTED_EVENT_FINISHED_CALLED:uint = 2;
 		private static var sEventQUITCalled:uint = 0;
 		private static const EXPECTED_EVENT_QUIT_CALLED:uint = 1;
 		private static var sEventPAUSEDCalled:uint = 0;

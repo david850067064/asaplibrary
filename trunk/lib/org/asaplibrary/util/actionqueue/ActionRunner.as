@@ -202,6 +202,7 @@ package org.asaplibrary.util.actionqueue {
 				ITimedAction(mCurrentAction).resume();
 				return;
 			}
+			setCurrentAction(null);
 			if (mCurrentAction == null && !mWaitingForCondition) {
 				step();
 			}
@@ -233,6 +234,7 @@ package org.asaplibrary.util.actionqueue {
 		Skips the pointer to the action by one.
 		*/
 		public function skip () : void {
+			mCurrentAction = null;
 			currentStep++;
 		}
 		

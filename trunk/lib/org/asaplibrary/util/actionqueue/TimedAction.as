@@ -34,8 +34,8 @@ package org.asaplibrary.util.actionqueue {
 		protected var mEnd:Number = 0; /**< Percentage end value to get returned. */
 		
 		protected var mRange:Number;
-		protected var percentage:Number;
-		protected var value:Number;
+		protected var mPercentage:Number;
+		protected var mValue:Number;
 		
 		protected var mLoop:Boolean;
 		protected var mLoopCount:int;
@@ -186,21 +186,21 @@ package org.asaplibrary.util.actionqueue {
 				// calculate percentage (1 to 0)
 				
 				if (msNow < mEndTime) {
-					percentage = (mEndTime - msNow) * mDurationFactor;
+					mPercentage = (mEndTime - msNow) * mDurationFactor;
 				} else { 
-					percentage = 0;
+					mPercentage = 0;
 				}
 				if (mEffect != null) {
-					var params:Array = new Array(1 - percentage, mStart, mRange, 1);
-					value = Number(mEffect.apply(null, params));
+					var params:Array = new Array(1 - mPercentage, mStart, mRange, 1);
+					mValue = Number(mEffect.apply(null, params));
 				} else {
-					value = mEnd - (percentage * mRange);
+					mValue = mEnd - (mPercentage * mRange);
 				}
 				
 			}
 
-			var result:Boolean = mMethod.call(null, value);
-			
+			var result:Boolean = mMethod.call(null, mValue);
+
 			if (mDuration != 0) {
 				if (msNow >= mEndTime) {
 					if (mLoop) {
