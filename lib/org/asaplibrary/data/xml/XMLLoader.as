@@ -59,6 +59,10 @@ package org.asaplibrary.data.xml {
 			mLoaderCount = inLoaderCount;
 		}
 		
+		public function setLoaderCount (inLoaderCount:Number) : void {
+			mLoaderCount = inLoaderCount;
+		}
+		
 		/**
 		* Load XML
 		* @param	inURL: source url of the XML
@@ -74,7 +78,7 @@ package org.asaplibrary.data.xml {
 			if ((inURL== null) || (inURL.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());
 				// dispatch error event
-				var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.ERROR, inName, null, this);
+				var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.ERROR, inName);
 				event.error = "invalid url";
 				dispatchEvent(event);
 				
@@ -133,7 +137,7 @@ package org.asaplibrary.data.xml {
 			var xld:XMLLoaderData = getDataForLoader(loader);
 			if (xld == null) {
 				Log.error("handleURLLoaderEvent: data for loader not found", toString());
-				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
+				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name);
 				dispatchEvent(event);
 				return;
 			}
@@ -143,11 +147,11 @@ package org.asaplibrary.data.xml {
 			if (inEvent is IOErrorEvent) {
 				// fill error event
 				var errorEvent:IOErrorEvent = inEvent as IOErrorEvent;
-				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null, this);
+				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name);
 				event.error = errorEvent.text;
 			} else {
 				// notify we're done loading this xml
-				event = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data), this);
+				event = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data));
 			}
 			dispatchEvent(event);
 			
@@ -156,6 +160,11 @@ package org.asaplibrary.data.xml {
 			
 			// continue loading
 			loadNext();
+			
+			// check if we're done loading
+			if ((mWaitingStack.length == 0) && (mLoadingStack.length == 0)) {
+				dispatchEvent(new XMLLoaderEvent(XMLLoaderEvent.ALL_COMPLETE, xld.name));
+			}
 		}
 		
 		/**
@@ -174,7 +183,7 @@ package org.asaplibrary.data.xml {
 			}
 
 			// create & dispatch event with relevant data
-			var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.PROGRESS, xld.name, null, this);
+			var event:XMLLoaderEvent = new XMLLoaderEvent(XMLLoaderEvent.PROGRESS, xld.name);
 			event.bytesLoaded = inEvent.bytesLoaded;
 			event.bytesTotal = inEvent.bytesTotal;
 			dispatchEvent(event);

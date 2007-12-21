@@ -40,14 +40,15 @@ package org.asaplibrary.data.xml {
 		/** Event type. */
 		public static const _EVENT:String = "onXMLLoaderEvent";
 		
-		/** Event subtype. */
+		/** Subtype of event sent when loading of a single XML is complete */
 		public static const COMPLETE:String = "complete";
-		/** Event subtype. */
+		/** Subtype of event sent when the stack of loading XMLs is empty */
+		public static const ALL_COMPLETE:String = "allComplete";
+		/** Subtype of event sent when an error has occurred */
 		public static const ERROR:String = "error";
-		/** Event subtype. */
+		/** Subtype of event sent during loading of XML */
 		public static const PROGRESS:String = "progress";
 		
-		public var source:XMLLoader;
 		public var name:String;
 		public var subtype:String;
 		public var data:XML;
@@ -60,18 +61,16 @@ package org.asaplibrary.data.xml {
 		@param inSubtype: either subtype; see above
 		@param inName: identifier name
 		@param inData: the XML data object (only at COMPLETE)
-		@param inSource: the sending XMLLoader
 		*/
 		public function XMLLoaderEvent (inSubtype:String,
 										inName:String,
-										inData:XML,
-										inSource:XMLLoader) {
+										inData:XML = null
+										) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
 			name = inName;
 			data = inData;
-			source = inSource;
 		}
 		
 		public override function toString ():String {
@@ -82,7 +81,7 @@ package org.asaplibrary.data.xml {
 		Creates a copy of an existing XMLLoaderEvent.
 		*/
 		public override function clone() : Event {
-			return new XMLLoaderEvent(subtype, name, data, source);
+			return new XMLLoaderEvent(subtype, name, data);
 		} 
 	}	
 }

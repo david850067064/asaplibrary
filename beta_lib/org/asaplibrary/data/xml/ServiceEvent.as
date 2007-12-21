@@ -10,6 +10,8 @@
 		
 		/** subtype of event sent when loading and parsing went ok */
 		public static const COMPLETE:String = "loadComplete";
+		/** subtype of event sent when all requests have completed; does not check for errors */
+		public static const ALL_COMPLETE:String = "allLoadComplete";
 		/** subtype of event sent when there was an error loading the data */
 		public static var LOAD_ERROR:String = "loadError";
 		/** subtype of event sent when there was an error parsing the data */

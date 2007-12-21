@@ -1,4 +1,21 @@
-﻿package org.asaplibrary.data.xml {
+﻿/*
+Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
+Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package org.asaplibrary.data.xml {
 	import flash.net.URLRequestMethod;	
 	import flash.events.EventDispatcher;
 	import flash.net.URLVariables;
@@ -6,12 +23,9 @@
 	import org.asaplibrary.data.URLData;
 	import org.asaplibrary.util.debug.Log;		
 
-	/**
-	 * @author stephan
-	 */
+
 	public class Service extends EventDispatcher {
 		private var mLoader : XMLLoader;
-		private var mName : String;
 
 		public function Service() {
 			super();
@@ -28,8 +42,6 @@
 		*	@param inDoPost: if true, a POST is used as request method, otherwise GET
 		*/
 		public function load (inURLData:URLData, inSendData:Object = null, inShowLog:Boolean = false, inDoPost:Boolean = false) : void {
-			mName = inURLData.name;
-
 			// copy input object to URLVariables object			
 			var vars : URLVariables;
 			if (inSendData) {
@@ -41,15 +53,22 @@
 			
 			if (inShowLog) Log.info("load: '" + inURLData.name + "' from " + inURLData.url, toString());
 			
-			mLoader.loadXML(inURLData.url, mName, vars, inDoPost ? URLRequestMethod.POST : URLRequestMethod.GET);
+			mLoader.loadXML(inURLData.url, inURLData.name, vars, inDoPost ? URLRequestMethod.POST : URLRequestMethod.GET);
+		}
+
+		/**
+		 * Set the number of parallel loaders
+		 */		
+		public function setLoaderCount (inLoaderCount:Number) : void {
+			mLoader.setLoaderCount(inLoaderCount);
 		}
 
 		private function handleLoaderEvent(event : XMLLoaderEvent) : void {
-			if (event.name != mName) return;
-			
 			switch (event.subtype) {
 				case XMLLoaderEvent.ERROR: handleLoadError(event); break;
 				case XMLLoaderEvent.COMPLETE: processData(event.data, event.name); break;
+				case XMLLoaderEvent.ALL_COMPLETE: dispatchEvent(new ServiceEvent(ServiceEvent.ALL_COMPLETE, event.name)); 
+					break;
 			}
 		}
 
@@ -79,7 +98,7 @@
 		*	@param inSendEvent: if true, a ServiceEvent is sent when parsing is successful
 		*	@return the list of objects of specified class, or null if an error occurred
 		*/
-		private function parseList (inList:XMLList, inClass:Class, inName:String, inSendEvent:Boolean = true) : Array {
+		protected function parseList (inList:XMLList, inClass:Class, inName:String, inSendEvent:Boolean = true) : Array {
 			var a:Array = Parser.parseList(inList, inClass);
 			
 			if (a == null) {
