@@ -22,10 +22,10 @@ To use this class, perform the following steps:
 <li>Create a new movieclip in the library</li>
 <li>Give it a significant name containing font information, p.e. "arial 11px center"; this allows for easy reuse of containers</li>
 <li>Link it to the class org.asaplibrary.management.lang.MultiLanguageTextContainer</li>
-<li>Inside the movieclip, create a dynamic textfield. Name it "tf_txt"</li>
+<li>Inside the movieclip, create one or more <b>nameless</b> textfields</li>
 <li>Set font embedding as necessary</li>
 <li>Place instances of the library item on the stage where necessary.</li>
-<li>Name the instances whatever you like, as long as the name ends with underscore, followed by the integer id of the text to be associated with the instance. P.e.: "helloWorld_1"</li>
+<li>Name the instances whatever you like, as long as the name ends with underscore, followed by the string id of the text to be associated with the instance. P.e.: "myHeader_helloWorld"</li>
 <li>In your application, load an xml file containing texts into the LanguageManager: <code>LanguageManager.getInstance().loadXML("texts_en.xml");</code></li>
 </ol>
 This class can be used either
@@ -35,18 +35,21 @@ This class can be used either
  */
 
 package org.asaplibrary.management.lang {
-
+	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.EventPhase;
 	import flash.text.TextField;
 	
+	import org.asaplibrary.util.debug.Log;		
+
 	public class MultiLanguageTextContainer extends MovieClip implements IMultiLanguageTextContainer {
-		public var tf_txt : TextField;
-		
+
+		private var mTextFields : Array;
 		
 		public function MultiLanguageTextContainer () {
-			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
-			addEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
+			addEventListener(Event.ADDED, handleAdded);
+			addEventListener(Event.REMOVED, handleRemoved);
 		}
 		
 		/**
@@ -65,8 +68,13 @@ package org.asaplibrary.management.lang {
 		 * @param inIsHTML: if true, text is rendered as HTML, otherwise directly
 		 */
 		public function setText (inText : String, inIsHTML : Boolean = true) : void {
-			if (inIsHTML) tf_txt.htmlText = inText;
-			else tf_txt.text = inText;
+			var len: uint = mTextFields.length;
+			for (var i : uint = 0; i < len; i++) {
+				var tf:TextField = mTextFields[i] as TextField;
+				
+				if (inIsHTML) tf.htmlText = inText;
+				else tf.text = inText;
+			}
 		}
 		
 		/**
@@ -74,8 +82,19 @@ package org.asaplibrary.management.lang {
 		 * @param	e
 		 */
 		private function handleAdded (e : Event) : void {
+			if (e.eventPhase != EventPhase.AT_TARGET) return;
+
+			// get id			
 			var id : String = name.substring(name.lastIndexOf("_") + 1);
 
+			// find all children of type TextField
+			mTextFields = new Array();
+			for (var i:uint = 0; i < numChildren; i++) {
+				var child : DisplayObject = getChildAt(i);
+				if (child is TextField) mTextFields.push(child); 
+			}
+			
+			// add to language manager
 			LanguageManager.getInstance().addContainer(id, this);
 		}
 		

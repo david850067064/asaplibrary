@@ -26,13 +26,13 @@ package org.asaplibrary.management.lang {
 	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
 	<code>
 	<texts>
-		<text id="1">Hello World</text>
-		<text id="2"><![CDATA[<b>Hello</b> World with bold Hello]]></text>
-		<text id="3" html="false"><![CDATA[<b>Hello</b> World with visible html tags]]></text>
-		<text id="4" html="false"><![CDATA[>>>Hello World<<<]]></text>
+		<text id="helloWorld">Hello World</text>
+		<text id="helloBoldWorld"><![CDATA[<b>Hello</b> World with bold Hello]]></text>
+		<text id="helloHTMLWorld" html="false"><![CDATA[<b>Hello</b> World with visible html tags]]></text>
+		<text id="helloWorldInBrackets" html="false"><![CDATA[>>>Hello World<<<]]></text>
 	</texts>
 	</code>
-	The 'id' attribute is mandatory, and has to be a number.
+	The 'id' attribute is mandatory, and has to be a String. It cannot contain "_" (underscore).
 	The 'html' attribute is optional. If left out, text is rendered as HTML text; any other value than "false" is seen as true. When false, the text is set directly into the text field, and any html tags are ignored.
 	In case the text contains xml characters, the text has to be wrapped in a {@code  <![CDATA[[]]>} tag.
 	The id is expected to be unique. When it isn't, the last item is taken.
