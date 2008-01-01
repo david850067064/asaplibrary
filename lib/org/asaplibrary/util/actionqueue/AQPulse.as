@@ -26,14 +26,7 @@ package org.asaplibrary.util.actionqueue {
 	*/
 	public class AQPulse extends AQBaseSinusoid {
 		
-		public function fade (inDO:DisplayObject,
-							  inCount:int,
-							  inFrequency:Number,
-							  inMaxAlpha:Number,
-							  inMinAlpha:Number,
-							  inStartAlpha:Number = Number.NaN,
-							  inDuration:Number = Number.NaN,
-							  inEffect:Function = null) : Function {
+		public function fade (inDO:DisplayObject, inCount:int, inFrequency:Number, inMaxAlpha:Number, inMinAlpha:Number, inStartAlpha:Number = Number.NaN, inDuration:Number = Number.NaN, inEffect:Function = null) : Function {
 
 			mDO = inDO;
 			mCount = inCount;
@@ -72,14 +65,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function scale (inDO:DisplayObject,
-							   inCount:int,
-							   inFrequency:Number,
-							   inMaxScale:Number,
-							   inMinScale:Number,
-							   inStartScale:Number = Number.NaN,
-							   inDuration:Number = Number.NaN,
-							   inEffect:Function = null) : Function {
+		public function scale (inDO:DisplayObject, inCount:int, inFrequency:Number, inMaxScale:Number, inMinScale:Number, inStartScale:Number = Number.NaN, inDuration:Number = Number.NaN, inEffect:Function = null) : Function {
 
 			mDO = inDO;
 			mCount = inCount;

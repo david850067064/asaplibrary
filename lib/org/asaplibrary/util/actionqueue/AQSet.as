@@ -31,15 +31,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inY: (optional) y position; default the current y position
 		@return The performing Action.
 		*/
-		public function setLoc (inDO:DisplayObject,
-								inX:Number = Number.NaN,
-								inY:Number = Number.NaN) : Action {
+		public function setLoc (inDO:DisplayObject, inX:Number = Number.NaN, inY:Number = Number.NaN) : Action {
 			return new Action(doSetLoc, [inDO, inX, inY]);
 		}
 		
-		protected function doSetLoc (inDO:DisplayObject,
-									 inX:Number = Number.NaN,
-									 inY:Number = Number.NaN) : void {
+		protected function doSetLoc (inDO:DisplayObject, inX:Number = Number.NaN, inY:Number = Number.NaN) : void {
 			var x:Number = (!isNaN(inX)) ? inX : inDO.x;
 			var y:Number = (!isNaN(inY)) ? inY : inDO.y;
 			inDO.x = x;
@@ -52,13 +48,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inFlag: visibility flag
 		@return The performing Action.
 		*/
-		public function setVisible (inDO:DisplayObject,
-									inFlag:Boolean) : Action {
+		public function setVisible (inDO:DisplayObject, inFlag:Boolean) : Action {
 			return new Action(doSetVisible, [inDO, inFlag]);
 		}
 		
-		protected function doSetVisible (inDO:DisplayObject,
-										 inFlag:Boolean) : void {
+		protected function doSetVisible (inDO:DisplayObject, inFlag:Boolean) : void {
 			inDO.visible = inFlag;
 		}
 		
@@ -68,13 +62,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inAlpha: alpha value between 0 and 1
 		@return The performing Action.
 		*/
-		public function setAlpha (inDO:DisplayObject,
-								  inAlpha:Number) : Action {
+		public function setAlpha (inDO:DisplayObject, inAlpha:Number) : Action {
 			return new Action(doSetAlpha, [inDO, inAlpha]);
 		}
 		
-		protected function doSetAlpha (inDO:DisplayObject,
-									   inAlpha:Number) : void {
+		protected function doSetAlpha (inDO:DisplayObject, inAlpha:Number) : void {
 			inDO.alpha = inAlpha;
 		}
 		
@@ -85,15 +77,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inScaleY: (optional) y scale; default the current y scale
 		@return The performing Action.
 		*/
-		public function setScale (inDO:DisplayObject,
-								  inScaleX:Number = Number.NaN,
-								  inScaleY:Number = Number.NaN) : Action {
+		public function setScale (inDO:DisplayObject, inScaleX:Number = Number.NaN, inScaleY:Number = Number.NaN) : Action {
 			return new Action(doSetScale, [inDO, inScaleX, inScaleY]);
 		}
 		
-		protected function doSetScale (inDO:DisplayObject,
-									   inScaleX:Number,
-									   inScaleY:Number) : void {
+		protected function doSetScale (inDO:DisplayObject, inScaleX:Number, inScaleY:Number) : void {
 			var scaleX:Number = (!isNaN(inScaleX)) ? inScaleX : inDO.scaleX;
 			var scaleY:Number = (!isNaN(inScaleY)) ? inScaleY : inDO.scaleY;
 			inDO.scaleX = scaleX;
@@ -120,15 +108,11 @@ package org.asaplibrary.util.actionqueue {
 		@param inOffsetY: (optional) y offset; default 0
 		@return The performing Action.
 		*/
-		public function centerOnStage (inDO:DisplayObject,
-								  	   inOffsetX:Number = Number.NaN,
-								   	   inOffsetY:Number = Number.NaN) : Action {
+		public function centerOnStage (inDO:DisplayObject, inOffsetX:Number = Number.NaN, inOffsetY:Number = Number.NaN) : Action {
 			return new Action(doCenterOnStage, [inDO, inOffsetX, inOffsetY]);
 		}
 		
-		protected function doCenterOnStage (inDO:DisplayObject,
-								 			inOffsetX:Number = Number.NaN,
-											inOffsetY:Number = Number.NaN) : void {
+		protected function doCenterOnStage (inDO:DisplayObject, inOffsetX:Number = Number.NaN, inOffsetY:Number = Number.NaN) : void {
 			var x:Number = inDO.stage.stageWidth / 2;
 			var y:Number = inDO.stage.stageHeight / 2;
 			
@@ -145,19 +129,16 @@ package org.asaplibrary.util.actionqueue {
 		@param inOffsetY: (optional) y offset; default 0
 		@return The performing Action.
 		*/
-		public function setEnabled (inMC:MovieClip,
-									inState:Boolean) : Action {
+		public function setEnabled (inMC:MovieClip, inState:Boolean) : Action {
 			return new Action(doSetEnabled, [inMC, inState]);
 		}
 		
-		protected function doSetEnabled (inMC:MovieClip,
-							  		 	 inState:Boolean) : void {
+		protected function doSetEnabled (inMC:MovieClip, inState:Boolean) : void {
 			inMC.enabled = inState;
 		}
 		
 		/*
-		public function setActive (inMC:MovieClip,
-							   	   inState:Boolean) : Action {
+		public function setActive (inMC:MovieClip, inState:Boolean) : Action {
 			MovieClipUtils.setActive( inMC, inFlag );
 		}
 		*/

@@ -70,10 +70,7 @@ package org.asaplibrary.data.xml {
 		* @param	inVariables: (optional) <code>URLVariables</code> object to be sent to the server
 		* @param inRequestMethod: (optional) <code>URLRequestMethod</code> POST or GET; default: GET
 		*/
-		public function loadXML (inURL:String,
-								 inName:String = "",
-								 inVariables:URLVariables = null,
-								 inRequestMethod:String = URLRequestMethod.GET) : void {
+		public function loadXML (inURL:String, inName:String = "", inVariables:URLVariables = null, inRequestMethod:String = URLRequestMethod.GET) : void {
 			// Check if url is valid
 			if ((inURL== null) || (inURL.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());

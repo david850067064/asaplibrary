@@ -187,7 +187,7 @@ package org.asaplibrary.data.array {
 			var i:uint, ilen:uint = mDelegates.length;
 			for (i=0; i<ilen; ++i) {
 				var delegate:ITraverseArrayDelegate = mDelegates[i] as ITraverseArrayDelegate;				
-				var approved:Boolean =  Boolean(delegate.mayUpdateToObject.apply(delegate, [mObjects, inLocation]));
+				var approved:Boolean =  Boolean(delegate.mayUpdateToObject(mObjects, inLocation));
 				if (!approved) {
 					isValid = false;
 				}

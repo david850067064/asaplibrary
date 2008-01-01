@@ -217,13 +217,7 @@ package org.asaplibrary.ui.buttons {
 			if (mState == drawState) return;
 		
 			dispatchEvent(new ButtonBehaviorEvent(
-				ButtonBehaviorEvent._EVENT,
-				drawState,
-				mSelected,
-				mEnabled,
-				mPressed,
-				e
-			));			
+				ButtonBehaviorEvent._EVENT, drawState, mSelected, mEnabled, mPressed, e));			
 			mState = drawState;
 		}
 	}

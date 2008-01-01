@@ -205,8 +205,7 @@ package org.asaplibrary.data.tree {
 		@param inFindSameDepth : (true or false) true: the found node must match the current node's depth; default false
 		@return The found node; if no node found, returns null.
 		*/
-		protected function getForwardNode (inTempNode:Tree,
-										 inFindSameDepth:Boolean) : Tree {
+		protected function getForwardNode (inTempNode:Tree, inFindSameDepth:Boolean) : Tree {
 			if (!inTempNode) return null;
 			if (!inTempNode.parent) return null;
 

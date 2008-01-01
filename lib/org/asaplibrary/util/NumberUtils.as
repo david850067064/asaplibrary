@@ -34,8 +34,7 @@ package org.asaplibrary.util {
 		var scale:Number = NumberUtils.randomInRange(10, 20);
 		</code>
 		*/
-		public static function randomInRange (inStartRange:Number,
-											  inEndRange:Number) : Number {
+		public static function randomInRange (inStartRange:Number, inEndRange:Number) : Number {
 			var d:Number = inEndRange - inStartRange;
 			return inStartRange + (d - Math.random() * d);
 		}
@@ -52,8 +51,7 @@ package org.asaplibrary.util {
 		// 3.14
 		</code>
 		*/
-		public static function roundFloat (inNumber:Number,
-										   inDigitCount:int) : Number {
+		public static function roundFloat (inNumber:Number, inDigitCount:int) : Number {
 			if (inDigitCount < 0) {
 				return inNumber;
 			}
@@ -77,9 +75,7 @@ package org.asaplibrary.util {
 		NumberUtils.xPosOnSinus(1, -1, 1); // 1.5707963267949 ( = 0.5 * Math.PI )
 		</code>
 		*/
-		public static function xPosOnSinus (inYPosOnCurve:Number,
-											inCurveBottom:Number,
-											inCurveTop:Number) : Number {
+		public static function xPosOnSinus (inYPosOnCurve:Number, inCurveBottom:Number, inCurveTop:Number) : Number {
 			return Math.asin( 2 * NumberUtils.normalizedValue(inYPosOnCurve, inCurveBottom, inCurveTop) - 1 );
 		}
 		
@@ -95,9 +91,7 @@ package org.asaplibrary.util {
 		NumberUtils.normalizedValue(0, -1, 1); // 0.5
 		</code>
 		*/
-		public static function normalizedValue (inValueToNormalize:Number,
-												inMinValue:Number,
-												inMaxValue:Number) : Number {
+		public static function normalizedValue (inValueToNormalize:Number, inMinValue:Number, inMaxValue:Number) : Number {
 			var diff:Number = inMaxValue - inMinValue;
 			if (diff == 0) return inMinValue;
 			var f:Number = 1 / diff;
@@ -110,8 +104,7 @@ package org.asaplibrary.util {
 		@param inDy : the y component of the vector
 		@return The the angle of the passed vector in degrees.
 		*/
-		public static function angle (inDx:Number,
-									  inDy:Number) : Number {
+		public static function angle (inDx:Number, inDy:Number) : Number {
 			return Math.atan2(inDy, inDx) * 180/Math.PI;
 		}
 		

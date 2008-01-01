@@ -34,11 +34,7 @@ package org.asaplibrary.util.actionqueue {
 		private var mTravelledX:Number;
 		private var mTravelledY:Number;
 		
-		public function addMove (inDO:DisplayObject,
-								 inDuration:Number,
-								 inAddX:Number,
-								 inAddY:Number,
-								 inEffect:Function = null) : Function {
+		public function addMove (inDO:DisplayObject, inDuration:Number, inAddX:Number, inAddY:Number, inEffect:Function = null) : Function {
 			
 			mDO = inDO;
 			mDuration = inDuration;

@@ -80,9 +80,7 @@ package org.asaplibrary.management.movie {
 		@param inIsVisible: visibility of movie when loaded, default = true (visible)
 		@return False if the loader cannot load the movie, or the movie could not be added to the list (usually because another or the same movie with the same name exists already); otherwise true.
 		*/
-		public function loadMovie (inURL:String,
-								   inName:String,
-								   inIsVisible:Boolean = true) : Boolean {
+		public function loadMovie (inURL:String, inName:String, inIsVisible:Boolean = true) : Boolean {
 			// try adding
 			if (!addMovie(inName)) {
 				return false;

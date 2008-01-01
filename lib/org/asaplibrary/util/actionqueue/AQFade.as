@@ -38,11 +38,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function fade (inDO:DisplayObject,
-							  inDuration:Number,
-							  inStartAlpha:Number,
-							  inEndAlpha:Number,
-							  inEffect:Function = null) : Function {
+		public function fade (inDO:DisplayObject, inDuration:Number, inStartAlpha:Number, inEndAlpha:Number, inEffect:Function = null) : Function {
 			mDO = inDO;
 			mDuration = inDuration;
 			mEffect = inEffect;

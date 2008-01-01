@@ -73,9 +73,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		protected function calculateLoopCount (inCount:int,
-											   inDuration:Number,
-											   inCycleDuration:Number) : uint {
+		protected function calculateLoopCount (inCount:int, inDuration:Number, inCycleDuration:Number) : uint {
 			if (inDuration == 0) {
 				return 0;
 			} else if (inDuration > 0) {

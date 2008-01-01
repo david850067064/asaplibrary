@@ -38,10 +38,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inUndoMethod: (optional) not implemented yet
 		@param inUndoArgs: (optional) not implemented yet
 		*/
-		function Action (inMethod:Function,
-						 inArgs:Array = null,
-						 inUndoMethod:Function = null,
-						 inUndoArgs:Array = null) {
+		function Action (inMethod:Function, inArgs:Array = null, inUndoMethod:Function = null, inUndoArgs:Array = null) {
 						 
 			mMethod = inMethod;
 			mArgs = inArgs;
