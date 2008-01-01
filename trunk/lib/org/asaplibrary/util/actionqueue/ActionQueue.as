@@ -718,8 +718,7 @@ class Marker {
 	*/
 	public var index:int;
 	
-	function Marker (inName:String,
-					 inIndex:int) {
+	function Marker (inName:String, inIndex:int) {
 		name = inName;
 		index = inIndex;
 	}
@@ -741,8 +740,7 @@ class Loop {
 	public var endIndex:int;
 	public var isLooping:Boolean = true;
 	
-	function Loop (inName:String,
-				   inStartIndex:int) {
+	function Loop (inName:String, inStartIndex:int) {
 		name = inName;
 		startIndex = inStartIndex;
 	}

@@ -56,9 +56,7 @@ package org.asaplibrary.util.loader {
 		* @param	inName: (optional) unique identifying name
 		* @param	inIsVisible: (optional) visibility state of loaded item
 		*/
-		public function loadAsset (inUrl:String,
-								   inName:String = "",
-								   inIsVisible:Boolean = true) : void {
+		public function loadAsset (inUrl:String, inName:String = "", inIsVisible:Boolean = true) : void {
 			// Check if url is valid
 			if ((inUrl== null) || (inUrl.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());

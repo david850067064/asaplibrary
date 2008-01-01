@@ -66,9 +66,7 @@ package org.asaplibrary.data.xml {
 		*	@param ignoreError: if true, the return value of {@link #parseXML} is always added to the array, and the array itself is returned. Otherwise, an error in parsing will return null.
 		*	@return Array of new objects of the specified type, cast to IParsable, or null if parsing returned false.
 		*/
-		public static function parseList (inList:XMLList,
-										  inClass:Class,
-										  inIgnoreError:Boolean = false) : Array {
+		public static function parseList (inList:XMLList, inClass:Class, inIgnoreError:Boolean = false) : Array {
 			var a:Array = new Array();
 			
 			var len:Number = inList.length();
@@ -88,9 +86,7 @@ package org.asaplibrary.data.xml {
 		*	@param ignoreError: if true, the return value of {@link IParsable#parseXML} is ignored, and the newly created object is always returned
 		*	@return a new object of the specified type, cast to {@link IParsable}, or null if parsing returned false.
 		*/
-		public static function parseXML (inXML:XML,
-										 inClass:Class,
-										 inIgnoreError:Boolean = false) : IParsable {
+		public static function parseXML (inXML:XML, inClass:Class, inIgnoreError:Boolean = false) : IParsable {
 			var ipa:IParsable = new inClass();
 			if (ipa.parseXML(inXML) || inIgnoreError) {
 				return ipa;

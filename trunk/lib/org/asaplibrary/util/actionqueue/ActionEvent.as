@@ -55,9 +55,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inAction: (optional) the performing Action object (presumably {@link ActionRunner} or {@link ActionQueue}
 		@param inMarkerName: (optional) name of the Marker (currently only used by {@link ActionQueue})
 		*/
-		public function ActionEvent (inSubtype:String,
-									 inAction:IAction = null,
-									 inMarkerName:String = null) {
+		public function ActionEvent (inSubtype:String, inAction:IAction = null, inMarkerName:String = null) {
 			super(_EVENT);
 			
 			subtype = inSubtype;

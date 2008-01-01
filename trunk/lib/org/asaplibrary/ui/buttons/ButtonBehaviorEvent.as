@@ -57,12 +57,7 @@ package org.asaplibrary.ui.buttons {
 		@param inPressed: the pressed button state
 		@param inMouseEvent: the mouse event; might be null in case no mouse event has triggered the update
 		*/
-		public function ButtonBehaviorEvent (inSubtype:String,
-													 inState:uint,
-													 inSelected:Boolean,
-													 inEnabled:Boolean,
-													 inPressed:Boolean,
-													 inMouseEvent:MouseEvent) {
+		public function ButtonBehaviorEvent (inSubtype:String, inState:uint, inSelected:Boolean, inEnabled:Boolean, inPressed:Boolean, inMouseEvent:MouseEvent) {
 			super(_EVENT);
 			subtype = inSubtype;
 			state = inState;

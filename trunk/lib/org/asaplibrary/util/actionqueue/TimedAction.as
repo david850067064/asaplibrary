@@ -53,11 +53,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inUndoMethod: (optional) not implemented yet
 		@param inUndoArgs: (optional) not implemented yet
 		*/
-		public function TimedAction (inMethod:Function,
-									 inDuration:Number = Number.NaN,
-									 inEffect:Function = null,
-									 inUndoMethod:Function = null,
-									 inUndoArgs:Array = null) {
+		public function TimedAction (inMethod:Function, inDuration:Number = Number.NaN, inEffect:Function = null, inUndoMethod:Function = null, inUndoArgs:Array = null) {
 			
 			super(inMethod, null, inUndoMethod, inUndoArgs);
 

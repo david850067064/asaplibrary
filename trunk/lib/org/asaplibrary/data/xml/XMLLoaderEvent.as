@@ -62,9 +62,7 @@ package org.asaplibrary.data.xml {
 		@param inName: identifier name
 		@param inData: the XML data object (only at COMPLETE)
 		*/
-		public function XMLLoaderEvent (inSubtype:String,
-										inName:String,
-										inData:XML = null
+		public function XMLLoaderEvent (inSubtype:String, inName:String, inData:XML = null
 										) {
 			super(_EVENT);
 			

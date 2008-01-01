@@ -48,13 +48,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function scale (inDO:DisplayObject,
-							   inDuration:Number,
-							   inStartScaleX:Number,
-							   inStartScaleY:Number,
-							   inEndScaleX:Number,
-							   inEndScaleY:Number,
-							   inEffect:Function = null) : Function {
+		public function scale (inDO:DisplayObject, inDuration:Number, inStartScaleX:Number, inStartScaleY:Number, inEndScaleX:Number, inEndScaleY:Number, inEffect:Function = null) : Function {
 							   
 			mDO = inDO;
 			mDuration = inDuration;

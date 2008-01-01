@@ -38,9 +38,7 @@ package org.asaplibrary.data {
 		Creates a new URLData.
 		The constructor will be called without parameters by the Parser.
 		*/
-		public function URLData (inName:String = null,
-								 inURL:String = null,
-								 inTarget:String = null) {
+		public function URLData (inName:String = null, inURL:String = null, inTarget:String = null) {
 			if (inName) name = inName;
 			if (inURL) url = inURL;
 			if (inTarget) target = inTarget;

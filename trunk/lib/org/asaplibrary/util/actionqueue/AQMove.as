@@ -42,13 +42,7 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		
 		*/
-		public function move (inDO:DisplayObject,
-							  inDuration:Number,
-							  inStartX:Number,
-							  inStartY:Number,
-							  inEndX:Number,
-							  inEndY:Number,
-							  inEffect:Function = null) : Function {
+		public function move (inDO:DisplayObject, inDuration:Number, inStartX:Number, inStartY:Number, inEndX:Number, inEndY:Number, inEffect:Function = null) : Function {
 
 			mDO = inDO;
 			mDuration = inDuration;

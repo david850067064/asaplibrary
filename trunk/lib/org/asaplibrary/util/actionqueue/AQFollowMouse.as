@@ -57,13 +57,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inCallBackFunction: (optional) function reference to which the calculated value will be returned; this callback function passes 3 arguments: (DO, x, y )
 		@return A reference to {@link #initDoFollowMouse} that in turn returns the performing move {@link TimedAction}.
 		*/
-		public function followMouse (inDO:DisplayObject,
-									 inDuration:Number = Number.NaN,
-									 inTimeDiv:Number = Number.NaN,
-									 inLocDiv:Number = Number.NaN,
-									 inOffsetX:Number = Number.NaN,
-									 inOffsetY:Number = Number.NaN,
-									 inCallBackFunction:Function = null) : Function {
+		public function followMouse (inDO:DisplayObject, inDuration:Number = Number.NaN, inTimeDiv:Number = Number.NaN, inLocDiv:Number = Number.NaN, inOffsetX:Number = Number.NaN, inOffsetY:Number = Number.NaN, inCallBackFunction:Function = null) : Function {
 	
 			mDO = inDO;
 			mDuration = inDuration;
