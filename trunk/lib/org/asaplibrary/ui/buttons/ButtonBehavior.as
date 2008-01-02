@@ -168,7 +168,7 @@ package org.asaplibrary.ui.buttons {
 			mPressed = true;
 			mMouseOver = true;
 			if (mSelected || !mEnabled) return;
-			update(e, ButtonStates.OVER);
+			update(e, ButtonStates.DOWN);
 		}
 		
 		/**
@@ -199,7 +199,7 @@ package org.asaplibrary.ui.buttons {
 		protected function mouseUpHandler (e:MouseEvent) : void {
 			mPressed = false;
 			if (mSelected || !mEnabled) return;
-			update(e, ButtonStates.OVER);
+			update(e, ButtonStates.UP);
 		}
 		
 		/**
