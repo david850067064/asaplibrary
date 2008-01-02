@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
-	
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
@@ -190,7 +189,7 @@ package org.asaplibrary.ui.buttons {
 		protected function processRollOut (e:TimerEvent) : void {
 			mMouseOver = false;
 			doAfterDelay();
-			mPressed = false;
+			sPressed = false;
 			mMouseOver = false;
 			if (mSelected || !mEnabled) return;
 			update(null, ButtonStates.OUT);
