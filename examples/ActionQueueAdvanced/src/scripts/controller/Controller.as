@@ -227,7 +227,7 @@
 			loopQueue = new ActionQueue("loopQueue");
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker1_mc.x, marker1_mc.y, effect));
 			loopQueue.addAsynchronousAction(new AQFade().fade(num1_mc, numFadeDuration, CURRENT, 0));
-			loopQueue.addStartLoop("L");
+			loopQueue.addStartLoop("L", 4);
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker2_mc.x, marker2_mc.y, effect));
 			loopQueue.addAsynchronousAction(new AQFade().fade(num2_mc, numFadeDuration, CURRENT, 0));
 			loopQueue.addAction(new AQMove().move(loop_mc, duration, CURRENT, CURRENT, marker3_mc.x, marker3_mc.y, effect));
