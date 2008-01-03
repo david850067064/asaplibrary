@@ -293,6 +293,9 @@
 					if (mLabelHash[LABEL_RELEASE]) queueDestination(LABEL_RELEASE);
 					queueDestination(LABEL_OVER);
 					break;
+				case ButtonBehavior.NORMAL:
+					queueDestination(LABEL_NONE);
+					break;
 			}
 		}
 		

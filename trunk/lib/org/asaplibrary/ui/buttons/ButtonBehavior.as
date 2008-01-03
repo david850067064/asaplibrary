@@ -36,7 +36,6 @@ package org.asaplibrary.ui.buttons {
 	
 	public class MyButton extends MovieClip {
 	
-		private static const S:Class = ButtonStates; // shorthand
 		private var mDelegate:ButtonBehavior;
 		
 		public var tBorder:MovieClip; // a border clip shows the button state
@@ -45,7 +44,7 @@ package org.asaplibrary.ui.buttons {
 			mDelegate = new ButtonBehavior(this);
 			// listen for changes
 			// button updates will be redirected to method 'update':
-			mDelegate.addEventListener(ButtonBehaviorEvent.UPDATE, update);
+			mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, update);
 		}
 		
 		// pass any button change setter state to the delegate
@@ -55,13 +54,13 @@ package org.asaplibrary.ui.buttons {
 		
 		private function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
-				case S.SELECTED:
-				case S.OVER:
+				case ButtonBehavior.SELECTED:
+				case ButtonBehavior.OVER:
 					tBorder.visible = true;
 					break;
-				case S.NORMAL:
-				case S.OUT:
-				case S.DESELECTED:
+				case ButtonBehavior.NORMAL:
+				case ButtonBehavior.OUT:
+				case ButtonBehavior.DESELECTED:
 					tBorder.visible = false;
 					break;
 				default:
