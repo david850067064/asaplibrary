@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.postcenter {
-
+	import flash.events.EventDispatcher;
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.net.URLVariables;
-	import flash.utils.Timer;
-	import flash.events.EventDispatcher;
+	import flash.utils.Timer;	
 
+	import org.asaplibrary.util.postcenter.PostCenterEvent;
+	
 	/**			
 	Send <code>navigateToURL</code> requests safely on all browsers.
 	Windows Internet Explorer cannot handle <code>navigateToURL</code> messages that are sent out quickly in succession; PostCenter functions as intermediary and queues and batches requests where possible.
