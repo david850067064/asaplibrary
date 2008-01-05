@@ -18,7 +18,8 @@ limitations under the License.
 package org.asaplibrary.util.postcenter {
 
 	import flash.events.Event;
-	
+	import flash.net.URLRequest;
+
 	/**
 	Event object sent by {@link PostCenter}. Subscribe to type <code>_EVENT</code>.
 	*/
@@ -27,32 +28,40 @@ package org.asaplibrary.util.postcenter {
 		/** Event type. */
 		public static const _EVENT:String = "onPostCenterEvent";
 	
-		public static const MESSAGE_SENT:String = "messageSent";
+		/**
+		Dispatched after sending a request.
+		*/
+		public static const REQUEST_SENT:String = "requestSent";
+		
+		/**
+		Dispatched when all requests in the send queue have been processed.
+		*/
 		public static const ALL_SENT:String = "allSent";
 
 		public var subtype:String;
-		public var message:String;
+		public var request:URLRequest;
 		
 		/**
 		Creates a new PostCenterEvent.
 		@param inSubtype: either subtype; see above
+		@param inRequest: (optional) the request that is sent
 		*/
-		public function PostCenterEvent (inSubtype:String, inMessage:String = null) {
+		public function PostCenterEvent (inSubtype:String, inRequest:URLRequest = null) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
-			message = inMessage;
+			request = inRequest;
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.util.postcenter.PostCenter; subtype=" + subtype + "; message=" + message;
+			return ";org.asaplibrary.util.postcenter.PostCenter; subtype=" + subtype + "; request=" + request;
 		}
 		
 		/**
 		Creates a copy of an existing PostCenterEvent.
 		*/
 		public override function clone() : Event {
-			return new PostCenterEvent(subtype, message);
+			return new PostCenterEvent(subtype, request);
 		} 
 	}
 }

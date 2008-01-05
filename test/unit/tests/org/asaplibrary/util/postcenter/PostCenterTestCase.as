@@ -1,8 +1,10 @@
 ﻿package org.asaplibrary.util.postcenter {
 	
+	import flash.net.URLRequest;
 	import flash.system.*;
 	import flash.external.*;
 	import asunit.framework.TestCase;
+	
 	import org.asaplibrary.util.postcenter.*;
 	import org.asaplibrary.util.FrameDelay;
 	
@@ -26,10 +28,10 @@
 	public class PostCenterTestCase extends TestCase {
 		
 		private static const TEST_DELAY:Number = 31;
-		private static const EXPECTED_MESSAGES_SENT:uint = 2;
-		private static var sMessagesSent:uint = 0;
-		private static const EXPECTED_ALL_MESSAGES_SENT:uint = 1;
-		private static var sAllMessagesSent:uint = 0;
+		private static const EXPECTED_REQUESTS_SENT:uint = 5;
+		private static var sRequestsSent:uint = 0;
+		private static const EXPECTED_ALL_REQUESTS_SENT:uint = 1;
+		private static var sAllRequestsSent:uint = 0;
 		
 		function PostCenterTestCase () {
 			super();
@@ -44,6 +46,7 @@
 		public override function run() : void {
 			doTestSendDefaultWindow();
 			doTestSendDifferentWindows();
+			doTestSendRequests();
 			new FrameDelay(startTests, TEST_DELAY);
 		}
 		
@@ -55,32 +58,43 @@
 		}
 		
 		public function testEvaluateResult () : void {
-			assertTrue("ActionQueueTestCase sMessagesSent", sMessagesSent == EXPECTED_MESSAGES_SENT);
+			assertTrue("ActionQueueTestCase sRequestsSent", sRequestsSent == EXPECTED_REQUESTS_SENT);
 			
-			assertTrue("ActionQueueTestCase sAllMessagesSent", sAllMessagesSent == EXPECTED_ALL_MESSAGES_SENT);
+			assertTrue("ActionQueueTestCase sAllRequestsSent", sAllRequestsSent == EXPECTED_ALL_REQUESTS_SENT);
 		}
 		
 		private function doTestSendDefaultWindow () : void {
 			var pc:PostCenter = PostCenter.defaultPostCenter;
-			pc.send(constructMessage("default window 1"));
-			pc.send(constructMessage("default window 2"));
-			pc.send(constructMessage("default window 3"));
+			pc.sendMessage(constructMessage("default window 1"));
+			pc.sendMessage(constructMessage("default window 2"));
+			pc.sendMessage(constructMessage("default window 3"));
 		}
 		
 		private function doTestSendDifferentWindows () : void {
 			var pc:PostCenter = PostCenter.defaultPostCenter;
-			pc.send(constructMessage("window _self 1"), "_self");
-			pc.send(constructMessage("window _self 2"), "_self");
-			pc.send(constructMessage("window TesterWindow 1 (_self 3)"), "TesterWindow");
+			pc.sendMessage(constructMessage("window _self 1"), "_self");
+			pc.sendMessage(constructMessage("window _self 2"), "_self");
+			pc.sendMessage(constructMessage("window TesterWindow 1 (_self 3)"), "TesterWindow");
+		}
+		
+		private function doTestSendRequests () : void {
+			var pc:PostCenter = PostCenter.defaultPostCenter;
+			var request:URLRequest;
+			request = new URLRequest(constructMessage("request _self 1"));
+			pc.sendURLRequest(request);
+			request = new URLRequest(constructMessage("request _self 2"));
+			pc.sendURLRequest(request);
+			request = new URLRequest(constructMessage("request _self 3"));
+			pc.sendURLRequest(request);
 		}
 		
 		private function handlePostCenterEvent (e:PostCenterEvent) : void {
 			switch (e.subtype) {
-				case PostCenterEvent.MESSAGE_SENT:
-					sMessagesSent++;
+				case PostCenterEvent.REQUEST_SENT:
+					sRequestsSent++;
 					break;
 				case PostCenterEvent.ALL_SENT:
-					sAllMessagesSent++;
+					sAllRequestsSent++;
 					break;
 			}
 		}
