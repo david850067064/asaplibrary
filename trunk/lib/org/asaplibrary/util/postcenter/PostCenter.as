@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -13,13 +13,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
- */
+*/
 
 package org.asaplibrary.util.postcenter {
+
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.utils.Timer;		
+	import flash.utils.Timer;
+	import flash.events.EventDispatcher;
 
 	/**
 	Send messages safely and cross-browser from Flash to HTML/Javascript.
@@ -29,16 +31,32 @@ package org.asaplibrary.util.postcenter {
 	<code>
 	var message:String;
 	var pc:PostCenter = PostCenter.defaultPostCenter;
-	message = "javascript:alert('message one')";
+	message = "javascript:sendStatsOne(" + contentId + ")";
 	pc.send(message);
-	message = "javascript:alert('message two')";
+	message = "javascript:sendStatsTwo(" + contentId + ")";
 	pc.send(message);	
+	</code>
+	@usageNote
+	Calls to the same window are concatenated and sent as one string.
+	For example:
+	<code>
+	var message:String;
+	var pc:PostCenter = PostCenter.defaultPostCenter;
+	message = "javascript:sendStatsOne(" + contentId + ")";
+	pc.send(message); // is sent to default window "_self"
+	message = "javascript:sendStatsTwo(" + contentId + ")";
+	pc.send(message); // is appended to the first message
+	</code>
+	These 2 messages are sent together. A subsequent call to a different window will be sent after a delay:
+	<code>
+	message = "javascript:notifyFrameLocation(" + contentId + ")";
+	pc.send(message, "_top");
 	</code>
 	@usageNote
 	Be careful with using multiple PostCenter objects: timings are not synchronized and postings to the browser may conflict with each other. Use <code>PostCenter.defaultPostCenter</code> unless you know what you are doing!
 	@todo PostCenter currently ignores the parameter 'method' ("GET" or "POST").
-	 */
-	public class PostCenter {
+	*/
+	public class PostCenter extends EventDispatcher {
 
 		private static var sDefaultPostCenter:PostCenter;
 
@@ -46,34 +64,35 @@ package org.asaplibrary.util.postcenter {
 
 		/**
 		List of objects of type {@link PostCenterMessage}.
-		 */
+		*/
 		private var mMessages:Array = new Array;
 
 		/**
-		The number of milliseconds between postings. 1000 seems very high, but is a safe interval for IE 6. Note that the first messages will be sent only after {@link #FIRST_SEND_DELAY} milliseconds.
-		 */
-		private static const SEND_DELAY:uint = 1000;
+		The number of milliseconds between postings. Note that the first messages will be sent after {@link #FIRST_SEND_DELAY} milliseconds.
+		*/
+		private static const SEND_DELAY:uint = 50;
 
 		/**
 		The number of milliseconds before the first posting.
-		 */
+		*/
 		private static const FIRST_SEND_DELAY:uint = 20;
 
 		/**
 		Timer object to delay posting.
-		 */
+		*/
 		private var mTimer:Timer;
 
 		/**
 		Callback function, called after posting the message; used for debugging.
-		 */
+		*/
 		private var mCallback:Function;
 
 		/**
 		Creates a new PostCenter. Use only when you need a custom PostCenter instance. For default use, call {@link #defaultPostCenter}.
 		@param inName: (optional) identifier name of this PostCenter - used for debugging
-		 */
+		*/
 		function PostCenter(inName:String = "Anonymous PostCenter") {
+			super();
 			if (inName != null) {
 				mName = inName;
 			}
@@ -81,7 +100,7 @@ package org.asaplibrary.util.postcenter {
 
 		/**
 		@return The default global instance of the PostCenter.
-		 */
+		*/
 		public static function get defaultPostCenter():PostCenter {
 			if (sDefaultPostCenter == null) {
 				sDefaultPostCenter = new PostCenter("Default PostCenter");
@@ -90,7 +109,7 @@ package org.asaplibrary.util.postcenter {
 		}
 
 		/**
-		Adds a message to the post queue.
+		Adds a message to the send queue. Get notified by the send progress by subscribing to {@link PostCenterMessage#_EVENT}.
 		@param inMessage : text to be sent
 		@param inWindow : (optional) name of the window to send message to: either the name of a specific window, or one of the following values: "_self" (the current frame in the current window), "_blank" (a new window), "_parent" (the parent of the current frame), "_top" (the top-level frame in the current window); default "_self"
 		@example
@@ -98,7 +117,7 @@ package org.asaplibrary.util.postcenter {
 		<code>
 		PostCenter.defaultPostCenter.send("javascript:sendStats('" + myId + "')"), "_self");
 		</code>
-		 */
+		*/
 		public function send(inMessage:String, inWindow:String = "_self"):void {
 			var message:PostCenterMessage = new PostCenterMessage(inMessage, inWindow);
 			mMessages.push(message);
@@ -111,17 +130,9 @@ package org.asaplibrary.util.postcenter {
 		}
 
 		/**
-		Sets the callback function. Used for debugging.
-		@param inCallback: Function reference. The function must use this parameter signature: <code>inMessage:String, inWindow:String = null</code> and return <code>void</code>.
-		 */
-		public function setCallback(inCallback:Function):void {
-			mCallback = inCallback;
-		}
-
-		/**
 		Creates a send string from waiting PostCenterMessage objects.
 		@param e: the timer event
-		 */
+		*/
 		private function processMessageQueue(e:TimerEvent = null):void {
 			resetTimer();
 			
@@ -152,24 +163,33 @@ package org.asaplibrary.util.postcenter {
 			if (mMessages.length > 0) {
 				initTimer();
 			}
-		}
-
-		/**
-		Sends the message.
-		Creates a new PostCenterMessage.
-		@param inMessage : text to be sent
-		@param inWindow : the window name; see {@link #send}
-		 */
-		private function sendMessage(inMessage:String, inWindow:String):void {
-			navigateToURL(new URLRequest(inMessage), inWindow);
-			if (mCallback != null) {
-				mCallback(inMessage, inWindow);
+			if (mMessages.length == 0) {
+				notifyAllSent();
 			}
 		}
 
 		/**
+		Sends the message to the browser.
+		@param inMessage : text to be sent
+		@param inWindow : the window name; see {@link #send}
+		@sends PostCenterEvent#MESSAGE_SENT
+		*/
+		private function sendMessage(inMessage:String, inWindow:String):void {
+			navigateToURL(new URLRequest(inMessage), inWindow);
+			dispatchEvent(new PostCenterEvent(PostCenterEvent.MESSAGE_SENT, inMessage));
+		}
+
+		/**
+		Notifies listeners that all messages in the queue have been sent.
+		@sends PostCenterEvent#ALL_SENT
+		*/
+		private function notifyAllSent () : void {
+			dispatchEvent(new PostCenterEvent(PostCenterEvent.ALL_SENT));
+		}
+		
+		/**
 		Stops the timer.
-		 */
+		*/
 		private function resetTimer():void {
 			if (mTimer) mTimer.stop();
 			mTimer = null;
@@ -177,7 +197,7 @@ package org.asaplibrary.util.postcenter {
 
 		/**
 		Initializes the timer.
-		 */
+		*/
 		private function initTimer(inDelay:uint = 0):void {
 			var delay:uint = inDelay ? inDelay : SEND_DELAY;
 			mTimer = new Timer(delay, 1);
@@ -185,7 +205,7 @@ package org.asaplibrary.util.postcenter {
 			mTimer.start();
 		}
 
-		public function toString():String {
+		public override function toString():String {
 			return "com.lostboys.util.postcenter.PostCenter; name=" + mName;
 		}
 	}
@@ -193,7 +213,7 @@ package org.asaplibrary.util.postcenter {
 
 /**
 Data object for PostCenter.
- */
+*/
 class PostCenterMessage {
 
 	internal var message:String;

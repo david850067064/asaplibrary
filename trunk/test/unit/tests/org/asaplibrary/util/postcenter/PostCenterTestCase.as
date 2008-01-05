@@ -10,28 +10,40 @@
 	This test assumes a html page with the following javascript:
 	<code>
 	window.name = "TesterWindow";
-	function sayHello1 (num) {
-		alert("hello1: " + num);
+	function updateTestContent (inContent) {
+		var testcontentElem = document.getElementById("testcontent");
+		testcontentElem.innerHTML += "Received:\"" + inContent + "\"<br />";
 	}
-	function sayHello2 (num) {
-		alert("hello2: " + num);
+	function setContent (inContent) {
+		updateTestContent(inContent);
 	}
+	</code>
+	Plus a page element with id "testcontent":
+	<code>
+	<div id="testcontent" style="margin:1em 0; padding:1em; background:#fc0; text-weight:bold;"></div>
 	</code>
 	*/
 	public class PostCenterTestCase extends TestCase {
 		
-		private static const TEST_DELAY:Number = 120;
-		private static const EXPECTED_LISTEN_NO_WINDOW_CALLED:uint = 1;
-		private static var sListenNoWindowCalled:uint = 0;
-		private static const EXPECTED_LISTEN_DIFFERENT_WINDOWS_CALLED:uint = 2;
-		private static var sListenDifferentWindowsCalled:uint = 0;
+		private static const TEST_DELAY:Number = 31;
+		private static const EXPECTED_MESSAGES_SENT:uint = 2;
+		private static var sMessagesSent:uint = 0;
+		private static const EXPECTED_ALL_MESSAGES_SENT:uint = 1;
+		private static var sAllMessagesSent:uint = 0;
 		
+		function PostCenterTestCase () {
+			super();
+			
+			var pc:PostCenter = PostCenter.defaultPostCenter;
+			pc.addEventListener(PostCenterEvent._EVENT, handlePostCenterEvent);
+		}		
+			
 		/**
 		List tests that should be run first - before any function starting with 'test'.
 		*/
 		public override function run() : void {
-			doTestSendNoWindow();
-			new FrameDelay(doTestSendDifferentWindows, 61);
+			doTestSendDefaultWindow();
+			doTestSendDifferentWindows();
 			new FrameDelay(startTests, TEST_DELAY);
 		}
 		
@@ -43,36 +55,38 @@
 		}
 		
 		public function testEvaluateResult () : void {
-			assertTrue("ActionQueueTestCase sListenNoWindowCalled", sListenNoWindowCalled == EXPECTED_LISTEN_NO_WINDOW_CALLED);
+			assertTrue("ActionQueueTestCase sMessagesSent", sMessagesSent == EXPECTED_MESSAGES_SENT);
 			
-			assertTrue("ActionQueueTestCase sListenDifferentWindowsCalled", sListenDifferentWindowsCalled == EXPECTED_LISTEN_DIFFERENT_WINDOWS_CALLED);
+			assertTrue("ActionQueueTestCase sAllMessagesSent", sAllMessagesSent == EXPECTED_ALL_MESSAGES_SENT);
 		}
 		
-		private function doTestSendNoWindow () : void {	
-			PostCenter.defaultPostCenter.setCallback(listenNoWindow);
-			PostCenter.defaultPostCenter.send(constructMessage("sayHello1", 1));
-			PostCenter.defaultPostCenter.send(constructMessage("sayHello1", 2));
-			PostCenter.defaultPostCenter.send(constructMessage("sayHello1", 3));
+		private function doTestSendDefaultWindow () : void {
+			var pc:PostCenter = PostCenter.defaultPostCenter;
+			pc.send(constructMessage("default window 1"));
+			pc.send(constructMessage("default window 2"));
+			pc.send(constructMessage("default window 3"));
 		}
 		
 		private function doTestSendDifferentWindows () : void {
-			var pc:PostCenter = new PostCenter("different windows");
-			pc.setCallback(listenDifferentWindows);
-			pc.send(constructMessage("sayHello2", 1), "_self");
-			pc.send(constructMessage("sayHello2", 2), "_self");
-			pc.send(constructMessage("sayHello2", 3), "TesterWindow");
+			var pc:PostCenter = PostCenter.defaultPostCenter;
+			pc.send(constructMessage("window _self 1"), "_self");
+			pc.send(constructMessage("window _self 2"), "_self");
+			pc.send(constructMessage("window TesterWindow 1 (_self 3)"), "TesterWindow");
 		}
 		
-		private function constructMessage (inFuncName:String, inVar:uint) : String {
-			return "javascript:" + inFuncName + "(\"" + inVar + "\")";
+		private function handlePostCenterEvent (e:PostCenterEvent) : void {
+			switch (e.subtype) {
+				case PostCenterEvent.MESSAGE_SENT:
+					sMessagesSent++;
+					break;
+				case PostCenterEvent.ALL_SENT:
+					sAllMessagesSent++;
+					break;
+			}
 		}
 		
-		private function listenNoWindow (inMessage:String, inWindow:String = null) : void {
-			sListenNoWindowCalled++;
-		}
-		
-		private function listenDifferentWindows (inMessage:String, inWindow:String = null) : void {
-			sListenDifferentWindowsCalled++;
+		private function constructMessage (inContent:String) : String {
+			return "javascript:updateTestContent(\"" + inContent + "\")";
 		}
 		
 	}
