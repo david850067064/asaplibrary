@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
+
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -43,18 +44,19 @@ package org.asaplibrary.util.loader {
 			
 		
 		/**
-		* Constructor
-		* @param	inLoaderCount: number of parallel loaders
+		Creates a new AssetLoader.
+		@param inLoaderCount: number of parallel loaders
 		*/
 		public function AssetLoader (inLoaderCount:Number = DEFAULT_LOADER_COUNT) {
 			mLoaderCount = inLoaderCount;
 		}
 		
 		/**
-		* Load an asset
-		* @param	inURL: source url of the file
-		* @param	inName: (optional) unique identifying name
-		* @param	inIsVisible: (optional) visibility state of loaded item
+		Load an asset
+		@param inURL: source url of the file
+		@param inName: (optional) unique identifying name
+		@param inIsVisible: (optional) visibility state of loaded item
+		@sends AssetLoaderEvent#ERROR
 		*/
 		public function loadAsset (inUrl:String, inName:String = "", inIsVisible:Boolean = true) : void {
 			// Check if url is valid
@@ -103,7 +105,8 @@ package org.asaplibrary.util.loader {
 		}
 		
 		/**
-		* Load next asset if the waiting stack isn't empty
+		Load next asset if the waiting stack isn't empty
+		@sends AssetLoaderEvent#ALL_LOADED
 		*/
 		private function loadNext () : void {
 			// quit if all loaders taken
@@ -137,6 +140,9 @@ package org.asaplibrary.util.loader {
 			loader.load(new URLRequest(fd.url));
 		}
 		
+		/**
+		@sends AssetLoaderEvent#START
+		*/
 		private function handleLoadStarted (e:Event) : void {
 			// get loader
 			var info:LoaderInfo = e.target as LoaderInfo;
@@ -156,6 +162,10 @@ package org.asaplibrary.util.loader {
 			dispatchEvent(evt);
 		}
 
+		/**
+		@sends AssetLoaderEvent#ERROR
+		@sends AssetLoaderEvent#COMPLETE
+		*/
 		private function handleLoaderEvent (e:Event) : void {
 			// get loader
 			var info:LoaderInfo = e.target as LoaderInfo;
@@ -192,8 +202,9 @@ package org.asaplibrary.util.loader {
 		}
 
 		/**
-		* Handle ProgressEvent from Loader
-		* @param	e: ProgressEvent sent
+		Handle ProgressEvent from Loader
+		@param e: ProgressEvent sent
+		@sends AssetLoaderEvent#PROGRESS
 		*/
 		private function handleLoaderProgressEvent (e:ProgressEvent) : void {
 			// get loader
@@ -215,9 +226,9 @@ package org.asaplibrary.util.loader {
 		}
 		
 		/**
-		* Get the data block in the loading stack for the specified LoaderInfo
-		* @param	inInfo: LoaderInfo
-		* @return the data, or null if none was found
+		Get the data block in the loading stack for the specified LoaderInfo
+		@param inInfo: LoaderInfo
+		@return The data, or null if none was found.
 		*/
 		private function getDataForLoaderInfo (inInfo:LoaderInfo):FileData {
 			var len:int = mLoadingStack.length;
@@ -236,6 +247,9 @@ package org.asaplibrary.util.loader {
 
 import flash.display.Loader;
 
+/**
+Data object for AssetLoader.
+*/
 class FileData {
 
 	public var loader:Loader;
