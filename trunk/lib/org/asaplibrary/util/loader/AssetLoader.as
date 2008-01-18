@@ -16,16 +16,16 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
-
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLRequest;
 	
-	import org.asaplibrary.util.debug.Log;	
+	import org.asaplibrary.util.debug.Log;		
 
 	/**
 	@todo stop, stopAll
@@ -128,7 +128,8 @@ package org.asaplibrary.util.loader {
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, handleLoaderEvent);
 			loader.contentLoaderInfo.addEventListener(Event.OPEN, handleLoadStarted);
 			loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, handleLoaderProgressEvent);
-			//ldr.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, handleLoaderEvent);
+			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, handleLoaderEvent);
+			loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleLoaderEvent);
 
 			// store loader in data
 			fd.loader = loader;
@@ -184,6 +185,11 @@ package org.asaplibrary.util.loader {
 				var errorEvent:IOErrorEvent = e as IOErrorEvent;
 				evt = new AssetLoaderEvent(AssetLoaderEvent.ERROR, fd.name);
 				evt.error = errorEvent.text;
+			} else if (e is SecurityErrorEvent) {
+				// fill error event
+				var secErEvent:SecurityErrorEvent = e as SecurityErrorEvent;
+				evt = new AssetLoaderEvent(AssetLoaderEvent.ERROR, fd.name);
+				evt.error = secErEvent.text;
 			} else {
 				// notify we're done loading this file
 				evt = new AssetLoaderEvent(AssetLoaderEvent.COMPLETE, fd.name);
