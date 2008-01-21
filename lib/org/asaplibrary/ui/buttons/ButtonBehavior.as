@@ -122,9 +122,9 @@ package org.asaplibrary.ui.buttons {
 			//mButton.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 			//mButton.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			
-			// Also listen for stage events to prevent buttons from firing button events if the mouse has been pressed.
-			mButton.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownStageHandler);
-			mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpStageHandler);
+			// Stage event handlers are set in mouseDownHandler
+			// because at constructor time the button's owner may not have
+			// added to the stage display list tree.
 		}
 	
 		/**
@@ -195,12 +195,19 @@ package org.asaplibrary.ui.buttons {
 		@param e: the mouse event
 		*/
 		protected function mouseDownHandler (e:MouseEvent) : void {
+			if (mButton.stage) {
+				// Also listen for stage events to prevent buttons from firing button events if the mouse has been pressed.
+				mButton.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownStageHandler);
+				mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpStageHandler);
+			}
 			if (!mMouseOver) return;
 			mMouseDownTarget = e.currentTarget;
-			// down, now check for global mouseUp
-		    mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler); // we also have mouseDownStageHandler
-		    // Track for release outside the window
-			mButton.stage.addEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
+			if (mButton.stage) {
+				// down, now check for global mouseUp
+				mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler); // we also have mouseDownStageHandler
+				// Track for release outside the window
+				mButton.stage.addEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
+			}
 			sPressed = true;
 			mMouseOver = true;
 			if (mSelected || !mEnabled) return;
@@ -250,7 +257,9 @@ package org.asaplibrary.ui.buttons {
 			sPressed = false;
 			mMouseOver = false;
 			mMouseDownTarget = null;
-			mButton.stage.removeEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
+			if (mButton.stage) {
+				mButton.stage.removeEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
+			}
 			update(null, ButtonStates.UP);
 			update(null, ButtonStates.OUT);
 		}
@@ -260,7 +269,9 @@ package org.asaplibrary.ui.buttons {
 		@param e: the mouse event
 		*/
 		protected function releaseOutside (e:MouseEvent) : void {
-			mButton.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler); // but we keep mouseUpStageHandler
+			if (mButton.stage) {
+				mButton.stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler); // but we keep mouseUpStageHandler
+			}
 			mMouseDownTarget = null;
 			sPressed = false;
 			update(e, ButtonStates.UP);
