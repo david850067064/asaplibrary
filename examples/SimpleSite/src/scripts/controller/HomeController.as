@@ -1,10 +1,9 @@
 package controller {
+
 	import flash.events.MouseEvent;
-	
-	import data.AppSettings;
-	
+	// ASAP Library classes
+	import data.AppSettings;	
 	import event.NavigationEvent;
-	
 	import ui.SimpleButton;	
 
 	public class HomeController extends ProjectController {

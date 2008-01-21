@@ -1,10 +1,9 @@
 ﻿package controller {
-	import flash.events.MouseEvent;
-	
+
+	import flash.events.MouseEvent;	
+	// ASAP Library classes
 	import data.AppSettings;
-	
-	import event.NavigationEvent;
-	
+	import event.NavigationEvent;	
 	import ui.MenuButton;	
 
 	public class MenuController extends ProjectController {
