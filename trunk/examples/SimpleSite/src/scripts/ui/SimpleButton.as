@@ -1,7 +1,6 @@
 package ui {
 
 	import flash.display.MovieClip;
-
 	import org.asaplibrary.ui.buttons.*;
 	
 	public class SimpleButton extends MovieClip {
