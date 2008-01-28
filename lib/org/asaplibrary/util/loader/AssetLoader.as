@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
+
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -28,20 +29,19 @@ package org.asaplibrary.util.loader {
 	import org.asaplibrary.util.debug.Log;		
 
 	/**
-	@todo stop, stopAll
+	Loads assets (SWF movies or supported image formats) into a clip. Multiple/subsequent added assets that are added are queued. AssetLoader can deal with multiple loading threads simultaneously (if passed to the constructor). The number of simultaneous loading processes is limited by the browser though.
 	*/
 	public class AssetLoader extends EventDispatcher {
 	
 		/** Default number of loaders before queueing */
 		private static const DEFAULT_LOADER_COUNT:Number = 1;
 		
-		/** FileData */
+		/** List of objects of type FileData. */
 		private var mWaitingStack:Array = new Array();
-		/** FileData */
+		/** List of objects of type FileData. */
 		private var mLoadingStack:Array = new Array();
-		
-		private var mLoaderCount:int;
-			
+		/** The number of simultaneous loader objects. */
+		private var mLoaderCount:uint;
 		
 		/**
 		Creates a new AssetLoader.
@@ -52,13 +52,12 @@ package org.asaplibrary.util.loader {
 		}
 		
 		/**
-		Load an asset
+		Loads an asset.
 		@param inURL: source url of the file
 		@param inName: (optional) unique identifying name
-		@param inIsVisible: (optional) visibility state of loaded item
 		@sends AssetLoaderEvent#ERROR
 		*/
-		public function loadAsset (inUrl:String, inName:String = "", inIsVisible:Boolean = true) : void {
+		public function loadAsset (inUrl:String, inName:String = "") : void {
 			// Check if url is valid
 			if ((inUrl== null) || (inUrl.length == 0)) {
 				Log.error("loadXML: url is not valid", toString());
@@ -70,7 +69,7 @@ package org.asaplibrary.util.loader {
 				return;
 			}
 
-			var fd:FileData = new FileData(inUrl, inName, inIsVisible);
+			var fd:FileData = new FileData(inUrl, inName);
 			mWaitingStack.push(fd);
 			
 			loadNext();
@@ -80,7 +79,7 @@ package org.asaplibrary.util.loader {
 		Stops loading of all loaders and clears the loading stack.
 		*/
 		public function stopLoadingAll () : void {
-			var i:int, ilen:int = mLoadingStack.length;
+			var i:uint, ilen:uint = mLoadingStack.length;
 			for (i=0; i<ilen; ++i) {
 				var loader:Loader = mLoadingStack[i].loader;
 				loader.close();
@@ -93,7 +92,7 @@ package org.asaplibrary.util.loader {
 		@param inName:	identifying name as passed to {@link #loadAsset}
 		*/
 		public function stopLoadingAsset (inName:String) : void {
-			var i:int, ilen:int = mLoadingStack.length;
+			var i:uint, ilen:uint = mLoadingStack.length;
 			for (i=0; i<ilen; ++i) {
 				if (mLoadingStack[i].name == inName) {
 					var loader:Loader = mLoadingStack[i].loader;
@@ -105,7 +104,36 @@ package org.asaplibrary.util.loader {
 		}
 		
 		/**
-		Load next asset if the waiting stack isn't empty
+		@return The total number of loaded bytes of all working Loader objects.
+		*/
+		public function getTotalBytesLoaded () : uint {
+			return getTotalCount("bytesLoaded");
+		}
+		
+		/**
+		@return The total number of bytesTotal ("the compressed bytes in the entire media file") of all working Loader objects.
+		*/
+		public function getTotalBytesCount () : uint {
+			return getTotalCount("bytesTotal");
+		}
+		
+		/**
+		@param inProperty: the LoaderInfo property; either "bytesLoaded" or "bytesTotal"
+		@return The sum of numbers of this property.
+		*/
+		private function getTotalCount (inProperty:String) : uint {
+			var count:uint = 0;
+			var i:uint, ilen:uint = mLoadingStack.length;
+			for (i=0; i<ilen; ++i) {
+				var loader:Loader = mLoadingStack[i].loader;
+				var info:LoaderInfo = loader.contentLoaderInfo;
+				count += info[inProperty];
+			}
+			return count;
+		}
+		
+		/**
+		Load next asset if the waiting stack is not empty.
 		@sends AssetLoaderEvent#ALL_LOADED
 		*/
 		private function loadNext () : void {
@@ -208,7 +236,7 @@ package org.asaplibrary.util.loader {
 		}
 
 		/**
-		Handle ProgressEvent from Loader
+		Handle ProgressEvent from Loader.
 		@param e: ProgressEvent sent
 		@sends AssetLoaderEvent#PROGRESS
 		*/
@@ -237,8 +265,8 @@ package org.asaplibrary.util.loader {
 		@return The data, or null if none was found.
 		*/
 		private function getDataForLoaderInfo (inInfo:LoaderInfo):FileData {
-			var len:int = mLoadingStack.length;
-			for (var i:int = 0; i < len; i++) {
+			var len:uint = mLoadingStack.length;
+			for (var i:uint = 0; i < len; i++) {
 				var fd:FileData = mLoadingStack[i] as FileData;
 				if (fd.loader.contentLoaderInfo == inInfo) return fd;
 			}
@@ -261,13 +289,11 @@ class FileData {
 	public var loader:Loader;
 	public var url:String;
 	public var name:String;
-	public var isVisible:Boolean;
 	public var bytesTotal:Number;
 	public var bytesLoaded:Number;
 	
-	public function FileData (inURL:String, inName:String, inIsVisible:Boolean) {
+	public function FileData (inURL:String, inName:String) {
 		url = inURL;
 		name = inName;
-		isVisible = inIsVisible;
 	}
 }
