@@ -30,7 +30,7 @@ package org.asaplibrary.util.loader {
 		public function testLoadAsset () : void {
 			var loader:AssetLoader = new AssetLoader();
 			loader.addEventListener(AssetLoaderEvent._EVENT, handleLoaded);
-			loader.loadAsset(IMG_URL_GOOD, "good", false);
+			loader.loadAsset(IMG_URL_GOOD, "good");
 		}
 		
 		/*
@@ -44,21 +44,21 @@ package org.asaplibrary.util.loader {
 		public function testStopLoadingAll () : void {
 			var loader:AssetLoader = new AssetLoader();
 			loader.addEventListener(AssetLoaderEvent._EVENT, handleLoaded);
-			loader.loadAsset(IMG_URL_GOOD, "all", false);
+			loader.loadAsset(IMG_URL_GOOD, "all");
 			loader.stopLoadingAll();
 		}
 		
 		public function testStopAsset () : void {
 			var loader:AssetLoader = new AssetLoader();
 			loader.addEventListener(AssetLoaderEvent._EVENT, handleLoaded);
-			loader.loadAsset(IMG_URL_GOOD, "stop", false);
+			loader.loadAsset(IMG_URL_GOOD, "stop");
 			loader.stopLoadingAsset("stop");
 		}
 		
 		public function testStopAssetWrongName () : void {
 			var loader:AssetLoader = new AssetLoader();
 			loader.addEventListener(AssetLoaderEvent._EVENT, handleLoaded);
-			loader.loadAsset(IMG_URL_GOOD, "wrong", false);
+			loader.loadAsset(IMG_URL_GOOD, "wrong");
 			loader.stopLoadingAsset("xxx");
 		}
 		
