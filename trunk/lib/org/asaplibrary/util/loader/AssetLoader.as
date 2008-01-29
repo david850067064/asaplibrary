@@ -224,7 +224,11 @@ package org.asaplibrary.util.loader {
 				evt.loader = fd.loader;
 				evt.loaderInfo = info;
 				evt.url = fd.url;
-				evt.asset = fd.loader.content;
+				// test url to see if this is an SWF
+				var reSWF:RegExp = /^.*\.swf$/i;
+				var isSWF:Boolean = reSWF.test(evt.url);
+				if (isSWF) evt.asset = fd.loader.content;
+				if (!isSWF) evt.asset = fd.loader;
 			}
 			dispatchEvent(evt);
 			
