@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
+
 	import flash.display.LoaderInfo;	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
@@ -40,15 +41,18 @@ package org.asaplibrary.util.loader {
 		/** Event subtype  sent when there's an error. */
 		public static const ERROR:String = "loadError";
 
-		public var subtype : String;
-		public var name : String;
-		public var totalBytesCount : uint;
-		public var loadedBytesCount : uint;
+		public var subtype:String;
+		public var name:String;
+		public var totalBytesCount:uint;
+		public var loadedBytesCount:uint;
 		public var error:String;
 		public var loader:Loader;
-		public var loaderInfo : LoaderInfo;
+		public var loaderInfo:LoaderInfo;
+		/**
+		The loaded asset. In case of an image: the Loader object; in case of an SWF: the Loader's content object.
+		*/
 		public var asset:DisplayObject;
-		public var url : String;
+		public var url:String;
 
 		/**
 		Creates a new AssetLoaderEvent.
@@ -62,7 +66,7 @@ package org.asaplibrary.util.loader {
 			name = inName;
 		}
 		
-		public override function toString ():String {
+		public override function toString () : String {
 			return ";org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
 		}
 		
