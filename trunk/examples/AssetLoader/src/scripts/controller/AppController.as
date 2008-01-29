@@ -25,7 +25,7 @@
 			"http://www.astro.uio.no/ita/nyheter/HUDF_0304/HUDF_IR_full.jpg",
 			"http://nssdc.gsfc.nasa.gov/planetary/image/earth_night.jpg",
 			"http://www.jpl.nasa.gov/images/earth/arctic/arctic20070515-hi-res.jpg",
-			"http://photojournal.jpl.nasa.gov/jpeg/PIA06141.jpg",
+			"http://photojournal.jpl.nasa.gov/jpeg/PIA06141.jpg"
 		];
 		private var mImageClips:Object;
 		private var mLoader:AssetLoader;
@@ -61,9 +61,9 @@
 		*/
 		private function loadImagesCombined (e:Event) : void {
 			mLoader = new AssetLoader( MULTI_LOADER_COUNT );
-			mLoader.addEventListener( AssetLoaderEvent._EVENT, handleLoaderEvent);
+			mLoader.addEventListener( AssetLoaderEvent._EVENT, handleLoaderEvent );
 			
-			var i:Number, ilen:Number = mImageUrls.length;
+			var i:uint, ilen:uint = mImageUrls.length;
 			for (i=0; i<ilen; ++i) {
 				var image:MovieClip = new MovieClip();
 				tImagesCombined.addChild(image);
@@ -78,7 +78,7 @@
 		Loads images with a AssetLoader for each image.
 		*/
 		private function loadImagesSingle (e:Event) : void {
-			var i:Number, ilen:Number = mImageUrls.length;
+			var i:uint, ilen:uint = mImageUrls.length;
 			for (i=0; i<ilen; ++i) {
 				var image:ui.ProgressImage = new ui.ProgressImage();
 				tImagesSingle.addChild(image);
@@ -108,7 +108,7 @@
 				case AssetLoaderEvent.ERROR:
 					reportError(e.error);
 					break;
-			}	
+			}
 		}
 		
 		private function reportError (inError:String) : void {
