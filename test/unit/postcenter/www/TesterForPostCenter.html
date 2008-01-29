@@ -11,10 +11,9 @@
 <!-- saved from url=(0013)about:internet -->
 <script language="javascript">
 	window.name = "TesterWindow";
-	var counter = 0;
-	function updateTestContent (inCounter) {
+	function updateTestContent (inContent) {
 		var testcontentElem = document.getElementById("testcontent");
-		testcontentElem.innerHTML = "Counter:" + inCounter;
+		testcontentElem.innerHTML += "Received:\"" + inContent + "\"<br />";
 	}
 	function setContent (inVar) {
 		updateTestContent(inVar);
