@@ -1,6 +1,7 @@
 ﻿package org.asaplibrary.util.postcenter {
 	
 	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	import flash.system.*;
 	import flash.external.*;
 	import asunit.framework.TestCase;
@@ -44,6 +45,7 @@
 		List tests that should be run first - before any function starting with 'test'.
 		*/
 		public override function run() : void {
+			doTestLoopURLRequest();
 			doTestSendDefaultWindow();
 			doTestSendDifferentWindows();
 			doTestSendRequests();
@@ -61,6 +63,20 @@
 			assertTrue("ActionQueueTestCase sRequestsSent", sRequestsSent == EXPECTED_REQUESTS_SENT);
 			
 			assertTrue("ActionQueueTestCase sAllRequestsSent", sAllRequestsSent == EXPECTED_ALL_REQUESTS_SENT);
+		}
+		
+		/**
+		Tests sending URLRequests in a loop without using PostCenter.
+		*/
+		private function doTestLoopURLRequest () : void {
+			var items:uint = 10;
+			var i:uint;
+			for (i=0; i<items; ++i) {
+				var m:String = constructMessage("Without postcenter (" + items + " calls) -- " + (i+1));
+				trace("m=" + m);
+				var r:URLRequest = new URLRequest(m);
+				navigateToURL(r, "_self");
+			}
 		}
 		
 		private function doTestSendDefaultWindow () : void {
