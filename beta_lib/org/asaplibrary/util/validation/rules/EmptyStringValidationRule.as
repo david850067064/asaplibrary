@@ -15,9 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.lostboys.util.validation.rules {
-	import com.lostboys.util.validation.IValidatable;
-	import com.lostboys.util.validation.rules.RegExpValidationRule;	
+package org.asaplibrary.util.validation.rules {
+	import org.asaplibrary.util.validation.IValidatable;	
 
 	/**
 	 * @author stephan.bezoen

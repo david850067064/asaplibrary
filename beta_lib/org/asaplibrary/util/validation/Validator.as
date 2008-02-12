@@ -15,9 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.lostboys.util.validation {
-	import yalog.Yalog;	
-	
+package org.asaplibrary.util.validation {
+
 	/**
 	 * @author stephan.bezoen
 	 */

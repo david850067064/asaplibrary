@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.lostboys.ui.form.focus {
+package org.asaplibrary.ui.form.focus {
 
 	/**
 	 * @author stephan.bezoen
