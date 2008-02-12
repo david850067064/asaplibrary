@@ -16,8 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
-	
 	import flash.display.MovieClip;
+	import flash.display.Stage;
 	
 	import org.asaplibrary.management.movie.MovieManager;	
 
@@ -31,6 +31,8 @@ package org.asaplibrary.management.movie {
 	The preferred mode of communication with the LocalController is through events, to avoid having to know the actual specific interface.
 	*/
 	public class LocalController extends MovieClip implements ILocalController {
+		/** Provide global access to the one and only stage */
+		public static var globalStage : Stage;
 
 		private var mName:String = "";
 		private var mIsStandalone:Boolean;
@@ -43,6 +45,9 @@ package org.asaplibrary.management.movie {
 			
 			// initialize standalone flag
 			mIsStandalone = ((stage != null) && (parent == stage));
+
+			// put the stage property into global space once if defined 
+			if ((stage != null) && (globalStage == null)) globalStage = stage;
 			
 			// add to moviemanager if standalone
 			if (isStandalone()) {
