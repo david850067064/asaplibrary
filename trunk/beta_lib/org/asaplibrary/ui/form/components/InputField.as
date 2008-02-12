@@ -15,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.lostboys.ui.form.components {
-	import flash.events.Event;	
+package org.asaplibrary.ui.form.components {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.text.TextField;
 	
-	import com.lostboys.ui.form.focus.IFocusable;
-	import com.lostboys.util.validation.IValidatable;
-	import com.lostboys.util.validation.IHasError;	
+	import org.asaplibrary.ui.form.focus.IFocusable;
+	import org.asaplibrary.util.validation.IHasError;
+	import org.asaplibrary.util.validation.IValidatable;		
 
 	/**
 	 * @author stephan.bezoen
