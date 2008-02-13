@@ -20,7 +20,13 @@ package org.asaplibrary.util.validation.rules {
 	import org.asaplibrary.util.validation.IValidationRule;	
 
 	/**
-	 * @author stephan.bezoen
+	 * IValidationRule implementation that checks whether or not a string matches a regular expression. Use this with the Validator class and IValidatable implementations that return a String.
+	 * @example
+	 * <code>
+	 	mValidator = new Validator();
+	 	mValidator.addValidationRule(new RegExpValidationRule(tName, ".+"));
+	   </code>
+	 * Be aware that if backslashes are used ("\"), they have to be put in double. P.e.the regexp for email validation becomes: "(\\w|[_.\\-])+@((\\w|-)+\\.)+\\w{2,4}+".
 	 */
 	public class RegExpValidationRule implements IValidationRule {
 		private var mTarget : IValidatable;
@@ -30,7 +36,7 @@ package org.asaplibrary.util.validation.rules {
 		/**
 		 * Constructor
 		 * @param inTarget: IValidatable object
-		 * @param inExpression: regular expression string to validate with
+		 * @param inExpression: regular expression string to validate with. NB: double up any backslashes.
 		 * @param inValidIfMatch: if true, value of IValidatable is considered valid if it matches the regular expression; otherwise it is considered invalid
 		 */
 		public function RegExpValidationRule (inTarget : IValidatable, inExpression: String, inValidIfMatch:Boolean = true) : void {
@@ -48,6 +54,9 @@ package org.asaplibrary.util.validation.rules {
 			return mIsValidIfMatch ? testResult : !testResult;
 		}
 		
+		/**
+		 * @return the target for validation
+		 */
 		public function getTarget() : IValidatable {
 			return mTarget;
 		}

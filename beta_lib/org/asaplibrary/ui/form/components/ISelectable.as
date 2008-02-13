@@ -18,7 +18,7 @@ limitations under the License.
 package org.asaplibrary.ui.form.components {
 
 	/**
-	 * @author stephan.bezoen
+	 * Interface for selectable UI components, such as a checkbox
 	 */
 	public interface ISelectable {
 		function getIsSelected () : Boolean;

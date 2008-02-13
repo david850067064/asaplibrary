@@ -18,10 +18,16 @@ limitations under the License.
 package org.asaplibrary.util.validation {
 
 	/**
-	 * @author stephan.bezoen
+	 * Interface to be implemented by UI components that can have an error state
 	 */
 	public interface IHasError {
+		/**
+		 * Show the error state
+		 */
 		function showError () : void;
+		/**
+		 * Hide the error state
+		 */
 		function hideError () : void;
 	}
 }

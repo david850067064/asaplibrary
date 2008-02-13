@@ -19,7 +19,7 @@ package org.asaplibrary.util.validation.rules {
 	import org.asaplibrary.util.validation.IValidatable;	
 
 	/**
-	 * @author stephan.bezoen
+	 * Validation rule to check for a valid email address. This validation rule will return <code>false</code> for <code>isValid()</code> if the return value of <code>inTarget.getValue()</code> is an invalid email address.
 	 */
 	public class EmailValidationRule extends RegExpValidationRule {
 		public function EmailValidationRule(inTarget : IValidatable) {

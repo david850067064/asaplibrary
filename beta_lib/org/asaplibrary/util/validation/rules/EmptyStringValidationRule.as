@@ -19,7 +19,7 @@ package org.asaplibrary.util.validation.rules {
 	import org.asaplibrary.util.validation.IValidatable;	
 
 	/**
-	 * @author stephan.bezoen
+	 * Validation rule to check for empty strings. This validation rule will return <code>false</code> for <code>isValid()</code> if the return value of <code>inTarget.getValue()</code> is an empty String
 	 */
 	public class EmptyStringValidationRule extends RegExpValidationRule {
 		public function EmptyStringValidationRule(inTarget : IValidatable) {

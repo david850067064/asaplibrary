@@ -18,11 +18,12 @@ limitations under the License.
 package org.asaplibrary.util.validation {
 
 	/**
-	 * @author stephan.bezoen
+	 * Interface to be implemented by UI components in order to allow validation on them
 	 */
 	public interface IValidatable {
 		/**
 		 * Return the value to be validated
+		 * It is expected that the IValidationRule implementation that validates this, knows what to cast the value to
 		 */
 		function getValue () : Object;
 	}

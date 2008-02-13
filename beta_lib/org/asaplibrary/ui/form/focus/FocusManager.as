@@ -25,7 +25,20 @@ package org.asaplibrary.ui.form.focus {
 	import org.asaplibrary.util.debug.Log;	
 
 	/**
-	 * @author stephan.bezoen
+	 * Class for managing focus on UI components that implement IFocusable.
+	 * Use of this class overrides default tab button behaviour. Only UI components added to an instance of this class can get focus through use of the tab key. Consecutive presses on the TAB key will cycle through the list of items in order of addition, unless a specific tab index has been set on any of them. With SHIFT-TAB the list is cycled in reversed order.
+	 * @example
+	 * Suppose two objects of type InputField have been defined on the timeline, with instance names "tName" & "tEmail". Use the following code to allow focus management on them:
+	 * <code>
+			mFocusManager = new FocusManager(LocalController.globalStage);
+			mFocusManager.addElement(tName);
+			mFocusManager.addElement(tEmail);
+	   </code>
+	 * Note that a valid stage object must be passed to the FocusManager constructor in order for the tab key to be detected.
+	 * To set focus to the email field, use the following code:
+	 * <code>
+	 		mFocusManager.setFocus(tEmail);
+	   </code>
 	 */
 	public class FocusManager extends EventDispatcher {
 		private var mFocusIndex : Number;
@@ -33,6 +46,7 @@ package org.asaplibrary.ui.form.focus {
 
 		/**
 		 * Constructor
+		 * @param inStage: a valid Stage object. Use LocalController.globalStage for a Stage object that is always valid. 
 		 */
 		public function FocusManager (inStage:Stage) {
 			super();
@@ -42,7 +56,7 @@ package org.asaplibrary.ui.form.focus {
 			// check if stage exists, we need this for key handling
 			if (!inStage) {
 				Log.error("FocusManager: stage is not defined", toString());
-				return;
+				throw new Error("stage is not defined.");
 			}
 			
 			// listen to key events & key focus events
@@ -61,13 +75,6 @@ package org.asaplibrary.ui.form.focus {
 		/**
 		Sets the focus to a specific element.
 		@param inItem: previously added item
-		@usage
-		<code>
-		var formFocus:FocusManager = new FocusManager(stage);
-		formFocus.addElement(to_name, 0);
-		formFocus.addElement(to_email, 1);
-		formFocus.setFocus(to_name);
-		</code>
 		*/
 		public function setFocus (inItem : IFocusable) : void {
 			var index:Number = mFocusList.indexOf(inItem);
@@ -75,22 +82,16 @@ package org.asaplibrary.ui.form.focus {
 		}
 	
 		/**
-		Set the TAB index for an interface element.
+		Add an item for focus management; optionally set the tab index for the item.
 		@param inItem: item to be used in focus management
 		@param inPosition: zero-based, optional. If ommitted (or set to -1), it will be added to the end of the list. If an element was already found at the position specifed, it will be inserted prior to the existing element
 		@return Boolean indicating if addition was successfull.
-		@usage
-		<code>
-		formFocus.addElement(to_name, 0);
-		formFocus.addElement(to_email, 1);
-		formFocus.addElement(to_city, 2);
-		</code>
 		*/
 		public function addElement (inItem : IFocusable, inPosition:int = -1) : Boolean {
 			// check if element exists
 			if (inItem == null) {
 				Log.error("addElement: No element specified for addition", toString());
-				return false;
+				throw new Error("No element specified for addition");
 			}
 
 			// check if already added	

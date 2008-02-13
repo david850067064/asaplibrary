@@ -18,7 +18,24 @@ limitations under the License.
 package org.asaplibrary.util.validation {
 
 	/**
-	 * @author stephan.bezoen
+	 * Class for validation of user input values in UI components.
+	 * UI components must implement IValidatable, and be added for validation through implementations of IValidationRule.
+	 * 
+	 * @example
+	 * In a form, suppose two objects of type InputField are defined: tName & tEmail. The class InputField implements Ivalidatable.
+	 * Add the following code to allow validation on those objects.
+	 * <code>
+	  		mValidator = new Validator();
+			mValidator.addValidationRule(new EmptyStringValidationRule(tName));
+			mValidator.addValidationRule(new EmailValidationRule(tEmail));
+		</code>
+	 * 	This code sets a validation rule on tName to check for an empty string, and on tEmail to check for a valid email address.
+	 * 	To perform the actual validation, use this:
+	 * 	<code>
+	 		var errors:Array = mValidator.validate();
+	 	</code>
+	 * If either of the validation rules returns false, it will be added to the list of <code>errors</code>. This list will have a length of 0 if no errors were found.
+	 * Run through the list of errors to get the rule(s) that returned false. The UI component itself can then be accessed through the <code>getTarget()</code> function of IValidatable.
 	 */
 	public class Validator {
 		/** Objects of type IValidationRule */
@@ -48,7 +65,7 @@ package org.asaplibrary.util.validation {
 		}
 		
 		/**
-		 *
+		 * Empty the list of validation rules
 		 */
 		public function clear () : void {
 			mRules = new Array();

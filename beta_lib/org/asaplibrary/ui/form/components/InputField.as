@@ -27,7 +27,14 @@ package org.asaplibrary.ui.form.components {
 	import org.asaplibrary.util.validation.IValidatable;		
 
 	/**
-	 * @author stephan.bezoen
+	 * UI Component class for text input.
+	 * This class provides text input with validation through Validator, focus through FocusManager, and has an error state.
+	 * The following requirements must be met to use this class:
+	 * <ul>
+	 * 		<li>This class must be linked to a library item of type MovieClip</li>
+	 * 		<li>The library item has a TextField child set to input, with the instance name "tInput"</li>
+	 * 		<li>Optionally, the library item has a MovieClip child with instance name "tError", to be used for displaying an error state</li>
+	 * 	</ul>
 	 */
 	public class InputField extends MovieClip implements IFocusable, IValidatable, IHasError {
 		public var tInput : TextField;
@@ -45,7 +52,7 @@ package org.asaplibrary.ui.form.components {
 			tInput.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn);
 			tInput.addEventListener(FocusEvent.FOCUS_OUT, handleFocusOut);
 			
-			tError.visible = false;
+			if (tError) tError.visible = false;
 		}
 		
 		/**
@@ -102,11 +109,11 @@ package org.asaplibrary.ui.form.components {
 		}
 
 		public function showError() : void {
-			tError.visible = true;
+			if (tError) tError.visible = true;
 		}
 		
 		public function hideError() : void {
-			tError.visible = false;
+			if (tError) tError.visible = false;
 		}
 
 		/**

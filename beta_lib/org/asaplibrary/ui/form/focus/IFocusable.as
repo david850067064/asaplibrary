@@ -18,7 +18,7 @@ limitations under the License.
 package org.asaplibrary.ui.form.focus {
 
 	/**
-	 * @author stephan.bezoen
+	 * Interface to be implemented by UI components in order to be added to the FocusManager for focus management.
 	 */
 	public interface IFocusable {
 		function setFocus () : void;

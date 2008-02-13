@@ -19,7 +19,20 @@ package org.asaplibrary.ui.form.components {
 	import flash.events.MouseEvent;			
 
 	/**
-	 * @author stephan.bezoen
+	 * Class for implementing radio button groups.
+	 * @example
+	 * Assume 3 objects of type SimpleCheckBox are placed on the stage, with instance names "tRadio1", "tRadio2", "tRadio3"
+	 * <code>
+	 		var rg:RadioGroup = new RadioGroup();
+	 		rg.addButton(tRadio1);
+	 		rg.addButton(tRadio2);
+	 		rg.addButton(tRadio3);
+	 		rg.selectButton(tRadio1);
+	   </code>
+	   To get the currently selected button, use this:
+	   <code>
+	   		var currentButton:SimpleCheckBox = rg.getSelection() as SimpleCheckBox;
+	   </code>
 	 */
 	public class RadioGroup {
 		
