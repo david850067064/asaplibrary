@@ -33,6 +33,7 @@ package ui {
 		private var mIsAutoValidate : Boolean;
 		private var mFields : Array;
 		private var mService : UserFormService;
+		private var mFocusManager : FocusManager;
 
 		public function UserForm (inContainer:MovieClip) {
 			mContainer = inContainer;
@@ -53,6 +54,8 @@ package ui {
 			tFirstName.text = "";
 			tLastName.text = "";
 			tEmail.text = "";
+			
+			mFocusManager.setFocus(tFirstName);
 		}
 
 		private function initUI() : void {
@@ -66,10 +69,10 @@ package ui {
 			mFields = [tFirstName, tLastName, tEmail];
 			
 			// focus management
-			var fm : FocusManager = new FocusManager(LocalController.globalStage);
-			fm.addElement(tFirstName);
-			fm.addElement(tLastName);
-			fm.addElement(tEmail);
+			mFocusManager = new FocusManager(LocalController.globalStage);
+			mFocusManager.addElement(tFirstName);
+			mFocusManager.addElement(tLastName);
+			mFocusManager.addElement(tEmail);
 			
 			// validation
 			mValidator = new Validator();

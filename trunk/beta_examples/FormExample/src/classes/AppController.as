@@ -40,6 +40,8 @@ package {
 
 		private function createUI() : void {
 			var dob:DisplayObject = AssetManager.getInstance().instantiate("Form");
+			dob.x = (stage.stageWidth - dob.width) / 2;
+			dob.y = (stage.stageHeight - dob.height) / 2;
 			addChild(dob);
 			
 			var form:UserForm = new UserForm(dob as MovieClip);
