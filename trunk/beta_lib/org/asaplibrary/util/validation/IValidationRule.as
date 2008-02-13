@@ -18,13 +18,14 @@ limitations under the License.
 package org.asaplibrary.util.validation {
 
 	/**
-	 * @author stephan.bezoen
+	 * Interface to be implemented in order to be used by the Validator class, for validation of IValidatable objects
 	 */
 	public interface IValidationRule {
 		/**
-		 * @return true if value of IValidatable target is valid according to set rule
+		 * @return true if value of IValidatable target is valid according to the rule
 		 */
 		function isValid () : Boolean;
+		
 		/**
 		 * @return the target for validation
 		 */

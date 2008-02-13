@@ -19,7 +19,7 @@ package org.asaplibrary.ui.form.focus {
 	import flash.events.Event;				
 
 	/**
-	 * @author stephan.bezoen
+	 * Event sent by FocusManager when a new item gets focus.
 	 */
 	public class FocusManagerEvent extends Event {
 		public static const FOCUS_CHANGE:String = "focusChange";
