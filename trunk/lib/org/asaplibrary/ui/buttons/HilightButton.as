@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
-	
 	import flash.events.Event;
 	
 	import org.asaplibrary.ui.buttons.*;
@@ -25,7 +24,6 @@ package org.asaplibrary.ui.buttons {
 	/**
 	Button with highlight behavior.
 	The button timeline is expected to have 4 labels: "up", "over", "on" (maintained over state) and "out".
-	The first frame (labeled "up") has a <code>stop()</code> command.
 	A hitarea clip named "tHitarea" is recommended. Because HilightButton inherits from BaseButton, the hitarea clip is automatically hidden.
 	
 	Frames scenario:
@@ -50,6 +48,8 @@ package org.asaplibrary.ui.buttons {
 			
 			mBehavior = new DelayButtonBehavior(this);
 			mBehavior.addEventListener(ButtonBehaviorEvent._EVENT, update);
+			
+			stop();
 		}
 		
 		/**
@@ -72,7 +72,7 @@ package org.asaplibrary.ui.buttons {
 		*/
 		public function hilight (inDoAnimate:Boolean = false) : void {
 			if (inDoAnimate) drawOver();
-			if (!inDoAnimate) drawOn();
+			else drawOn();
 		}
 		
 		/**
@@ -81,7 +81,7 @@ package org.asaplibrary.ui.buttons {
 		 */
 		public function unHilight (inDoAnimate:Boolean = false) : void {
 			if (inDoAnimate) drawOut();
-			if (!inDoAnimate) drawUp();
+			else drawUp();
 		}
 		
 		/**
@@ -90,8 +90,8 @@ package org.asaplibrary.ui.buttons {
 		*/
 		protected function update (e:ButtonBehaviorEvent) : void {
 			if (e.state == ButtonStates.ADDED) init();
-			if (e.state == ButtonStates.OVER) drawOver();
-			if (e.state == ButtonStates.OUT) drawOut();
+			else if (e.state == ButtonStates.OVER) drawOver();
+			else if (e.state == ButtonStates.OUT) drawOut();
 		}
 		
 		/**
@@ -123,6 +123,7 @@ package org.asaplibrary.ui.buttons {
 
 			mAnimatingOver = true;
 			mDoOutAnimation = false;
+			
 			FramePulse.addEnterFrameListener(checkAnimation);
 		}
 		
@@ -131,11 +132,14 @@ package org.asaplibrary.ui.buttons {
 		*/
 		protected function drawOut () : void {
 			if (mAnimatingOver) mDoOutAnimation = true;
-			if (!mAnimatingOver) gotoAndPlay(LABEL_OUT);
+			else {
+				gotoAndPlay(LABEL_OUT);
+				FramePulse.addEnterFrameListener(checkAnimation);
+			}
 		}
 		
 		/**
-		Continually checks if out animation has finished. Stops at frame "on".
+		Continually checks if animation has finished. Stops at frame "on" if mouse is still on button, or at frame "up" if not.
 		*/
 		protected function checkAnimation (e:Event) : void {
 			if (currentLabel == LABEL_ON) {
@@ -143,7 +147,10 @@ package org.asaplibrary.ui.buttons {
 				FramePulse.removeEnterFrameListener(checkAnimation);
 
 				if (mDoOutAnimation) drawOut();
-				if (!mDoOutAnimation) stop();
+				else stop();
+			} else if (currentLabel == LABEL_UP) {
+				FramePulse.removeEnterFrameListener(checkAnimation);
+				stop();
 			}
 		}
 		
