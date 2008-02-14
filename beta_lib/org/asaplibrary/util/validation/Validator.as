@@ -71,6 +71,18 @@ package org.asaplibrary.util.validation {
 			mRules = new Array();
 		}
 		
+		/**
+		 * @return all targets for validation, objects of type IValidatable
+		 */
+		public function getTargets () : Array {
+			var a:Array = new Array();
+			var leni : uint = mRules.length;
+			for (var i:uint = 0; i < leni; i++) {
+				a.push((mRules[i] as IValidationRule).getTarget());
+			}
+			return a;
+		}
+		
 		public function toString():String {
 			return "; com.lostboys.util.validation.Validator ";
 		}

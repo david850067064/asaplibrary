@@ -28,8 +28,7 @@ package org.asaplibrary.util.validation.rules {
 	   </code>
 	 * Be aware that if backslashes are used ("\"), they have to be put in double. P.e.the regexp for email validation becomes: "(\\w|[_.\\-])+@((\\w|-)+\\.)+\\w{2,4}+".
 	 */
-	public class RegExpValidationRule implements IValidationRule {
-		private var mTarget : IValidatable;
+	public class RegExpValidationRule extends ValidationRuleBase implements IValidationRule {
 		private var mRegExp : RegExp;
 		private var mIsValidIfMatch : Boolean;
 
@@ -40,7 +39,8 @@ package org.asaplibrary.util.validation.rules {
 		 * @param inValidIfMatch: if true, value of IValidatable is considered valid if it matches the regular expression; otherwise it is considered invalid
 		 */
 		public function RegExpValidationRule (inTarget : IValidatable, inExpression: String, inValidIfMatch:Boolean = true) : void {
-			mTarget = inTarget;
+			super(inTarget);
+			
 			mRegExp = new RegExp(inExpression, "");
 			mIsValidIfMatch = inValidIfMatch;
 		}
@@ -52,17 +52,6 @@ package org.asaplibrary.util.validation.rules {
 			var value:String = mTarget.getValue() as String;
 			var testResult:Boolean = mRegExp.test(value);
 			return mIsValidIfMatch ? testResult : !testResult;
-		}
-		
-		/**
-		 * @return the target for validation
-		 */
-		public function getTarget() : IValidatable {
-			return mTarget;
-		}
-		
-		public function toString():String {
-			return "; com.lostboys.util.validation.RegExpValidationRule ";
 		}
 	}
 }
