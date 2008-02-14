@@ -8,13 +8,17 @@ package ui {
 	import org.asaplibrary.management.movie.LocalController;
 	import org.asaplibrary.ui.buttons.HilightButton;
 	import org.asaplibrary.ui.form.components.InputField;
+	import org.asaplibrary.ui.form.components.RadioGroup;
+	import org.asaplibrary.ui.form.components.SimpleCheckBox;
 	import org.asaplibrary.ui.form.focus.FocusManager;
 	import org.asaplibrary.util.debug.Log;
 	import org.asaplibrary.util.validation.IHasError;
 	import org.asaplibrary.util.validation.IValidationRule;
 	import org.asaplibrary.util.validation.Validator;
+	import org.asaplibrary.util.validation.rules.BooleanValidationRule;
 	import org.asaplibrary.util.validation.rules.EmailValidationRule;
 	import org.asaplibrary.util.validation.rules.EmptyStringValidationRule;
+	import org.asaplibrary.util.validation.rules.NullValidationRule;
 	
 	import data.UserFormService;	
 
@@ -27,13 +31,20 @@ package ui {
 		private var tEmail : InputField;
 		private var tSubmit : HilightButton;
 		private var tError : TextField;
+		private var tMale : SimpleCheckBox;
+		private var tFemale : SimpleCheckBox;
+		private var tTerms : SimpleCheckBox;
 
 		private var mContainer : MovieClip;
 		private var mValidator : Validator;
 		private var mIsAutoValidate : Boolean;
+
+		/** objects of type InputField */
 		private var mFields : Array;
+
 		private var mService : UserFormService;
 		private var mFocusManager : FocusManager;
+		private var mGenderGroup : RadioGroup;
 
 		public function UserForm (inContainer:MovieClip) {
 			mContainer = inContainer;
@@ -54,6 +65,8 @@ package ui {
 			tFirstName.text = "";
 			tLastName.text = "";
 			tEmail.text = "";
+			mGenderGroup.selectButton(null);
+			tTerms.setIsSelected(false);
 			
 			mFocusManager.setFocus(tFirstName);
 		}
@@ -65,9 +78,18 @@ package ui {
 			tEmail = mContainer.tEmail;
 			tSubmit = mContainer.tSubmit;
 			tError = mContainer.tError;
+			tMale = mContainer.tMale;
+			tFemale = mContainer.tFemale;
+			tTerms = mContainer.tTerms;
 			
+			// create radio group for gender
+			mGenderGroup = new RadioGroup();
+			mGenderGroup.addButton(tMale);
+			mGenderGroup.addButton(tFemale);
+			
+			// aggregate all input fields
 			mFields = [tFirstName, tLastName, tEmail];
-			
+
 			// focus management
 			mFocusManager = new FocusManager(LocalController.globalStage);
 			mFocusManager.addElement(tFirstName);
@@ -79,14 +101,18 @@ package ui {
 			mValidator.addValidationRule(new EmptyStringValidationRule(tFirstName));
 			mValidator.addValidationRule(new EmptyStringValidationRule(tLastName));
 			mValidator.addValidationRule(new EmailValidationRule(tEmail));
+			mValidator.addValidationRule(new NullValidationRule(mGenderGroup));
+			mValidator.addValidationRule(new BooleanValidationRule(tTerms));
 			
 			// event handling
-			tSubmit.addEventListener(MouseEvent.CLICK, handleSubmit);
-			
 			var leni : uint = mFields.length;
 			for (var i:uint = 0; i < leni; i++) {
 				(mFields[i] as InputField).addEventListener(Event.CHANGE, handleInputChange);
 			}
+			mGenderGroup.addEventListener(Event.CHANGE, handleInputChange);
+			tTerms.addSelectListener(handleInputChange);
+
+			tSubmit.addEventListener(MouseEvent.CLICK, handleSubmit);
 			
 			reset();
 		}
@@ -122,7 +148,12 @@ package ui {
 			o.firstname = tFirstName.text;
 			o.lastname = tLastName.text;
 			o.email = tEmail.text;
+			o.gender = (mGenderGroup.getSelection() == tMale) ? "m" : "f";
 			
+			Log.debug("Posting form with following data:", toString());
+			for (var s:String in o) {
+				Log.debug("\t" + s + " = " + o[s], toString());
+			}
 			mService.postUserForm(o);
 		}
 
@@ -135,6 +166,8 @@ package ui {
 			
 			if (e.subtype != ServiceEvent.COMPLETE) return;
 			
+			reset();
+			
 			showError("All went well.");
 		}
 		
@@ -144,9 +177,13 @@ package ui {
 		}
 
 		private function clearErrors() : void {
-			var leni : uint = mFields.length;
+			var targets:Array = mValidator.getTargets();
+			
+			var leni : uint = targets.length;
 			for (var i:uint = 0; i < leni; i++) {
-				(mFields[i] as IHasError).hideError();
+				// treat target as IHasError, despite the fact that they were added as IValidatable
+				var iha : IHasError = targets[i];
+				if (iha) iha.hideError();
 			}
 			
 			tError.visible = false;
