@@ -23,6 +23,8 @@ package org.asaplibrary.ui.form.components {
 	public interface ISelectable {
 		function getIsSelected () : Boolean;
 		function setIsSelected (inSelected:Boolean) : void;
+		function getIsEnabled () : Boolean;
+		function setIsEnabled (inEnabled:Boolean) : void;
 		function addSelectListener (inHandler:Function) : void;
 	}
 }
