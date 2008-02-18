@@ -39,7 +39,7 @@ package org.asaplibrary.ui.form.components {
 			super();
 			
 			tV.visible = false;
-			tError.visible = false;
+			if (tError) tError.visible = false;
 			
 			tabEnabled = false;
 			
@@ -49,14 +49,14 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * @return true if button is selected, otherwise false
 		 */
-		public function getIsSelected () : Boolean {
+		public function isSelected () : Boolean {
 			return mIsSelected;
 		}
 		
 		/**
 		 * Set selection state
 		 */
-		public function setIsSelected (inSelected:Boolean) : void {
+		public function setSelected (inSelected:Boolean) : void {
 			mIsSelected = inSelected;
 			
 			tV.visible = mIsSelected;
@@ -65,14 +65,14 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 *
 		 */
-		public function setIsEnabled (inEnabled:Boolean) : void {
+		public function setEnabled (inEnabled:Boolean) : void {
 			mouseEnabled = inEnabled;
 		}
 		
 		/**
 		 *
 		 */
-		public function getIsEnabled () : Boolean {
+		public function isEnabled () : Boolean {
 			return mouseEnabled;
 		}
 		
@@ -100,8 +100,8 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Return the value to be validated
 		 */
-		public function getValue() : Object {
-			return getIsSelected();
+		public function getValue() : * {
+			return isSelected();
 		}		
 
 		private function handleClick(event : MouseEvent) : void {

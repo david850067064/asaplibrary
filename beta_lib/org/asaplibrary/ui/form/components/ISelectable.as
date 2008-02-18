@@ -21,10 +21,10 @@ package org.asaplibrary.ui.form.components {
 	 * Interface for selectable UI components, such as a checkbox
 	 */
 	public interface ISelectable {
-		function getIsSelected () : Boolean;
-		function setIsSelected (inSelected:Boolean) : void;
-		function getIsEnabled () : Boolean;
-		function setIsEnabled (inEnabled:Boolean) : void;
+		function isSelected () : Boolean;
+		function setSelected (inSelected:Boolean) : void;
+		function isEnabled () : Boolean;
+		function setEnabled (inEnabled:Boolean) : void;
 		function addSelectListener (inHandler:Function) : void;
 	}
 }

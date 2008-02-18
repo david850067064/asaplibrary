@@ -66,15 +66,15 @@ package org.asaplibrary.ui.form.components {
 		 */
 		public function selectButton (inButton : ISelectable) : void {
 			if (mCurrentSelectedButton) {
-				mCurrentSelectedButton.setIsSelected(false);
-				mCurrentSelectedButton.setIsEnabled(true);
+				mCurrentSelectedButton.setSelected(false);
+				mCurrentSelectedButton.setEnabled(true);
 			}
 			
 			mCurrentSelectedButton = inButton;
 			
 			if (mCurrentSelectedButton) {
-				mCurrentSelectedButton.setIsSelected(true);
-				mCurrentSelectedButton.setIsEnabled(false);
+				mCurrentSelectedButton.setSelected(true);
+				mCurrentSelectedButton.setEnabled(false);
 			}
 		}
 		
@@ -88,7 +88,7 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Return the selection for validation
 		 */
-		public function getValue() : Object {
+		public function getValue() : * {
 			return getSelection();
 		}
 
