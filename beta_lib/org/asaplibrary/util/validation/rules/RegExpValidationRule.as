@@ -29,19 +29,19 @@ package org.asaplibrary.util.validation.rules {
 	 * Be aware that if backslashes are used ("\"), they have to be put in double. P.e.the regexp for email validation becomes: "(\\w|[_.\\-])+@((\\w|-)+\\.)+\\w{2,4}+".
 	 */
 	public class RegExpValidationRule extends ValidationRuleBase implements IValidationRule {
-		private var mRegExp : RegExp;
+		protected var mRegExp : RegExp;
 		private var mIsValidIfMatch : Boolean;
 
 		/**
 		 * Constructor
 		 * @param inTarget: IValidatable object
-		 * @param inExpression: regular expression string to validate with. NB: double up any backslashes.
+		 * @param inExpression: regular expression to validate with.
 		 * @param inValidIfMatch: if true, value of IValidatable is considered valid if it matches the regular expression; otherwise it is considered invalid
 		 */
-		public function RegExpValidationRule (inTarget : IValidatable, inExpression: String, inValidIfMatch:Boolean = true) : void {
+		public function RegExpValidationRule (inTarget : IValidatable, inExpression: RegExp = null, inValidIfMatch:Boolean = true) : void {
 			super(inTarget);
 			
-			mRegExp = new RegExp(inExpression, "");
+			mRegExp = inExpression;
 			mIsValidIfMatch = inValidIfMatch;
 		}
 
