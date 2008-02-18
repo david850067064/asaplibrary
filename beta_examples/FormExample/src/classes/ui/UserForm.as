@@ -66,7 +66,7 @@ package ui {
 			tLastName.text = "";
 			tEmail.text = "";
 			mGenderGroup.selectButton(null);
-			tTerms.setIsSelected(false);
+			tTerms.setSelected(false);
 			
 			mFocusManager.setFocus(tFirstName);
 		}
@@ -149,6 +149,7 @@ package ui {
 			o.lastname = tLastName.text;
 			o.email = tEmail.text;
 			o.gender = (mGenderGroup.getSelection() == tMale) ? "m" : "f";
+			o.agreetoterms = tTerms.isSelected() ? "1" : "0";
 			
 			Log.debug("Posting form with following data:", toString());
 			for (var s:String in o) {
