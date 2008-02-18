@@ -104,7 +104,7 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Return the value to be validated
 		 */
-		public function getValue() : Object {
+		public function getValue() : * {
 			return tInput.text;
 		}
 

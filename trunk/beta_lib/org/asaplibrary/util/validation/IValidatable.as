@@ -25,6 +25,6 @@ package org.asaplibrary.util.validation {
 		 * Return the value to be validated
 		 * It is expected that the IValidationRule implementation that validates this, knows what to cast the value to
 		 */
-		function getValue () : Object;
+		function getValue () : *;
 	}
 }
