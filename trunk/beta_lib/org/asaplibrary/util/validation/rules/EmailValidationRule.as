@@ -23,7 +23,9 @@ package org.asaplibrary.util.validation.rules {
 	 */
 	public class EmailValidationRule extends RegExpValidationRule {
 		public function EmailValidationRule(inTarget : IValidatable) {
-			super(inTarget, "(\\w|[_.\\-])+@((\\w|-)+\\.)+\\w{2,4}+");
+			super(inTarget);
+			
+			mRegExp = /(\w|[_.\-])+@((\w|-)+\.)+\w{2,4}+/;
 		}
 	}
 }
