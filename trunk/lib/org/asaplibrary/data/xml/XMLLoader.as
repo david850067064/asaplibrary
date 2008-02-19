@@ -147,8 +147,14 @@ package org.asaplibrary.data.xml {
 				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name);
 				event.error = errorEvent.text;
 			} else {
-				// notify we're done loading this xml
-				event = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data));
+				try {
+					// notify we're done loading this xml
+					event = new XMLLoaderEvent(XMLLoaderEvent.COMPLETE, xld.name, new XML(loader.data));
+				} catch (error:Error) {
+					Log.error("An error has occurred : " + error.message, toString());
+					event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name, null);
+					event.error = error.message;
+				}
 			}
 			dispatchEvent(event);
 			
