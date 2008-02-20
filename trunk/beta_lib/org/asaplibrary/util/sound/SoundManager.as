@@ -20,9 +20,11 @@ package org.asaplibrary.util.sound {
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
+	import flash.net.SharedObject;
 	import flash.net.URLRequest;
 	
-	import org.asaplibrary.util.debug.Log;	
+	import org.asaplibrary.ui.form.components.ISelectable;
+	import org.asaplibrary.util.debug.Log;		
 
 	/**
 	 * Class for managing sounds in an application.
@@ -44,8 +46,9 @@ package org.asaplibrary.util.sound {
 	public class SoundManager {
 		/* Singleton implementation */
 		private static const theInstance : SoundManager = new SoundManager();
-		public function SoundManager () {if (theInstance) throw new Error("Singleton, use getInstance()");}
 		public static function getInstance() : SoundManager {return theInstance;}
+
+		private static var COOKIENAME_MUTESTATE:String = "muteState";
 
 		/** 
 		 * If true, an error is logged when a sound is not found for playing, stopping, setting volume etc. 
@@ -54,10 +57,21 @@ package org.asaplibrary.util.sound {
 		public static var doShowErrors : Boolean = true;
 		
 		private var mOverallVolume : Number = 1;
+		private var mMuteSwitch : ISelectable;
 		private var mIsMuted : Boolean;
 		private var mSounds:Object = new Object();
+		private var mMuteCookie : SharedObject;
 		
 		
+		public function SoundManager () {
+			if (theInstance) throw new Error("Singleton, use getInstance()");
+			
+			mMuteCookie = SharedObject.getLocal(COOKIENAME_MUTESTATE);
+			try {
+				mIsMuted = mMuteCookie.data.mute;
+			} catch (e:Error) {}
+		}
+
 		/**
 		*	Add a sound for specified name
 		*	@param inSound: Sound object to add
@@ -178,6 +192,8 @@ package org.asaplibrary.util.sound {
 		public function muteAllSounds() : void {
 			mIsMuted = true;
 
+			updateMuteCookie();
+
 			updateAllVolumes();
 		}
 				
@@ -186,6 +202,8 @@ package org.asaplibrary.util.sound {
 		 */
 		public function unmuteAllSounds() : void {
 			mIsMuted = false;
+
+			updateMuteCookie();
 
 			updateAllVolumes();
 		}
@@ -207,7 +225,25 @@ package org.asaplibrary.util.sound {
 			
 			mSounds[inName] = null;
 		}
+		
+		/**
+		 * Set mute switch; any class that implements ISelectable can be used for this. The state of the switch is updated according to the current mute state.
+		 */
+		public function setMuteSwitch (inSwitch : ISelectable) : void {
+			mMuteSwitch = inSwitch;
+			mMuteSwitch.addSelectListener(toggleMute);
+			
+			mMuteSwitch.setSelected(mIsMuted);
+		}
 
+		/**
+		 * Handle event from mute switch to set mute state according to switch state
+		 */
+		private function toggleMute (e:Event) : void {
+			if ((e.target as ISelectable).isSelected()) muteAllSounds();
+			else unmuteAllSounds();
+		}
+		
 		/**
 		 * Set volumes of all sounds again. The function setVolume() takes care of muting & overall volume
 		 */
@@ -288,7 +324,15 @@ package org.asaplibrary.util.sound {
 			}
 			return mSounds[inName] as SoundData;
 		}
+		
+		private function updateMuteCookie() : void {
+			mMuteCookie.data.mute = mIsMuted;
+			mMuteCookie.flush();
+			
+		}
 
+		
+		
 		public function toString():String {
 			return "; org.asaplibrary.util.sound.SoundManager ";
 		}		
