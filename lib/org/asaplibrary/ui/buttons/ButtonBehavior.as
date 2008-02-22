@@ -122,11 +122,22 @@ package org.asaplibrary.ui.buttons {
 			//mButton.addEventListener(MouseEvent.DOUBLE_CLICK, doubleClickHandler);
 			//mButton.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			
-			// Stage event handlers are set in mouseDownHandler
-			// because at constructor time the button's owner may not have
-			// added to the stage display list tree.
+			setStageHandler();
 		}
 	
+		/**
+		Note: the stage listener may not be set in the constructor 
+		because at that time the button's owner may not have
+		added to the stage display list tree yet.
+		*/
+		protected function setStageHandler () : void {
+			if (mButton.stage) {
+				// Also listen for stage events to prevent buttons from firing button events if the mouse has been pressed.
+				mButton.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownStageHandler);
+				mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpStageHandler);
+			}
+		}
+		
 		/**
 		
 		*/
@@ -174,6 +185,7 @@ package org.asaplibrary.ui.buttons {
 		*/
 		protected function mouseOutHandler (e:MouseEvent) : void {
 			if (sPressed) return;
+			if (!mMouseOver) return;
 			mMouseOver = false;
 			if (mSelected || !mEnabled) return;
 			update(e, ButtonStates.OUT);
@@ -195,11 +207,7 @@ package org.asaplibrary.ui.buttons {
 		@param e: the mouse event
 		*/
 		protected function mouseDownHandler (e:MouseEvent) : void {
-			if (mButton.stage) {
-				// Also listen for stage events to prevent buttons from firing button events if the mouse has been pressed.
-				mButton.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownStageHandler);
-				mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpStageHandler);
-			}
+			setStageHandler();
 			if (!mMouseOver) return;
 			mMouseDownTarget = e.currentTarget;
 			if (mButton.stage) {
@@ -219,6 +227,7 @@ package org.asaplibrary.ui.buttons {
 		@param e: the mouse event
 		*/
 		protected function mouseUpHandler (e:MouseEvent) : void {
+			if (!mMouseOver) return;
 			if (mMouseDownTarget != mButton) return;
 			sPressed = false;
 			if (mSelected || !mEnabled) return;
@@ -274,6 +283,7 @@ package org.asaplibrary.ui.buttons {
 			}
 			mMouseDownTarget = null;
 			sPressed = false;
+			mMouseOver = false;
 			update(e, ButtonStates.UP);
 			update(e, ButtonStates.OUT);
 		}

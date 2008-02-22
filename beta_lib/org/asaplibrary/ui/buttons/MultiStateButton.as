@@ -126,10 +126,18 @@ package org.asaplibrary.ui.buttons {
 		public var tHitArea:MovieClip;
 		
 		/**
-		Creates and initializes a new MultiStateButton.
+		Creates a new MultiStateButton.
 		*/
 		public function MultiStateButton () {
 			super();
+			addEventListener(Event.ADDED, init);
+		}
+		
+		/**
+		Initializes the button.
+		*/
+		private function init (e:Event = null) : void {
+			removeEventListener(Event.ADDED, init);
 			
 			mBehavior = new ButtonBehavior(this);
 			mBehavior.addEventListener(ButtonBehaviorEvent._EVENT, update);
@@ -170,8 +178,6 @@ package org.asaplibrary.ui.buttons {
 			if (inState) {
 				// don't handle mouse events on children
 				mouseChildren = false;
-				// behave as button
-				buttonMode = true;
 				// set the hitarea and hide it
 				hitArea = tHitArea;
 			} else {
@@ -225,8 +231,11 @@ package org.asaplibrary.ui.buttons {
 		@param inDestination: name of the destination label
 		*/
 		private function queueDestination (inDestination:String) : void {
-			mDestinations.push(inDestination);
-			processDestinations();
+			var index:int = mDestinations.indexOf(inDestination);
+			if (index == -1) {
+				mDestinations.push(inDestination);
+				processDestinations();
+			}		
 		}
 		
 		/**
@@ -241,7 +250,7 @@ package org.asaplibrary.ui.buttons {
 				return;
 			}
 			var destination:String = String(mDestinations.shift());
-			if (destination == LABEL_NONE) {
+			if (destination == LABEL_NONE) {;
 				initQueues();
 				return;
 			}
@@ -268,8 +277,11 @@ package org.asaplibrary.ui.buttons {
 		*/
 		private function queueMouseState (inState:uint) : void {
 			mCurrentMouseState = inState;
-			mMouseStates.push(inState);
-			processMouseStates();
+			var index:int = mMouseStates.indexOf(inState);
+			if (index == -1) {
+				mMouseStates.push(inState);
+				processMouseStates();
+			}		
 		}
 	
 		/**
@@ -289,26 +301,36 @@ package org.asaplibrary.ui.buttons {
 			    // is where we need to end up anyway.
 				mMouseStates = new Array();
 			}
+			
 			switch (state) {
 				case ButtonStates.OVER:
+					buttonMode = true;
 					queueDestination(LABEL_UP);
-					if (mLabelHash[LABEL_IN]) queueDestination(LABEL_IN);
+					if (mLabelHash[LABEL_IN]) {
+						queueDestination(LABEL_IN);
+					}
 					queueDestination(LABEL_OVER);
 					break;
 				case ButtonStates.OUT:
+					buttonMode = false;
 					queueDestination(LABEL_OVER);
-					if (mLabelHash[LABEL_OUT]) queueDestination(LABEL_OUT);
+					if (mLabelHash[LABEL_OUT]) {
+						queueDestination(LABEL_OUT);
+					}
 					queueDestination(LABEL_UP);
-					queueDestination(LABEL_NONE);
 					break;
 				case ButtonStates.DOWN:
 					queueDestination(LABEL_OVER);
-					if (mLabelHash[LABEL_PRESS]) queueDestination(LABEL_PRESS);
+					if (mLabelHash[LABEL_PRESS]) {
+						queueDestination(LABEL_PRESS);
+					}
 					queueDestination(LABEL_DOWN);
 					break;
 				case ButtonStates.UP:
 					queueDestination(LABEL_DOWN);
-					if (mLabelHash[LABEL_RELEASE]) queueDestination(LABEL_RELEASE);
+					if (mLabelHash[LABEL_RELEASE]) {    	
+						queueDestination(LABEL_RELEASE);
+					}
 					queueDestination(LABEL_OVER);
 					break;
 				case ButtonBehavior.NORMAL:
