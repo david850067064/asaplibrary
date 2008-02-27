@@ -88,6 +88,13 @@ package org.asaplibrary.data.array {
 		}
 		
 		/**
+		@return The current position of the array location pointer.
+		*/
+		public function getCurrentLocation () : int {
+			return mLocation;
+		}
+		
+		/**
 		Sets the location pointer to a new position.
 		@param inLocation : the new pointer location
 		@implementationNote Calls {@link #update}.

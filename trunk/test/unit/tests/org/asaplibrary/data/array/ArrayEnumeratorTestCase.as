@@ -29,9 +29,11 @@ package org.asaplibrary.data.array {
 			var enumerator:ArrayEnumerator = new ArrayEnumerator(chars);
 			
 			assertTrue("ArrayEnumerator getCurrentObject", (enumerator.getCurrentObject() == null));
+			assertTrue("ArrayEnumerator getCurrentLocation at start", (enumerator.getCurrentLocation() == -1));
 			
 			assertTrue("ArrayEnumerator getNextObject", (enumerator.getNextObject() == "a"));
 			assertTrue("ArrayEnumerator getCurrentObject after getNextObject", (enumerator.getCurrentObject() == "a"));
+			assertTrue("ArrayEnumerator getCurrentLocation after getNextObject", (enumerator.getCurrentLocation() == 0));
 			
 			enumerator.reset();
 			assertTrue("ArrayEnumerator getCurrentObject after reset", (enumerator.getCurrentObject() == null));
