@@ -54,13 +54,13 @@ package org.asaplibrary.ui.buttons {
 		
 		private function update (e:ButtonBehaviorEvent) : void {
 			switch (e.state) {
-				case ButtonBehavior.SELECTED:
-				case ButtonBehavior.OVER:
+				case ButtonStates.SELECTED:
+				case ButtonStates.OVER:
 					tBorder.visible = true;
 					break;
-				case ButtonBehavior.NORMAL:
-				case ButtonBehavior.OUT:
-				case ButtonBehavior.DESELECTED:
+				case ButtonStates.NORMAL:
+				case ButtonStates.OUT:
+				case ButtonStates.DESELECTED:
 					tBorder.visible = false;
 					break;
 				default:
