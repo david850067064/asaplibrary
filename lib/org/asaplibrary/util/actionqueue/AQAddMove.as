@@ -18,9 +18,12 @@ limitations under the License.
 package org.asaplibrary.util.actionqueue {
 
 	import flash.display.DisplayObject;
-	
 	import org.asaplibrary.util.actionqueue.*;
 	
+	/**
+	Action method that controls the relative position of a DisplayObject.
+	Lets a DisplayObject move a specified number of pixels added to its current location, without specifying its end location.
+	*/
 	public class AQAddMove {
 	
 		private var mDO:DisplayObject;
@@ -34,6 +37,14 @@ package org.asaplibrary.util.actionqueue {
 		private var mTravelledX:Number;
 		private var mTravelledY:Number;
 		
+		/**
+		@param inDO : DisplayObject to move
+		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
+		@param inAddX : the horizontal distance in pixels to move the DisplayObject
+		@param inAddX : the vertical distance in pixels to move the DisplayObject
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
+		@return A reference to {@link #initAddMove} that in turn returns the performing move {@link TimedAction}.
+		*/
 		public function addMove (inDO:DisplayObject, inDuration:Number, inAddX:Number, inAddY:Number, inEffect:Function = null) : Function {
 			
 			mDO = inDO;
@@ -46,6 +57,9 @@ package org.asaplibrary.util.actionqueue {
 			return initAddMove;
 		}
 		
+		/**
+		Initializes the starting values.
+		*/
 		protected function initAddMove() : TimedAction {
 			mTravelledX = 0;
 			mTravelledY = 0;
@@ -53,7 +67,9 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-
+		Calculates and sets the x and y values of the DisplayObject.
+		@param inValue: the percentage value ranging from 0 to 1.
+		@return True (the animation will not be interrupted).
 		*/
 		protected function doAddMove (inValue:Number) : Boolean {
 			var targetX:Number = (1-inValue) * mParamAddX;

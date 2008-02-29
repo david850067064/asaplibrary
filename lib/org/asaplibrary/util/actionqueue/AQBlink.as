@@ -46,7 +46,7 @@ package org.asaplibrary.util.actionqueue {
 		@param inMinAlpha : the lowest alpha when blinking; when no value is passed the current inDO's current alpha is used
 		@param inStartAlpha : (optional) the starting alpha; if not given, a calculated middle value is used. The resulting starting alpha depends on the position of that value on a sine curve.
 		@param inDuration : (optional: pass either inDuration or inCount - if inDuration is given, inCount will be ignored) length of blinking in seconds; when 0, blinking is infinite, otherwise the movement will be stopped as soon as the duration has passed; in seconds
-		@param inEffect : (optional) an effect function, for instance one of the fl.motion.easing methods
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
 		@return A reference to {@link #initDoBlink} that in turn returns the performing blink {@link TimedAction}.
 		@example
 		This code will let a shape blink 4 times with a frequency of 2 blinks per second, with a max alpha of 1 and a min alpha of 0.1, starting out with min alpha:

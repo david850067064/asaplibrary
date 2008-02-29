@@ -278,7 +278,7 @@ package org.asaplibrary.util.actionqueue {
 		
 		/**
 		Adds a waiting action to the queue.
-		@param inDuration: waiting time in seconds
+		@param inDuration: waiting time in seconds; use 0 to wait indeterminately.
 		*/
 		public function addWait (inDuration:Number) : void {
 			addAction(doWait, inDuration);
@@ -444,8 +444,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Skips to the next action (if any). If the queue is paused, skip will resume the queue.
-		also skips paused state
+		Skips to the next action (if any). If the queue is paused, skip will resume the queue. WIll also skip a paused state.
 		*/
 		public function skip () : void {
 			skipActionRunners();
