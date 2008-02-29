@@ -23,7 +23,7 @@ package org.asaplibrary.util.actionqueue {
 	Action method to control the timed scaling of a DisplayObject.
 	@example:
 	<code>
-	var CURRENT:Number = Number.NaN;
+	const CURRENT:Number = Number.NaN;
 	queue.addAction(new AQScale().scale(my_mc, 3, CURRENT, CURRENT, 4, 4));
 	</code>
 	*/
@@ -46,7 +46,14 @@ package org.asaplibrary.util.actionqueue {
 		private var mEndScaleY:Number;
 		
 		/**
-		
+		@param inDO : DisplayObject to scale
+		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
+		@param inStartScaleX : x value to start scaling from; if null then inDO's current scaleX value is used
+		@param inStartScaleY : y value to start scaling from; if null then inDO's current scaleY value is used
+		@param inEndScaleX : x value to end scaling to; if null then inDO's current (dynamic) scaleX value is used
+		@param inEndScaleY : y value to end scaling to; if null then inDO's current (dynamic) scaleY value is used
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
+		@return A reference to {@link #initDoScale} that in turn returns the performing fade {@link TimedAction}.
 		*/
 		public function scale (inDO:DisplayObject, inDuration:Number, inStartScaleX:Number, inStartScaleY:Number, inEndScaleX:Number, inEndScaleY:Number, inEffect:Function = null) : Function {
 							   
@@ -63,7 +70,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Initializes the starting values.
 		*/
 		protected function initDoScale () : TimedAction {
 			mStartScaleX = (!isNaN(mParamStartScaleX)) ? mParamStartScaleX : mDO.scaleX;
@@ -75,7 +82,9 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-
+		Calculates and sets the scaleX and scaleY values of the DisplayObject.
+		@param inValue: the percentage value ranging from 0 to 1.
+		@return True (the animation will not be interrupted).
 		*/
 		protected function doScale (inValue:Number) : Boolean {
 			mDO.scaleX = mEndScaleX - (inValue * (mEndScaleX - mStartScaleX));

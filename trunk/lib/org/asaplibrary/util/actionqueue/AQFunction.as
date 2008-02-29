@@ -34,7 +34,8 @@ package org.asaplibrary.util.actionqueue {
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
 		@param inStartValue : the start value to call inCallFunction with
 		@param inEndValue : the end value to call inCallFunction with
-		@param inEffect : (optional) an effect function, for instance one of the fl.motion.easing methods
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
+		@return A reference to {@link #initDoCall} that in turn returns the performing call {@link TimedAction}.
 		@example
 		This queue calls function <code>setHeight</code> for a duration of 2 seconds with a value between <code>getCurrentHeight()</code> and the projected <code>tContent.height</code>. If no effect is applied, <code>setHeight</code> will be half the projected height at 1 second:
 		<code>

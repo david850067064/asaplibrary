@@ -36,7 +36,12 @@ package org.asaplibrary.util.actionqueue {
 		private var mEndAlpha:Number;
 		
 		/**
-		
+		@param inDO : DisplayObject to fade
+		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
+		@param inStartAlpha : value to start fading from; if null then inDO's current alpha value is used
+		@param inEndAlpha : value to start fading to; if null then inDO's current alpha value is used
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
+		@return A reference to {@link #initDoFade} that in turn returns the performing fade {@link TimedAction}.
 		*/
 		public function fade (inDO:DisplayObject, inDuration:Number, inStartAlpha:Number, inEndAlpha:Number, inEffect:Function = null) : Function {
 			mDO = inDO;
@@ -51,7 +56,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Initializes the starting values.
 		*/
 		protected function initDoFade () : TimedAction {
 			mStartAlpha = (!isNaN(mParamStartAlpha)) ? mParamStartAlpha : mDO.alpha;
@@ -60,7 +65,9 @@ package org.asaplibrary.util.actionqueue {
 		}
 
 		/**
-
+		Calculates and sets the alpha value of the DisplayObject.
+		@param inValue: the percentage value ranging from 0 to 1.
+		@return True (the animation will not be interrupted).
 		*/
 		protected function doFade (inValue:Number) : Boolean {
 			mDO.alpha = mEndAlpha - (inValue * (mEndAlpha - mStartAlpha));

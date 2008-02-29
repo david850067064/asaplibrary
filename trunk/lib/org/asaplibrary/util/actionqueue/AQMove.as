@@ -40,6 +40,13 @@ package org.asaplibrary.util.actionqueue {
 		private var mEndY:Number;
 
 		/**
+		@param inDO : DisplayObject to move
+		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
+		@param inStartX : x value to start moving from; if null then inDO's current x value is used
+		@param inStartY : y value to start moving from; if null then inDO's current y value is used
+		@param inEndX : x value to start moving to; if null then inDO's current (dynamic) x value is used
+		@param inEndY : y value to start moving to; if null then inDO's current (dynamic) y value is used
+		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
 		
 		*/
 		public function move (inDO:DisplayObject, inDuration:Number, inStartX:Number, inStartY:Number, inEndX:Number, inEndY:Number, inEffect:Function = null) : Function {
@@ -57,7 +64,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		
+		Initializes the starting values.
 		*/
 		protected function initDoMove () : TimedAction {
 			mStartX = (!isNaN(mParamStartX)) ? mParamStartX : mDO.x;
@@ -68,7 +75,9 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-
+		Calculates and sets the x and y values of the DisplayObject.
+		@param inValue: the percentage value ranging from 0 to 1.
+		@return True (the animation will not be interrupted).
 		*/
 		protected function doMove (inValue:Number) : Boolean {
 			mDO.x = mEndX - (inValue * (mEndX - mStartX));
