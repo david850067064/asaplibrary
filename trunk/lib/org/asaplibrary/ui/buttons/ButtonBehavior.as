@@ -213,7 +213,7 @@ package org.asaplibrary.ui.buttons {
 			if (mButton.stage) {
 				// down, now check for global mouseUp
 				mButton.stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler); // we also have mouseDownStageHandler
-				// Track for release outside the window
+				// track for release outside the window
 				mButton.stage.addEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
 			}
 			sPressed = true;
@@ -269,8 +269,7 @@ package org.asaplibrary.ui.buttons {
 			if (mButton.stage) {
 				mButton.stage.removeEventListener(Event.MOUSE_LEAVE, mouseLeaveStageHandler);
 			}
-			update(null, ButtonStates.UP);
-			update(null, ButtonStates.OUT);
+			update(null, ButtonStates.UP|ButtonStates.OUT);
 		}
 		
 		/**
@@ -284,8 +283,7 @@ package org.asaplibrary.ui.buttons {
 			mMouseDownTarget = null;
 			sPressed = false;
 			mMouseOver = false;
-			update(e, ButtonStates.UP);
-			update(e, ButtonStates.OUT);
+			update(e, ButtonStates.UP|ButtonStates.OUT);
 		}
 		
 		/**

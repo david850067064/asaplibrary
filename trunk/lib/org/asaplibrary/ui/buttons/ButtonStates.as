@@ -28,6 +28,10 @@ package org.asaplibrary.ui.buttons {
 	state |= ButtonStates.OVER; // state is now OVER
 	state |= ButtonStates.DOWN; // state is now OVER and DOWN
 	</code>
+	or:
+	<code>
+	var state:uint = ButtonStates.OVER|ButtonStates.DOWN;
+	</code>
 	Retrieval:
 	<code>
 	var isOver:Boolean;
