@@ -31,6 +31,11 @@
 		private static var sResetQueueValue:Number = 0;
 		private static const EXPECTED_RESET_QUEUE_VALUE:Number = 1;
 		
+		private static var SHAPE_PROPERTY_HEIGHT:Shape;
+		private static const EXPECTED_PROPERTY_HEIGHT:Number = 98;
+		private static var SHAPE_PROPERTY_Y:Shape;
+		private static const EXPECTED_PROPERTY_Y:Number = 401;
+		
 		private static var sEventSTARTEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_STARTED_CALLED:uint = 1;
 		private static var sEventFINISHEDCalled:uint = 0;
@@ -43,6 +48,7 @@
 		private static const EXPECTED_EVENT_RESUMED_CALLED:uint = 1;
 		private static var sEventSTOPPEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_STOPPED_CALLED:uint = 1;
+		
 		// Not tested yet
 		private static var sEventMARKER_PASSEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_MARKER_PASSED_CALLED:uint = 0;
@@ -87,6 +93,7 @@
 			doTestFollowMouse();
 			doTestBlink();
 			doTestPulse();
+			doTestProperty();
 			doTestEvents();
 			doTestLoops();
 			
@@ -128,7 +135,9 @@
 			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sEventMARKER_PASSEDCalled == EXPECTED_EVENT_MARKER_PASSED_CALLED));
 
 			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sLoopCalled == EXPECTED_LOOP_CALLED));
-
+			
+			evaluatePropertyHeight();
+			evaluatePropertyY();
 		}
 		
 		private function doTestAddAction () : void {
@@ -473,10 +482,31 @@
 			queue.run();
 		}
 		
-		private function evaluateTestFollowMouse (s:Shape) : void {
-			
-			assertTrue("ActionQueueTestCase evaluateTestFollowMouse", Math.round(s.x) == Math.round(mCanvas.mouseX));
-			assertTrue("ActionQueueTestCase evaluateTestFollowMouse", Math.round(s.y) == Math.round(mCanvas.mouseY));
+		public function doTestProperty () : void {
+			doTestPropertyHeight();
+			doTestPropertyY();
+		}
+		
+		private function doTestPropertyHeight () : void {
+			SHAPE_PROPERTY_HEIGHT = createRectShape(randomColor(), 450, 320);	
+			var queue:ActionQueue = new ActionQueue("property height");
+			queue.addAction( new AQProperty().change(SHAPE_PROPERTY_HEIGHT, "height", .6, NaN, EXPECTED_PROPERTY_HEIGHT) );
+			queue.run();
+		}
+		
+		private function evaluatePropertyHeight () : void {
+			assertTrue("ActionRunner EXPECTED_PROPERTY_HEIGHT", (SHAPE_PROPERTY_HEIGHT["height"] == EXPECTED_PROPERTY_HEIGHT));
+		}
+		
+		private function doTestPropertyY () : void {
+			SHAPE_PROPERTY_Y = createRectShape(randomColor(), 475, 320);	
+			var queue:ActionQueue = new ActionQueue("property y");
+			queue.addAction( new AQProperty().change(SHAPE_PROPERTY_Y, "y", .6, NaN, EXPECTED_PROPERTY_Y) );
+			queue.run();
+		}
+		
+		private function evaluatePropertyY () : void {
+			assertTrue("ActionRunner EXPECTED_PROPERTY_Y", (SHAPE_PROPERTY_Y["y"] == EXPECTED_PROPERTY_Y));
 		}
 		
 		private function doTestEvents () : void {
