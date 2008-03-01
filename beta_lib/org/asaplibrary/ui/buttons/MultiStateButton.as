@@ -183,6 +183,7 @@ package org.asaplibrary.ui.buttons {
 			} else {
 				enabled = false;
 			}
+			buttonMode = true;
 			// By default go to label "up"
 			setDestination(LABEL_UP);
 		}
@@ -193,7 +194,7 @@ package org.asaplibrary.ui.buttons {
 		Otherwise store mouse state in queue to be processed in order.		
 		*/
 		private function update (e:ButtonBehaviorEvent) : void {
-			if (e.state == ButtonStates.ADDED) {
+			if (e.state & ButtonStates.ADDED) {
 				return;
 			}
 			queueMouseState(e.state);
@@ -302,40 +303,34 @@ package org.asaplibrary.ui.buttons {
 				mMouseStates = new Array();
 			}
 			
-			switch (state) {
-				case ButtonStates.OVER:
-					buttonMode = true;
-					queueDestination(LABEL_UP);
-					if (mLabelHash[LABEL_IN]) {
-						queueDestination(LABEL_IN);
-					}
-					queueDestination(LABEL_OVER);
-					break;
-				case ButtonStates.OUT:
-					buttonMode = false;
-					queueDestination(LABEL_OVER);
-					if (mLabelHash[LABEL_OUT]) {
-						queueDestination(LABEL_OUT);
-					}
-					queueDestination(LABEL_UP);
-					break;
-				case ButtonStates.DOWN:
-					queueDestination(LABEL_OVER);
-					if (mLabelHash[LABEL_PRESS]) {
-						queueDestination(LABEL_PRESS);
-					}
-					queueDestination(LABEL_DOWN);
-					break;
-				case ButtonStates.UP:
-					queueDestination(LABEL_DOWN);
-					if (mLabelHash[LABEL_RELEASE]) {    	
-						queueDestination(LABEL_RELEASE);
-					}
-					queueDestination(LABEL_OVER);
-					break;
-				case ButtonBehavior.NORMAL:
-					queueDestination(LABEL_NONE);
-					break;
+			ButtonStates.stateToString(state));
+
+			if (state & ButtonStates.UP) {
+				if (mLabelHash[LABEL_RELEASE]) {    	
+					queueDestination(LABEL_RELEASE);
+				}
+				queueDestination(LABEL_OVER);
+			}
+			if (state & ButtonStates.OVER) {
+				if (mLabelHash[LABEL_IN]) {
+					queueDestination(LABEL_IN);
+				}
+				queueDestination(LABEL_OVER);
+			}
+			if (state & ButtonStates.DOWN) {
+				if (mLabelHash[LABEL_PRESS]) {
+					queueDestination(LABEL_PRESS);
+				}
+				queueDestination(LABEL_DOWN);
+			}
+			if (state & ButtonStates.OUT) {
+				if (mLabelHash[LABEL_OUT]) {
+					queueDestination(LABEL_OUT);
+				}
+				queueDestination(LABEL_UP);
+			}
+			if (state & ButtonBehavior.NORMAL) {
+				queueDestination(LABEL_NONE);
 			}
 		}
 		

@@ -20,7 +20,8 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.MouseEvent;	
 
 	/**
-	Passes events for {@link ButtonBehavior} (and subclasses thereof). Subscribe to type <code>_EVENT</code>.
+	Passes events for {@link ButtonBehavior} (and subclasses thereof). 
+	Subscribe to type <code>_EVENT</code>.
 	@example
 	<code>
 	mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, handleUpdate);
@@ -28,8 +29,8 @@ package org.asaplibrary.ui.buttons {
 	Listen for delegate events:
 	<code>
 	private function handleUpdate (e:ButtonBehaviorEvent) : void {
-		if (e.state == ButtonStates.OVER) grow();
-		if (e.state == ButtonStates.OUT) shrink();
+		if (e.state & ButtonStates.OVER) grow();
+		if (e.state & ButtonStates.OUT) shrink();
 	}
 	</code>
 	*/
