@@ -202,6 +202,9 @@ package org.asaplibrary.management.flow {
 		
 		private static var sDefaultFlowManager:FlowManager;
 		
+		/**
+		Identifier name, used for debugging.
+		*/
 		private var mName:String;
 		private var mActionRunner:ActionRunner;
 		private var mSections:Object; // of type String => IFlowSection

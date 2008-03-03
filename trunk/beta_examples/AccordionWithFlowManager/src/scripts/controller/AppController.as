@@ -84,7 +84,7 @@
 			mFinishedFadeQueue.addAction(new AQSet().setAlpha(tFinishedNote, 0));
 			mFinishedFadeQueue.addAction(new AQSet().setVisible(tFinishedNote, true));
 			mFinishedFadeQueue.addAction(new AQFade().fade(tFinishedNote, .05, 0, 1));
-			mFinishedFadeQueue.addWait(3);
+			mFinishedFadeQueue.addPause(3);
 			mFinishedFadeQueue.addAction(new AQFade().fade(tFinishedNote, 1, 1, 0));
 			mFinishedFadeQueue.addAction(new AQSet().setVisible(tFinishedNote, false));
 			mFinishedFadeQueue.run();
