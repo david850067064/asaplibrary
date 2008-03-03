@@ -277,14 +277,6 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Adds a waiting action to the queue.
-		@param inDuration: waiting time in seconds; use 0 to wait indeterminately.
-		*/
-		public function addWait (inDuration:Number) : void {
-			addAction(doWait, inDuration);
-		}
-		
-		/**
 		Adds a {@link Condition} to the queue. A running queue is automatically halted as long as the condition is not met. The condition will be checked on each frame update (using {@link FramePulse} events.
 		@param inCondition: the condition to add
 		@implementationNote Conditions are run by {@link ConditionManager}.
@@ -321,13 +313,6 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Internal function, called by {@link #addWait}.
-		*/
-		protected function doWait (inDuration:Number) : TimedAction {
-			return new TimedAction(idle, inDuration);
-		}
-		
-		/**
 		Internal function, called by {@link #doWait}.
 		@param inValue: not used
 		@return True.
@@ -337,17 +322,23 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		/**
-		Adds a paused state to the queue. When this action is run the queue is paused until {@link #resume} is called on it.
+		Use pause() to add a paused state to the queue; when this action is run the queue is paused until {@link #resume} is called on it.
+		Use pause(duration) to add a waiting action to the queue.
+		@param inDuration: pause time in seconds; use 0 to pause indeterminately.
 		*/
-		public function addPause () : void {
-			addAction(doPause);
+		public function addPause (inDuration:Number = Number.NaN) : void {
+			if (isNaN(inDuration)) {
+				addAction(pause, true);
+			} else {
+				addAction(doWait, inDuration);
+			}
 		}
-		
+
 		/**
-		Internal function, called by {@link #addPause}.
+		Internal function, called by {@link #addWait}.
 		*/
-		protected function doPause () : void {
-			pause(true);
+		protected function doWait (inDuration:Number) : TimedAction {
+			return new TimedAction(idle, inDuration);
 		}
 		
 		/**

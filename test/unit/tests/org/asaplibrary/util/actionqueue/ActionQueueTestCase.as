@@ -30,6 +30,8 @@
 		private static const EXPECTED_SKIP_VALUE:int = 1;
 		private static var sResetQueueValue:Number = 0;
 		private static const EXPECTED_RESET_QUEUE_VALUE:Number = 1;
+		private static var sAfterPauseValue:Number = 0;
+		private static const EXPECTED_AFTER_PAUSE_VALUE:Number = 1;
 		
 		private static var SHAPE_PROPERTY_HEIGHT:Shape;
 		private static const EXPECTED_PROPERTY_HEIGHT:Number = 98;
@@ -81,7 +83,7 @@
 			doTestIsFinished();
 			doTestPauseAndContinue();
 			doTestTogglePlay();
-			doTestAddWait();
+			doTestAddPause();
 			doTestSkip();
 
 			doTestFade();
@@ -218,16 +220,27 @@
 			assertTrue("ActionQueueTestCase toggle play 1", queue.isPaused());
 		}
 		
-		private function doTestAddWait () : void {
-			var queue = new ActionQueue("addWait");
-			queue.addWait(0.1);
+		private function doTestAddPause () : void {
+			var queue = new ActionQueue("addPause");
+			queue.addPause(0.1);
+			queue.addAction(doAfterPause);
+			queue.addPause(); // pause queue
+			queue.addAction(doAfterPause); // should not get called
 			queue.run();
+			new FrameDelay(evaluateAfterPause, TEST_DELAY);
+		}
+		
+		private function doAfterPause () : void {
+			sAfterPauseValue++;
+		}
+		
+		private function evaluateAfterPause () : void {
+			assertTrue("ActionQueueTestCase after addPause", sAfterPauseValue == EXPECTED_AFTER_PAUSE_VALUE);
 		}
 		
 		private function doTestSkip () : void {
 			var skipQueue = new ActionQueue("skip");
 			skipQueue.addAction( addToSkip );
-			//skipQueue.addWait(.1);
 			skipQueue.addAction( addToSkip );
 			skipQueue.skip();
 			skipQueue.run();

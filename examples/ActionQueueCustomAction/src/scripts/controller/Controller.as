@@ -5,7 +5,8 @@
 	import org.asaplibrary.util.NumberUtils;
 	import org.asaplibrary.util.actionqueue.*;
 	
-	import fl.motion.easing.Elastic;	
+	import fl.transitions.easing.*;
+	import fl.motion.easing.*;	
 	import fl.motion.BezierEase;
 
 	public class Controller extends MovieClip {	
@@ -37,7 +38,7 @@
 			var queue:ActionQueue = new ActionQueue("Move and Scale");
 			var action:TimedAction = new TimedAction(doMoveAndScale, duration, effect);
 			queue.addAction(action);
-			queue.addWait(.35);
+			queue.addPause(.35);
 			// reset position
 			queue.addAction(resetClip);
 			queue.run();
@@ -56,9 +57,10 @@
 		}
 		
 		public function resetClip () : void {
-			tClip.x = 215.0;
-			tClip.y = 200.0;
 			tClip.scaleX = tClip.scaleY = 1;
+			var queue:ActionQueue = new ActionQueue("Move and Scale");
+			queue.addAction(new AQMove().move(tClip, .5, NaN, NaN, 215, 200, Elastic.easeOut));
+			queue.run();
 		}
 
 	}
