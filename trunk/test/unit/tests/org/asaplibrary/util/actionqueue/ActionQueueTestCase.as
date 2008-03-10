@@ -51,6 +51,9 @@
 		private static var sEventSTOPPEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_STOPPED_CALLED:uint = 1;
 		
+		private static var sOrderedEventList:String = "";
+		private static const EXPECTED_ORDERED_EVENT_LIST:String = "onActionStartedonActionFinished";
+		
 		// Not tested yet
 		private static var sEventMARKER_PASSEDCalled:uint = 0;
 		private static const EXPECTED_EVENT_MARKER_PASSED_CALLED:uint = 0;
@@ -97,6 +100,7 @@
 			doTestPulse();
 			doTestProperty();
 			doTestEvents();
+			doTestEventsOrder();
 			doTestLoops();
 			
 			new FrameDelay(startTests, TEST_DELAY);
@@ -137,6 +141,8 @@
 			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sEventMARKER_PASSEDCalled == EXPECTED_EVENT_MARKER_PASSED_CALLED));
 
 			assertTrue("ActionRunner EXPECTED_EVENT_MARKER_PASSED_CALLED", (sLoopCalled == EXPECTED_LOOP_CALLED));
+			
+			assertTrue("ActionRunner EXPECTED_ORDERED_EVENT_LIST", (sOrderedEventList == EXPECTED_ORDERED_EVENT_LIST));
 			
 			evaluatePropertyHeight();
 			evaluatePropertyY();
@@ -533,6 +539,13 @@
 			queue.quit();
 		}
 		
+		private function doTestEventsOrder () : void {
+			var queue:ActionQueue = new ActionQueue();
+			queue.addAction(new Action(dummyFunc));
+			queue.addEventListener(ActionEvent._EVENT, onActionEventOrder);
+			queue.run();
+		}
+		
 		private function doTestLoops () : void {
 			var queue:ActionQueue = new ActionQueue();
 			queue.addStartLoop("LOOP", 3);
@@ -569,6 +582,11 @@
 					sEventMARKER_PASSEDCalled++; 
 					break;
 			}
+		}
+		
+		
+		private function onActionEventOrder (e:ActionEvent) : void {
+			sOrderedEventList += e.subtype;
 		}
 		
 		private function createRectShape (inColor:int, inX:int, inY:int) : Shape {
