@@ -653,8 +653,8 @@ package org.asaplibrary.util.actionqueue {
 		@sends ActionEvent#STARTED
 		*/
 		public function run () : * {
-			mMainActionRunner.run();
 			dispatchEvent(new ActionEvent(ActionEvent.STARTED, this));
+			mMainActionRunner.run();
 			return null;
 		}
 				
