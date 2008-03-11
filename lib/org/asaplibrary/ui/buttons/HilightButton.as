@@ -89,8 +89,6 @@ package org.asaplibrary.ui.buttons {
 			mouseEnabled = inEnabled;
 		}
 
-		
-		
 		/**
 		Deal with button state events (received from mBehavior).
 		@param e: e.state contains the button state information
