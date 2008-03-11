@@ -84,6 +84,13 @@ package org.asaplibrary.ui.buttons {
 			else drawUp();
 		}
 		
+		public function setEnabled (inEnabled:Boolean) : void {
+			mBehavior.enable(inEnabled);
+			mouseEnabled = inEnabled;
+		}
+
+		
+		
 		/**
 		Deal with button state events (received from mBehavior).
 		@param e: e.state contains the button state information
