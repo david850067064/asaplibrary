@@ -157,6 +157,8 @@ package org.asaplibrary.ui.buttons {
 		override protected function mouseOutHandler (e:MouseEvent) : void {	
 			resetTimers();
 	
+			if (!mEnabled) return;
+	
 			if (mOutDelay == 0) {
 				mMouseOver = false;
 				doAfterDelay();
