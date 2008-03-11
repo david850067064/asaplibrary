@@ -329,7 +329,7 @@ package org.asaplibrary.ui.buttons {
 				}
 				queueDestination(LABEL_UP);
 			}
-			if (state & ButtonBehavior.NORMAL) {
+			if (state & ButtonStates.NORMAL) {
 				queueDestination(LABEL_NONE);
 			}
 		}
