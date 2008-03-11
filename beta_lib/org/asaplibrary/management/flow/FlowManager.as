@@ -890,7 +890,7 @@ class StringNodeHelper {
 	@param inName: raw string that potentially has leading dots
 	*/
 	public function removeLeadingDots (inName:String) : String {
-		var re:RegExp = new RegExp(/\.?(.*?)$/);
+		var re:RegExp = /\.?(.*?)$/;
 		var result:Object = re.exec(inName);
 		return result[1];
 	}
