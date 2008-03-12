@@ -33,9 +33,6 @@ package org.asaplibrary.util.loader {
 	*/
 	public class AssetLoader extends EventDispatcher {
 	
-		/** Default number of loaders before queueing */
-		private static const DEFAULT_LOADER_COUNT:Number = 1;
-		
 		/** List of objects of type FileData. */
 		private var mWaitingStack:Array = new Array();
 		/** List of objects of type FileData. */
@@ -47,7 +44,7 @@ package org.asaplibrary.util.loader {
 		Creates a new AssetLoader.
 		@param inLoaderCount: number of parallel loaders
 		*/
-		public function AssetLoader (inLoaderCount:Number = DEFAULT_LOADER_COUNT) {
+		public function AssetLoader (inLoaderCount:Number = 1) {
 			mLoaderCount = inLoaderCount;
 		}
 		
