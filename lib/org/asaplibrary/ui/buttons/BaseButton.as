@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
-
 	import flash.display.MovieClip;
-	
+	import flash.utils.getQualifiedClassName;	
+
 	public class BaseButton extends MovieClip {
 	
 		public var tHitArea:MovieClip;
@@ -39,7 +39,7 @@ package org.asaplibrary.ui.buttons {
 		}
 
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.BaseButton";
+			return getQualifiedClassName(this);
 		}
 	}
 	

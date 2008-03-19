@@ -21,10 +21,11 @@ package org.asaplibrary.ui.form.components {
 	import flash.events.Event;
 	import flash.events.FocusEvent;
 	import flash.text.TextField;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.ui.form.focus.IFocusable;
 	import org.asaplibrary.util.validation.IHasError;
-	import org.asaplibrary.util.validation.IValidatable;		
+	import org.asaplibrary.util.validation.IValidatable;	
 
 	/**
 	 * UI Component class for text input.
@@ -146,7 +147,7 @@ package org.asaplibrary.ui.form.components {
 		}
 
 		override public function toString():String {
-			return "; com.lostboys.form.components.InputField - " + name;
+			return getQualifiedClassName(this) + ":" + name;
 		}
 		
 	}

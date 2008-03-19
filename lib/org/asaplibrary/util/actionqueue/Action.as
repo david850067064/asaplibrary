@@ -16,11 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
 	import flash.events.*;
-
-	import org.asaplibrary.util.actionqueue.IAction;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.util.actionqueue.IAction;	
+
 	/**
 	An Action is a "Command Pattern" object that holds data of an object's method. See http://en.wikipedia.org/wiki/Command_pattern
 	*/
@@ -67,7 +67,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString() : String {
-			return ";org.asaplibrary.util.actionqueue.Action";
+			return getQualifiedClassName(this);
 		}
 
 	}

@@ -16,10 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
 	import flash.events.*;
-	import org.asaplibrary.util.actionqueue.ConditionManager;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.util.actionqueue.ConditionManager;	
+
 	/**
 	Sequentially calls a list of Action objects. Each action is performed one after the other.
 	
@@ -227,7 +228,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString () : String {
-			return "ActionRunner " + getName();
+			return getQualifiedClassName(this) + ":" + getName();
 		}
 		
 		/**

@@ -20,6 +20,7 @@ package org.asaplibrary.ui.buttons {
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
 	
 	import org.asaplibrary.ui.buttons.ButtonBehavior;
@@ -95,7 +96,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.DelayButtonBehavior";
+			return getQualifiedClassName(this);
 		}
 		
 		/**

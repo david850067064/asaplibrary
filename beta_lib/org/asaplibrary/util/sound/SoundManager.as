@@ -22,9 +22,10 @@ package org.asaplibrary.util.sound {
 	import flash.media.SoundTransform;
 	import flash.net.SharedObject;
 	import flash.net.URLRequest;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.ui.form.components.ISelectable;
-	import org.asaplibrary.util.debug.Log;		
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	 * Class for managing sounds in an application.
@@ -334,7 +335,7 @@ package org.asaplibrary.util.sound {
 		
 		
 		public function toString():String {
-			return "; org.asaplibrary.util.sound.SoundManager ";
+			return getQualifiedClassName(this);
 		}		
 	}
 }

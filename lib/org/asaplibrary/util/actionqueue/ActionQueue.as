@@ -16,11 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-		
 	import flash.events.*;
+	import flash.utils.getQualifiedClassName;
 	
-	import org.asaplibrary.util.actionqueue.*;
-	
+	import org.asaplibrary.util.actionqueue.*;		
+
 	/**
 	Creates a series of sequential animation/function calls, or "actions". Each action is performed one after the other.
 	
@@ -645,7 +645,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";org.asaplibrary.util.actionqueue.ActionQueue: " + mName;
+			return getQualifiedClassName(this) + ": " + mName;
 		}
 		
 		/**

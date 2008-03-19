@@ -16,9 +16,10 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.array {
+	import flash.utils.getQualifiedClassName;
 	
-	import org.asaplibrary.data.array.*;
-	
+	import org.asaplibrary.data.array.*;	
+
 	/**
 	Enhanced array enumerator, with the option to loop and validate updates by way of a delegate. TraverseArrayEnumerator sends out traverse events of type {@link TraverseArrayEnumeratorEvent#UPDATE}.
 	
@@ -129,7 +130,7 @@ package org.asaplibrary.data.array {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";org.asaplibrary.data.array.TraverseArrayEnumerator: objects=" + mObjects;
+			return getQualifiedClassName(this) + ": objects=" + mObjects;
 		}
 		
 		// PRIVATE METHODS

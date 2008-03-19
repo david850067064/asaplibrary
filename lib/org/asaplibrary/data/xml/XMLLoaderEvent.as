@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.xml {
-	
 	import flash.events.Event;
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Passes events for {@link XMLLoader}. Subscribe to type <code>_EVENT</code>.
 	@example
@@ -72,7 +72,7 @@ package org.asaplibrary.data.xml {
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.data.xml.XMLLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; bytesLoaded=" + bytesLoaded + "; bytesTotal=" + bytesTotal;
+			return getQualifiedClassName(this) + "; name=" + name + "; subtype=" + subtype + "; error=" + error + "; bytesLoaded=" + bytesLoaded + "; bytesTotal=" + bytesTotal;
 		}
 		
 		/**

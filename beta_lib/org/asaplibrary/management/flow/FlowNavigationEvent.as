@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.flow {
-	
 	import flash.events.Event;
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Event objects that are dispatched by {@link FlowManager}. Subscribe to type <code>_EVENT</code>.
 	@example
@@ -95,7 +95,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowNavigationEvent: subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination + "; stoppingSections=" + stoppingSections + "; startingSections=" + startingSections;
+			return return getQualifiedClassName(this) + ": subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination + "; stoppingSections=" + stoppingSections + "; startingSections=" + startingSections;
 		}
 		
 		/**

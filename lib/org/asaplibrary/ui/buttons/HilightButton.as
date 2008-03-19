@@ -17,6 +17,7 @@ limitations under the License.
 
 package org.asaplibrary.ui.buttons {
 	import flash.events.Event;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.ui.buttons.*;
 	import org.asaplibrary.util.FramePulse;	
@@ -160,7 +161,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.HilightButton";
+			return getQualifiedClassName(this);
 		}
 	}
 }

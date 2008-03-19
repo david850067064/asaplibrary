@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
-
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
 	import flash.events.Event;
@@ -25,8 +24,9 @@ package org.asaplibrary.util.loader {
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLRequest;
+	import flash.utils.getQualifiedClassName;
 	
-	import org.asaplibrary.util.debug.Log;		
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	Loads assets (SWF movies or supported image formats) into a clip. Multiple/subsequent added assets that are added are queued. AssetLoader can deal with multiple loading threads simultaneously (if passed to the constructor). The number of simultaneous loading processes is limited by the browser though.
@@ -275,7 +275,7 @@ package org.asaplibrary.util.loader {
 		}
 		
 		override public function toString ():String {
-			return "org.asaplibrary.util.loader.AssetLoader";
+			return getQualifiedClassName(this);
 		}
 	}
 }

@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.flow {
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Behavior rule for FlowManager when traversing from one state to the other. See {@link FlowManager} for examples.
 	*/
@@ -49,7 +50,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowRule: name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
+			return return getQualifiedClassName(this) + ": name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
 		}
 	}
 

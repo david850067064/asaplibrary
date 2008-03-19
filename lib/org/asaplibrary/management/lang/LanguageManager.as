@@ -18,9 +18,11 @@ limitations under the License.
 package org.asaplibrary.management.lang {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.data.xml.*;
 	import org.asaplibrary.util.debug.Log;	
+
 	/**
 	Class for managing language dependencies in an application.
 	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
@@ -296,7 +298,7 @@ package org.asaplibrary.management.lang {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.management.lang.LanguageManager";
+			return getQualifiedClassName(this);
 		}
 
 	}

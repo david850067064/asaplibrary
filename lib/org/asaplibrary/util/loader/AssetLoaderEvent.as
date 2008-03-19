@@ -16,12 +16,12 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.loader {
-
-	import flash.display.LoaderInfo;	
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
+	import flash.display.LoaderInfo;
 	import flash.events.Event;
-	
+	import flash.utils.getQualifiedClassName;		
+
 	/**
 	Event object sent by {@link AssetLoader}. Subscribe to type <code>_EVENT</code>.
 	*/
@@ -67,7 +67,7 @@ package org.asaplibrary.util.loader {
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.util.loader.AssetLoaderEvent; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
+			return getQualifiedClassName(this) + "; name=" + name + "; subtype=" + subtype + "; error=" + error + "; totalBytesCount=" + totalBytesCount + "; loadedBytesCount=" + loadedBytesCount;
 		}
 		
 		/**

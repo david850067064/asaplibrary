@@ -42,7 +42,7 @@ private function onLogEvent (e:LogEvent) {
 }
 
 public function toString () : String {
-	return "TestClass";
+	return getQualifiedClassName(this);
 }
 </code>
 This will show the following output in the Flash IDE output window:

@@ -22,9 +22,10 @@ Basic info contained in this class is the text and the id by which it is referen
 */
 
 package org.asaplibrary.management.lang {
-
-	import org.asaplibrary.data.xml.IParsable;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.data.xml.IParsable;	
+
 	public class TextItemData implements IParsable {
 		
 		public var text : String;
@@ -55,7 +56,7 @@ package org.asaplibrary.management.lang {
 		}
 		
 		public function toString () : String {
-			return "org.asaplibrary.management.lang.TextItemData";
+			return getQualifiedClassName(this);
 		}
 	}
 }

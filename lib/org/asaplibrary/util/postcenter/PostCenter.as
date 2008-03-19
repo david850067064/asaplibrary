@@ -20,10 +20,11 @@ package org.asaplibrary.util.postcenter {
 	import flash.events.TimerEvent;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.utils.Timer;	
-
-	import org.asaplibrary.util.postcenter.PostCenterEvent;
+	import flash.utils.Timer;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.util.postcenter.PostCenterEvent;	
+
 	/**			
 	Send <code>navigateToURL</code> requests safely on all browsers.
 	Windows Internet Explorer cannot handle <code>navigateToURL</code> messages that are sent out quickly in succession; PostCenter functions as intermediary and queues and batches requests where possible.
@@ -248,7 +249,7 @@ package org.asaplibrary.util.postcenter {
 		@exclude
 		*/
 		public override function toString():String {
-			return "com.lostboys.util.postcenter.PostCenter; name=" + mName;
+			return getQualifiedClassName(this) + "; name=" + mName;
 		}
 	}
 }

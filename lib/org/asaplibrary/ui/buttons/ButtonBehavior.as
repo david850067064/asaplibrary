@@ -16,15 +16,15 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.buttons {
-	
-	import flash.events.EventDispatcher;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.ui.buttons.ButtonBehaviorEvent;
-	import org.asaplibrary.ui.buttons.ButtonStates;
-	
+	import org.asaplibrary.ui.buttons.ButtonStates;	
+
 	/**
 	Delegate class to manage button states (mouse over, selected, enabled, etcetera) to free the button class from state management and let it just do the drawing of its mouse states.
 	This also makes mouse behaviour pluggable - see for instance {@link DelayButtonBehavior} for a time-oriented delegate.
@@ -142,7 +142,7 @@ package org.asaplibrary.ui.buttons {
 		
 		*/
 		override public function toString () : String {
-			return ";org.asaplibrary.ui.buttons.ButtonBehavior";
+			return getQualifiedClassName(this);
 		}
 		
 		/**

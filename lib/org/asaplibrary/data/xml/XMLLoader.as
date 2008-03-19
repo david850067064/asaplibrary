@@ -24,6 +24,7 @@ package org.asaplibrary.data.xml {
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.util.debug.Log;	
 
@@ -207,7 +208,7 @@ package org.asaplibrary.data.xml {
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.data.xml.XMLLoader";
+			return getQualifiedClassName(this);
 		}
 	}	
 }

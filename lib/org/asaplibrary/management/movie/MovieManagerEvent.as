@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.movie {
-
 	import flash.display.DisplayObject;
 	import flash.events.Event;
+	import flash.utils.getQualifiedClassName;	
 
 	/**
 	Event object sent by {@link MovieManager}. Subscribe to type <code>_EVENT</code>.
@@ -78,7 +78,7 @@ package org.asaplibrary.management.movie {
 		}
 		
 		public override function toString ():String {
-			return "org.asaplibrary.management.movie.MovieManagerEvent; subtype=" + subtype + "; name=" + name + "; controller=" + controller + "; container=" + container + "; error=" + error;
+			return getQualifiedClassName(this) + "; subtype=" + subtype + "; name=" + name + "; controller=" + controller + "; container=" + container + "; error=" + error;
 		}
 		
 		/**

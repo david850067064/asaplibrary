@@ -46,9 +46,5 @@ package {
 			
 			var form:UserForm = new UserForm(dob as MovieClip);
 		}
-		
-		override public function toString():String {
-			return "; AppController ";
-		}
 	}
 }

@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.postcenter {
-
 	import flash.events.Event;
 	import flash.net.URLRequest;
+	import flash.utils.getQualifiedClassName;	
 
 	/**
 	Event object sent by {@link PostCenter}. Subscribe to type <code>_EVENT</code>.
@@ -54,7 +54,7 @@ package org.asaplibrary.util.postcenter {
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.util.postcenter.PostCenter; subtype=" + subtype + "; request=" + request;
+			return getQualifiedClassName(this) + "; subtype=" + subtype + "; request=" + request;
 		}
 		
 		/**
