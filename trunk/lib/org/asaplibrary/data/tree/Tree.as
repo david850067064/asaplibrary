@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.tree {
-
+	import flash.utils.getQualifiedClassName;	
+	
 	/**
 	All sorts of information is hierarchical and can be represented by a tree structure: websites, photo albums, topic knowledge, etcetera.
 	
@@ -124,7 +125,7 @@ package org.asaplibrary.data.tree {
 		*/
 		public function toString () : String {
 			var dataStr:String = data ? data.toString() : "";
-			return ";org.asaplibrary.data.tree.Tree: " + name + "; data=" + dataStr;
+			return getQualifiedClassName(this) + ": " + name + "; data=" + dataStr;
 		}
 		
 		/**

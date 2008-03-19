@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
 	import flash.events.Event;
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Event objects that are sent by {@link ConditionManager}. Subscribe to type <code>_EVENT</code>.
 	*/
@@ -45,7 +45,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 		
 		public override function toString () : String {
-			return ";org.asaplibrary.util.actionqueue.ConditionEvent: subtype=" + subtype + "; condition=" + condition;
+			return getQualifiedClassName(this) + ": subtype=" + subtype + "; condition=" + condition;
 		}
 		
 		/**

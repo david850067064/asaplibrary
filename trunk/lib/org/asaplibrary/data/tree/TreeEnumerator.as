@@ -16,10 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.tree {
-
-	import org.asaplibrary.data.BaseEnumerator;
-	import org.asaplibrary.util.debug.Log;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.data.BaseEnumerator;
+	import org.asaplibrary.util.debug.Log;	
+
 	/**
 	Straightforward enumeration (iterator) class for {@link Tree} objects. TreeEnumerator has one way of iterating: forward ({@link #getNextObject}).
 	@use
@@ -112,7 +113,7 @@ package org.asaplibrary.data.tree {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "org.asaplibrary.data.TreeEnumeratorl root node=" + mRootNode;
+			return getQualifiedClassName(this) + ": root node=" + mRootNode;
 		}
 		
 		/**

@@ -21,12 +21,12 @@ WARNING: provided "AS IS" -- this code has not been tested on production sites!
 </div>
 */
 package org.asaplibrary.management.flow {
-	
 	import flash.events.*;
-
+	import flash.utils.getQualifiedClassName;
+	
 	import org.asaplibrary.management.movie.*;
-	import org.asaplibrary.util.actionqueue.*;	
-	import org.asaplibrary.util.debug.Log;
+	import org.asaplibrary.util.actionqueue.*;
+	import org.asaplibrary.util.debug.Log;	
 
 	/**
 	Enables to move from one state to the other within a site structure, even using 'deep links'.
@@ -242,7 +242,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowManager:" + mName;
+			return return getQualifiedClassName(this) + mName;
 		}
 		
 		/**
@@ -730,7 +730,6 @@ class DownloadSection {
 		destination = inDestination;
 	}
 }
-
 
 import org.asaplibrary.management.flow.*;
 

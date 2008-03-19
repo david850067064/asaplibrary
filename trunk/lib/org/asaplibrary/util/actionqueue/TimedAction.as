@@ -16,11 +16,11 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-
 	import flash.events.*;
+	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
-
-	import org.asaplibrary.util.FramePulse;
+	
+	import org.asaplibrary.util.FramePulse;	
 
 	/**
 	A TimedAction is an Action that performs a function during a set time period.
@@ -109,7 +109,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString() : String {
-			return ";org.asaplibrary.util.actionqueue.TimedAction; duration=" + mDuration + "; start=" + mStart + "; end=" + mEnd;
+			return getQualifiedClassName(this) + "; duration=" + mDuration + "; start=" + mStart + "; end=" + mEnd;
 		}
 		
 		/**

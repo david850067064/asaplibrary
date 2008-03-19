@@ -40,8 +40,7 @@ package org.asaplibrary.management.lang {
 	import flash.events.Event;
 	import flash.events.EventPhase;
 	import flash.text.TextField;
-	
-	import org.asaplibrary.util.debug.Log;		
+	import flash.utils.getQualifiedClassName;	
 
 	public class MultiLanguageTextContainer extends MovieClip implements IMultiLanguageTextContainer {
 
@@ -107,7 +106,7 @@ package org.asaplibrary.management.lang {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.management.lang.MultiLanguageTextContainer";
+			return getQualifiedClassName(this);
 		}
 	}
 }

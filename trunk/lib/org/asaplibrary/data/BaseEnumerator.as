@@ -17,8 +17,8 @@ limitations under the License.
 
 
 package org.asaplibrary.data {
-
 	import flash.events.EventDispatcher;
+	import flash.utils.getQualifiedClassName;	
 
 	/**
 	Base class for enumerator objects.
@@ -57,7 +57,7 @@ package org.asaplibrary.data {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "org.asaplibrary.data.BaseEnumerator";
+			return getQualifiedClassName(this);
 		}
 		
 	}

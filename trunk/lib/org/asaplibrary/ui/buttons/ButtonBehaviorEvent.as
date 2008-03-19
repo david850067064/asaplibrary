@@ -17,7 +17,8 @@ limitations under the License.
 
 package org.asaplibrary.ui.buttons {
 	import flash.events.Event;
-	import flash.events.MouseEvent;	
+	import flash.events.MouseEvent;
+	import flash.utils.getQualifiedClassName;	
 
 	/**
 	Passes events for {@link ButtonBehavior} (and subclasses thereof). 
@@ -68,7 +69,7 @@ package org.asaplibrary.ui.buttons {
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.ui.buttons.ButtonBehaviorEvent; state=" + ButtonStates.stateToString(state) + "; selected=" + selected + "; enabled=" + enabled + "; pressed=" + pressed + "; mouseEvent=" + mouseEvent;
+			return getQualifiedClassName(this) + "; state=" + ButtonStates.stateToString(state) + "; selected=" + selected + "; enabled=" + enabled + "; pressed=" + pressed + "; mouseEvent=" + mouseEvent;
 		}
 		
 		/**

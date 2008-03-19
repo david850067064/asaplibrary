@@ -2,10 +2,11 @@ package assets {
 	import flash.display.DisplayObject;
 	import flash.events.EventDispatcher;
 	import flash.system.ApplicationDomain;
+	import flash.utils.getQualifiedClassName;
 	
+	import org.asaplibrary.util.debug.Log;
 	import org.asaplibrary.util.loader.AssetLoader;
-	import org.asaplibrary.util.loader.AssetLoaderEvent;
-	import org.asaplibrary.util.debug.Log;	
+	import org.asaplibrary.util.loader.AssetLoaderEvent;	
 
 	/**
 	 * @author eric-paul.lecluse
@@ -114,7 +115,7 @@ package assets {
 		}
 
 		override public function toString() : String {
-			return "; com.lostboys.assets.AssetManager ";
+			return getQualifiedClassName(this);
 		}
 		
 	}

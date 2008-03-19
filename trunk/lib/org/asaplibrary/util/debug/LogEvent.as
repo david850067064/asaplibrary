@@ -16,9 +16,9 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.debug {
-
 	import flash.events.Event;
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Event object sent by {@link Log}. Subscribe to type <code>_EVENT</code>.
 	*/
@@ -44,7 +44,7 @@ package org.asaplibrary.util.debug {
 		}
 		
 		public override function toString ():String {
-			return ";org.asaplibrary.util.debug.LogEvent: level=" + level + "; text=" + text + "; sender=" + sender;
+			return getQualifiedClassName(this) + ": level=" + level + "; text=" + text + "; sender=" + sender;
 		}
 	
 		/**

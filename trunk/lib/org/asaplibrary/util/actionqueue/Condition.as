@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	A Condition is an {@link Action} that runs an evaluation method and returns its result: true or false. 
 	
@@ -58,7 +59,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString() : String {
-			return ";org.asaplibrary.util.actionqueue.Condition";
+			return getQualifiedClassName(this);
 		}
 		
 		/**

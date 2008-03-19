@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.validation {
-
+	import flash.utils.getQualifiedClassName;	
+	
 	/**
 	 * Class for validation of user input values in UI components.
 	 * UI components must implement IValidatable, and be added for validation through implementations of IValidationRule.
@@ -84,7 +85,7 @@ package org.asaplibrary.util.validation {
 		}
 		
 		public function toString():String {
-			return "; com.lostboys.util.validation.Validator ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

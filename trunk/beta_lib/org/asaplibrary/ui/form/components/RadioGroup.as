@@ -16,9 +16,10 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.form.components {
-	import flash.events.Event;	
-	import flash.events.EventDispatcher;	
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.util.validation.IHasError;
 	import org.asaplibrary.util.validation.IValidatable;		
@@ -124,7 +125,7 @@ package org.asaplibrary.ui.form.components {
 		}
 		
 		override public function toString():String {
-			return "; com.lostboys.form.RadioGroup ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

@@ -19,6 +19,7 @@ package org.asaplibrary.management.movie {
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.events.EventDispatcher;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.util.debug.Log;
 	import org.asaplibrary.util.loader.AssetLoader;
@@ -336,12 +337,13 @@ package org.asaplibrary.management.movie {
 		}
 		
 		override public function toString () : String {
-			return ";org.asaplibrary.management.movie.MovieManager";
+			return getQualifiedClassName(this);
 		}
 	}
 }
 
 import flash.display.DisplayObject;
+import flash.utils.getQualifiedClassName;
 
 import org.asaplibrary.management.movie.*;
 
@@ -362,7 +364,7 @@ class MovieData {
 	}
 	
 	public function toString () : String {
-		return "; org.asaplibrary.management.movie.MovieData: name=" + name + "; controller=" + controller + "; container=" + container;
+		return getQualifiedClassName(this) + ": name=" + name + "; controller=" + controller + "; container=" + container;
 	}
 	
 }

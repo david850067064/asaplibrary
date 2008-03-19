@@ -1,7 +1,9 @@
 package data {
+	import flash.utils.getQualifiedClassName;
+	
 	import org.asaplibrary.data.URLData;
 	import org.asaplibrary.data.xml.Service;
-	import org.asaplibrary.data.xml.ServiceEvent;		
+	import org.asaplibrary.data.xml.ServiceEvent;	
 
 	/**
 	 * @author stephan.bezoen
@@ -28,7 +30,7 @@ package data {
 		}
 		
 		override public function toString():String {
-			return "; data.UserFormService ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

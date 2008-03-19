@@ -16,6 +16,7 @@ limitations under the License.
 
 package org.asaplibrary.data.xml {
 	import flash.events.Event;
+	import flash.utils.getQualifiedClassName;	
 
 	/**
 	Event class for use with the Service class. Listen to the generic event type to receive these events.
@@ -63,7 +64,7 @@ package org.asaplibrary.data.xml {
 		}
 		
 		override public function toString() : String {
-			return "org.asaplibrary.data.xml.ServiceEvent: subtype = " + subtype + ", name = " + name;
+			return getQualifiedClassName(this) + ": subtype = " + subtype + ", name = " + name;
 		}
 	}
 }

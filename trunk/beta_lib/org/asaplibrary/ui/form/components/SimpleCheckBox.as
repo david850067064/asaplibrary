@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.form.components {
-	import org.asaplibrary.util.validation.IValidatable;	
-	
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.ui.buttons.BaseButton;
-	import org.asaplibrary.util.validation.IHasError;	
+	import org.asaplibrary.util.validation.IHasError;
+	import org.asaplibrary.util.validation.IValidatable;		
 
 	/**
 	 * Very simple implementation of checkbox behaviour.
@@ -111,7 +111,7 @@ package org.asaplibrary.ui.form.components {
 		}
 
 		override public function toString():String {
-			return "; org.asaplibrary.ui.form.components.SimpleCheckBox ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

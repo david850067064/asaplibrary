@@ -1,6 +1,7 @@
 ﻿package data {
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.data.URLData;
 	import org.asaplibrary.data.xml.Parser;
@@ -110,7 +111,7 @@
 		}
 		
 		override public function toString() : String {
-			return "com.lostboys.data.URLManager";
+			return getQualifiedClassName(this);
 		}
 	}
 }

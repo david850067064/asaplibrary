@@ -21,6 +21,7 @@ package org.asaplibrary.ui.form.focus {
 	import flash.events.FocusEvent;
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.util.debug.Log;	
 
@@ -198,7 +199,7 @@ package org.asaplibrary.ui.form.focus {
 		}
 		
 		override public function toString():String {
-			return "; com.lostboys.form.focus.FocusManager ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

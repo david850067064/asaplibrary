@@ -17,8 +17,9 @@ limitations under the License.
 
 
 package org.asaplibrary.data.array {
-
-	import org.asaplibrary.data.BaseEnumerator;
+	import flash.utils.getQualifiedClassName;
+	
+	import org.asaplibrary.data.BaseEnumerator;	
 
 	/**
 	Straightforward enumeration (iterator) class for arrays. ArrayEnumerator has one way of iterating: forward (using {@link #getNextObject}). For more options see {@link TraverseArrayEnumerator}.
@@ -119,7 +120,7 @@ package org.asaplibrary.data.array {
 		@exclude
 		*/
 		public override function toString () : String {
-			return "org.asaplibrary.data.array.ArrayEnumerator; objects " + mObjects;
+			return getQualifiedClassName(this) + "; objects " + mObjects;
 		}
 				
 		/**

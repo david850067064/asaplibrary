@@ -18,6 +18,7 @@ limitations under the License.
 package org.asaplibrary.management.movie {
 	import flash.display.MovieClip;
 	import flash.display.Stage;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.management.movie.MovieManager;	
 
@@ -100,7 +101,7 @@ package org.asaplibrary.management.movie {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";org.asaplibrary.management.movie.LocalController: " + getName();
+			return getQualifiedClassName(this) + ": " + getName();
 		}
 	}
 }

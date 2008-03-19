@@ -16,10 +16,10 @@ limitations under the License.
 */
 
 package org.asaplibrary.util.actionqueue {
-	
 	import flash.events.*;
-
-	import org.asaplibrary.util.FramePulse;
+	import flash.utils.getQualifiedClassName;
+	
+	import org.asaplibrary.util.FramePulse;	
 
 	/**
 	ConditionManager repeatedly runs through a list of {@link Condition Conditions} (on each {@link FramePulse} event, until all conditions are met).  
@@ -44,7 +44,7 @@ package org.asaplibrary.util.actionqueue {
 		@exclude
 		*/
 		override public function toString() : String {
-			return ";org.asaplibrary.util.actionqueue.ConditionManager";
+			return getQualifiedClassName(this);
 		}
 		
 		/**

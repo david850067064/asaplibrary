@@ -3,6 +3,7 @@ package ui {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.data.xml.ServiceEvent;
 	import org.asaplibrary.management.movie.LocalController;
@@ -159,7 +160,7 @@ package ui {
 		}
 
 		private function handleServiceEvent(e : ServiceEvent) : void {     
-			if ((e.subtype == ServiceEvent.LOAD_ERROR) || (e.subtype == ServiceEvent.LOAD_ERROR)) { 
+			if ((e.subtype == ServiceEvent.LOAD_ERROR) || (e.subtype == ServiceEvent.PARSE_ERROR)) { 
 				Log.error("Server error: message = " + e.error, toString());
 				showError("Something went wrong with the server. Try again later.");
 				return;
@@ -191,7 +192,7 @@ package ui {
 		}
 		
 		public function toString():String {
-			return "; com.lostboys.ui.form.UserForm ";
+			return getQualifiedClassName(this);
 		}
 	}
 }

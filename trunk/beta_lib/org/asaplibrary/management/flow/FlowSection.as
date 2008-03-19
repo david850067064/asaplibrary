@@ -16,12 +16,12 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.flow {
-
 	import flash.display.MovieClip;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.management.flow.*;
-	import org.asaplibrary.util.actionqueue.*;
-	
+	import org.asaplibrary.util.actionqueue.*;	
+
 	/**
 	Building block of navigatable site sections.
 	
@@ -189,7 +189,7 @@ package org.asaplibrary.management.flow {
 		@exclude
 		*/
 		public override function toString () : String {
-			return ";org.asaplibrary.management.flow.FlowSection: " + getName();
+			return return getQualifiedClassName(this) + ":" + getName();
 		}
 		
 	}

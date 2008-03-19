@@ -16,7 +16,8 @@ limitations under the License.
 */
 
 package org.asaplibrary.management.flow {
-	
+	import flash.utils.getQualifiedClassName;	
+
 	/**
 	Navigation properties for {@link FlowSection} names.
 	*/
@@ -35,7 +36,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public function toString () : String {
-			return "FlowNavigationData: name=" + name + "; trigger=" + trigger + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
+			return return getQualifiedClassName(this) + ": name=" + name + "; trigger=" + trigger + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
 		}
 		
 	}
