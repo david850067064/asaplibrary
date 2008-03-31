@@ -3,6 +3,7 @@ package ui {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
+	import flash.ui.Keyboard;
 	import flash.utils.getQualifiedClassName;
 	
 	import org.asaplibrary.data.xml.ServiceEvent;
@@ -12,6 +13,7 @@ package ui {
 	import org.asaplibrary.ui.form.components.RadioGroup;
 	import org.asaplibrary.ui.form.components.SimpleCheckBox;
 	import org.asaplibrary.ui.form.focus.FocusManager;
+	import org.asaplibrary.util.KeyMapper;
 	import org.asaplibrary.util.debug.Log;
 	import org.asaplibrary.util.validation.IHasError;
 	import org.asaplibrary.util.validation.IValidationRule;
@@ -46,6 +48,7 @@ package ui {
 		private var mService : UserFormService;
 		private var mFocusManager : FocusManager;
 		private var mGenderGroup : RadioGroup;
+		private var mKeyMapper : KeyMapper;
 
 		public function UserForm (inContainer:MovieClip) {
 			mContainer = inContainer;
@@ -115,6 +118,10 @@ package ui {
 
 			tSubmit.addEventListener(MouseEvent.CLICK, handleSubmit);
 			
+			// key handling
+			mKeyMapper = new KeyMapper(LocalController.globalStage);
+			mKeyMapper.setMapping(Keyboard.ENTER, handleSubmit);
+			
 			reset();
 		}
 		
@@ -122,7 +129,7 @@ package ui {
 			if (mIsAutoValidate) validate(false);
 		}
 
-		private function handleSubmit(e : MouseEvent) : void {
+		private function handleSubmit(e : MouseEvent = null) : void {
 			mIsAutoValidate = true;
 			
 			validate(true);
