@@ -18,32 +18,39 @@ package org.asaplibrary.ui.animation {
 	import flash.events.Event;	
 
 	/**
-	 * Event class for sending animation related events
+	 * Event class for sending animation related events. Subscribe to type <code>_EVENT</code>.
 	 */
 	public class AnimationEvent extends Event {
-		/** generic event type */
+		/** Generic event type. */
 		public static var _EVENT:String = "onAnimationEvent";
 		
-		/** subtype of event sent when in animation is started */
+		/** Subtype of event sent when in animation is started. */
 		public static var IN_ANIMATION_STARTED:String = "inAnimationStarted";
-		/** subtype of event sent when in animation is done*/
+		/** Subtype of event sent when in animation is done. */
 		public static var IN_ANIMATION_DONE:String = "inAnimationDone";
-		/** subtype of event sent when out animation is done*/
+		/** Subtype of event sent when out animation is done. */
 		public static var OUT_ANIMATION_STARTED:String = "outAnimationStarted";
-		/** subtype of event sent when out animation is done*/
+		/** Subtype of event sent when out animation is done. */
 		public static var OUT_ANIMATION_DONE:String = "outAnimationDone";
-		/** subtype of event sent when general animation is done*/
+		/** Subtype of event sent when general animation is done. */
 		public static var ANIMATION_DONE:String = "animationDone";
 		
-		/** Subtype of event */
+		/** Subtype of event. */
 		public var subtype:String;
 		
+		/**
+		Creates a new AnimationEvent.
+		@param inSubtype: either subtype; see above
+		*/
 		function AnimationEvent(inSubtype : String) {
 			super(_EVENT);
 			
 			subtype = inSubtype;
 		}
 		
+		/**
+		Creates a copy of an existing AnimationEvent.
+		*/
 		override public function clone () : Event {
 			return new AnimationEvent(subtype);
 		}
