@@ -48,10 +48,10 @@ package org.asaplibrary.ui.form.components {
 		 */
 		public function InputField() {
 			// catch events for focus management
-			tInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, handleMouseFocusChange);
-			tInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, handleKeyFocusChange);
-			tInput.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn);
-			tInput.addEventListener(FocusEvent.FOCUS_OUT, handleFocusOut);
+			tInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, handleMouseFocusChange, false, 0, true);
+			tInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, handleKeyFocusChange, false, 0, true);
+			tInput.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn, false, 0, true);
+			tInput.addEventListener(FocusEvent.FOCUS_OUT, handleFocusOut, false, 0, true);
 			
 			if (tError) tError.visible = false;
 		}
