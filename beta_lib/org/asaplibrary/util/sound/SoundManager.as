@@ -16,6 +16,7 @@ limitations under the License.
 
 package org.asaplibrary.util.sound {
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
@@ -44,7 +45,7 @@ package org.asaplibrary.util.sound {
 	 * Sounds that are currently being played, or present in the list, can be muted & unmuted with <code>muteAllSounds()</code> & <code>unmuteAllSounds()</code>. Muting is also applied to sounds that are started after mute is set. These sounds will start normally, but will not be audible if muting is applied.
 	 * The overall sound volume can be set with <code>setOverallVolume()</code>. This multiplies the volume of individual sounds with the overall volume value.
 	 */
-	public class SoundManager {
+	public class SoundManager extends EventDispatcher {
 		/* Singleton implementation */
 		private static const theInstance : SoundManager = new SoundManager();
 		public static function getInstance() : SoundManager {return theInstance;}
@@ -139,7 +140,7 @@ package org.asaplibrary.util.sound {
 			
 			setVolume(sd, sd.volume);
 			
-			if (inLoop && sd.channel) sd.channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete);
+			if (sd.channel) sd.channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete);
 		}
 		
 		/**
@@ -272,6 +273,8 @@ package org.asaplibrary.util.sound {
 			
 			sd.isLoaded = true;
 			sd.isLoading = false;
+			
+			dispatchEvent(new SoundEvent(Event.COMPLETE, sd.name));
 		}
 
 		/**
@@ -286,6 +289,8 @@ package org.asaplibrary.util.sound {
 			if (sd.isLooping) {
 				playSound(sd.name, true);
 				setVolume(sd, sd.volume);
+			} else {
+				dispatchEvent(new SoundEvent(Event.SOUND_COMPLETE, sd.name));
 			}
 		}
 		
@@ -332,9 +337,7 @@ package org.asaplibrary.util.sound {
 			
 		}
 
-		
-		
-		public function toString():String {
+		override public function toString():String {
 			return getQualifiedClassName(this);
 		}		
 	}
