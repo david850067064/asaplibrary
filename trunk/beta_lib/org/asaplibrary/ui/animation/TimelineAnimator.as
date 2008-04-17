@@ -26,11 +26,11 @@ package org.asaplibrary.ui.animation {
 	import org.asaplibrary.util.FramePulse;		
 
 	/**
-	 * Wrapper class to control a timeline animation & receive events when animations are done.
-	 * The timeline animation can have labels "in" & "out" defined, that will be used as control points for specific animations. See each of the functions (#goIn, #goOut, #playOneShotAnimation) for detailed behaviour description.
+	 * Wrapper class to control a timeline animation and receive events when animations are done.
+	 * The timeline animation can have labels "in" and "out" defined, that will be used as control points for specific animations. See each of the functions ({@link #goIn}, {@link #goOut}, {@link #playOneShotAnimation}) for detailed behaviour description.
 	 * 
 	 * Example:
-	 * Suppose a MovieClip instance with instance name "tIntroAnimation" that is a child of the class in which the following code is defined. This MovieClip has labels "in" & "out" defined on its timeline.
+	 * Suppose a MovieClip instance with instance name "tIntroAnimation" that is a child of the class in which the following code is defined. This MovieClip has labels "in" and "out" defined on its timeline.
 	 * <code>
 	 * private var mAnimation : TimelineAnimation;
 	 * 
