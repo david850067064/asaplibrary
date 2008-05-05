@@ -16,10 +16,12 @@ limitations under the License.
 */
 
 package org.asaplibrary.data.xml {
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
@@ -106,6 +108,7 @@ package org.asaplibrary.data.xml {
 			var loader:URLLoader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, handleURLLoaderEvent);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, handleURLLoaderEvent);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleURLLoaderEvent);
 			loader.addEventListener(ProgressEvent.PROGRESS, handleURLLoaderProgressEvent);
 
 			// create request
@@ -142,9 +145,9 @@ package org.asaplibrary.data.xml {
 
 			// check if an IOError occurred
 			var event:XMLLoaderEvent;
-			if (inEvent is IOErrorEvent) {
+			if (inEvent is ErrorEvent) {
 				// fill error event
-				var errorEvent:IOErrorEvent = inEvent as IOErrorEvent;
+				var errorEvent:ErrorEvent = inEvent as ErrorEvent;
 				event = new XMLLoaderEvent(XMLLoaderEvent.ERROR, xld.name);
 				event.error = errorEvent.text;
 			} else {
