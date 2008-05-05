@@ -18,6 +18,7 @@ limitations under the License.
 package org.asaplibrary.util.loader {
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
+	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -205,16 +206,11 @@ package org.asaplibrary.util.loader {
 
 			// check if an IOError occurred
 			var evt:AssetLoaderEvent;
-			if (e is IOErrorEvent) {
+			if (e is ErrorEvent) {
 				// fill error event
-				var errorEvent:IOErrorEvent = e as IOErrorEvent;
+				var errorEvent:ErrorEvent = e as ErrorEvent;
 				evt = new AssetLoaderEvent(AssetLoaderEvent.ERROR, fd.name);
 				evt.error = errorEvent.text;
-			} else if (e is SecurityErrorEvent) {
-				// fill error event
-				var secErEvent:SecurityErrorEvent = e as SecurityErrorEvent;
-				evt = new AssetLoaderEvent(AssetLoaderEvent.ERROR, fd.name);
-				evt.error = secErEvent.text;
 			} else {
 				// notify we're done loading this file
 				evt = new AssetLoaderEvent(AssetLoaderEvent.COMPLETE, fd.name);
@@ -293,8 +289,4 @@ class FileData {
 	public var bytesTotal:Number;
 	public var bytesLoaded:Number;
 	
-	public function FileData (inURL:String, inName:String) {
-		url = inURL;
-		name = inName;
-	}
-}
+	public function FileData (inURL:
