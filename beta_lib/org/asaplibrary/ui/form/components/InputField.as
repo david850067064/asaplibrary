@@ -103,7 +103,7 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Enable or disable input
 		 */		
-		public function enable (inEnable:Boolean) : void {
+		public function setEnabled (inEnable:Boolean) : void {
 			tInput.mouseEnabled = inEnable;
 		}
 		
