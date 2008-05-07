@@ -86,6 +86,14 @@ package ui {
 			tFemale = mContainer.tFemale;
 			tTerms = mContainer.tTerms;
 			
+			// set hints
+			tFirstName.hintText = "First name";
+			tFirstName.hintTextColor = 0x888888;
+			tLastName.hintText = "Last name";
+			tLastName.hintTextColor = 0x888888;
+			tEmail.hintText = "Email";
+			tEmail.hintTextColor = 0x888888;
+			
 			// create radio group for gender
 			mGenderGroup = new RadioGroup();
 			mGenderGroup.addButton(tMale);
