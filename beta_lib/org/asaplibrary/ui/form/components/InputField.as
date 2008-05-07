@@ -42,6 +42,11 @@ package org.asaplibrary.ui.form.components {
 		public var tError : Sprite;
 		
 		private var mHasFocus : Boolean;
+		private var mText : String;
+		private var mHintText : String;
+		private var mShowsHint : Boolean;
+		private var mTextColor : uint;
+		private var mHintTextColor : uint;
 
 		/**
 		 * Constructor
@@ -53,6 +58,8 @@ package org.asaplibrary.ui.form.components {
 			tInput.addEventListener(FocusEvent.FOCUS_IN, handleFocusIn, false, 0, true);
 			tInput.addEventListener(FocusEvent.FOCUS_OUT, handleFocusOut, false, 0, true);
 			
+			mTextColor = mHintTextColor = tInput.textColor;
+			
 			if (tError) tError.visible = false;
 		}
 		
@@ -60,14 +67,37 @@ package org.asaplibrary.ui.form.components {
 		 * The text in the contained input field
 		 */
 		public function get text () : String {
-			return tInput.text;
+			return mShowsHint ? "" : tInput.text;
 		}
 		
 		/**
 		 * The text in the contained input field
 		 */
 		public function set text (inText:String) : void {
+			mText = inText;
+			
 			tInput.text = inText;
+			
+			mShowsHint = false;
+			updateHint();
+		}
+		
+		/**
+		 * Set the hint text to be displayed when nothing has been input in the field yet
+		 */
+		public function set hintText (inText:String) : void {
+			mHintText = inText;
+			
+			updateHint();
+		}
+		
+		/**
+		 * Set the colour of the hint text
+		 */
+		public function set hintTextColor (inColor : uint) : void {
+			mHintTextColor = inColor;
+			
+			if (mShowsHint) tInput.textColor = mHintTextColor;
 		}
 
 		/**
@@ -106,7 +136,7 @@ package org.asaplibrary.ui.form.components {
 		 * Return the value to be validated
 		 */
 		public function getValue() : * {
-			return tInput.text;
+			return text;
 		}
 
 		public function showError() : void {
@@ -122,6 +152,7 @@ package org.asaplibrary.ui.form.components {
 		 */
 		private function handleFocusIn(event : FocusEvent) : void {
 			mHasFocus = true;
+			updateHint();
 		}
 
 		/**
@@ -129,6 +160,7 @@ package org.asaplibrary.ui.form.components {
 		 */
 		private function handleFocusOut(event : FocusEvent) : void {
 			clearFocus();
+			updateHint();
 		}
 
 		/**
@@ -145,7 +177,21 @@ package org.asaplibrary.ui.form.components {
 		private function handleMouseFocusChange(event : FocusEvent) : void {
 			setFocus();
 		}
-
+		
+		private function updateHint() : void {
+			if (!mHintText) return;
+			
+			if (mHasFocus && mShowsHint) {
+				mShowsHint = false;
+				tInput.text = "";
+				tInput.textColor = mTextColor;
+			} else if (!mHasFocus && !mShowsHint && (tInput.text == "")) {
+				mShowsHint = true;
+				tInput.text = mHintText;
+				tInput.textColor = mHintTextColor;
+			}
+		}
+		
 		override public function toString():String {
 			return getQualifiedClassName(this) + ":" + name;
 		}
