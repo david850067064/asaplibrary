@@ -20,7 +20,9 @@ Interface for the LocalController class. See {@link LocalController} for details
 */
 
 package org.asaplibrary.management.movie {
-	public interface ILocalController {
+	import flash.events.IEventDispatcher;	
+	
+	public interface ILocalController extends IEventDispatcher {
 		function startMovie () : void;
 		function stopMovie () : void;
 		function die () : void;
