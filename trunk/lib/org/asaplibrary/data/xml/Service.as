@@ -118,7 +118,7 @@ package org.asaplibrary.data.xml {
 		/**
 		*	Handle error occurred during parsing of data
 		*/
-		private function handleDataParseError (inName:String) : void {
+		protected function handleDataParseError (inName:String) : void {
 			Log.error("handleDataParseError: error parsing xml with name '" + inName + "'", toString());
 			
 			var error:String = "The XML was well-formed but incomplete. Be so kind and check it. It goes by the name of " + inName;
