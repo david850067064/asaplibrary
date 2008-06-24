@@ -66,11 +66,11 @@ package ui {
 			mIsAutoValidate = false;
 			tError.visible = false;
 			
-			tFirstName.text = "";
-			tLastName.text = "";
-			tEmail.text = "";
-			mGenderGroup.selectButton(null);
-			tTerms.setSelected(false);
+			tFirstName.reset();
+			tLastName.reset();
+			tEmail.reset();
+			mGenderGroup.reset();
+			tTerms.reset();
 			
 			mFocusManager.setFocus(tFirstName);
 		}
@@ -96,8 +96,8 @@ package ui {
 			
 			// create radio group for gender
 			mGenderGroup = new RadioGroup();
-			mGenderGroup.addButton(tMale);
-			mGenderGroup.addButton(tFemale);
+			mGenderGroup.addButton(tMale, "m");
+			mGenderGroup.addButton(tFemale, "f");
 			
 			// aggregate all input fields
 			mFields = [tFirstName, tLastName, tEmail];
@@ -164,7 +164,7 @@ package ui {
 			o.firstname = tFirstName.text;
 			o.lastname = tLastName.text;
 			o.email = tEmail.text;
-			o.gender = (mGenderGroup.getSelection() == tMale) ? "m" : "f";
+			o.gender = mGenderGroup.getValue();
 			o.agreetoterms = tTerms.isSelected() ? "1" : "0";
 			
 			Log.debug("Posting form with following data:", toString());
