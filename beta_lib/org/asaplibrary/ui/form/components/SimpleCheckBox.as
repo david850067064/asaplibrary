@@ -29,11 +29,11 @@ package org.asaplibrary.ui.form.components {
 	 * Very simple implementation of checkbox behaviour.
 	 * This class expects one child with name "tV" on the timeline that will be set to visible or invisible depending on selection state. No animation is provided.
 	 */
-	public class SimpleCheckBox extends BaseButton implements ISelectable, IHasError, IValidatable {
+	public class SimpleCheckBox extends BaseButton implements ISelectable, IHasError, IValidatable, IResettable {
 		public var tV : DisplayObject;
 		public var tError : MovieClip;
 		
-		private var mIsSelected:Boolean = false;
+		protected var mIsSelected:Boolean = false;
 
 		public function SimpleCheckBox () {
 			super();
@@ -102,9 +102,17 @@ package org.asaplibrary.ui.form.components {
 		 */
 		public function getValue() : * {
 			return isSelected();
-		}		
+		}
+		
+		/**
+		 * Reset the checkbox by deselecting & enabling it
+		 */
+		public function reset () : void {
+			setEnabled(true);
+			setSelected(false);
+		}
 
-		private function handleClick(event : MouseEvent) : void {
+		protected function handleClick(event : MouseEvent) : void {
 			mIsSelected = !mIsSelected;
 			
 			tV.visible = mIsSelected;
