@@ -46,18 +46,19 @@ package org.asaplibrary.ui.form.components {
 	   		var currentButton:SimpleCheckBox = rg.getSelection() as SimpleCheckBox;
 	   </code>
 	 */
-	public class RadioGroup extends EventDispatcher implements IValidatable, IHasError {
-
-		private var mButtons:Array = new Array();
-		private var mCurrentSelectedButton : ISelectable;
+	public class RadioGroup extends EventDispatcher implements IValidatable, IHasError, IResettable {
+		/** objects of type Selection */
+		protected var mButtons:Array = new Array();
+		protected var mCurrentSelectedButton : ISelectable;
 
 		/**
 		 *	Add a button to the group
 		 */
-		public function addButton (inButton : ISelectable) : void {
+		public function addButton (inButton : ISelectable, inValue : *) : void {
 			if (!inButton) throw new Error("Parameter 'inButton' not defined.");
 			
-			mButtons.push(inButton);
+			mButtons.push(new Selection(inButton, inValue));
+			
 			// listen to click events from button in capture mode, to disable deselection for selected buttons
 			inButton.addSelectListener(handleButtonSelected);
 		}
@@ -85,12 +86,30 @@ package org.asaplibrary.ui.form.components {
 		public function getSelection() : ISelectable {
 			return mCurrentSelectedButton;
 		}
+		
+		/**
+		 * @return all buttons in this group; objects of type ISelectable
+		 */
+		public function getButtons () : Array {
+			var a:Array = new Array();
+			var leni : uint = mButtons.length;
+			for (var i:uint = 0; i < leni; i++) {
+				a.push((mButtons[i] as Selection).button);
+			}
+			
+			return a;
+		}
 
 		/**
-		 * Return the selection for validation
+		 * @return the value of the currently selected button as provided during addition; returns null if no button is selected. 
 		 */
 		public function getValue() : * {
-			return getSelection();
+			var leni : uint = mButtons.length;
+			for (var i:uint = 0; i < leni; i++) {
+				var sel:Selection = mButtons[i];
+				if (mCurrentSelectedButton == sel.button) return sel.value;
+			}
+			return null;
 		}
 
 		/**
@@ -99,7 +118,7 @@ package org.asaplibrary.ui.form.components {
 		public function showError() : void {
 			var leni : uint = mButtons.length;
 			for (var i:uint = 0; i < leni; i++) {
-				var btn : IHasError = mButtons[i] as IHasError;
+				var btn : IHasError = (mButtons[i] as Selection).button as IHasError;
 				if (btn) btn.showError(); 
 			}
 		}
@@ -110,15 +129,32 @@ package org.asaplibrary.ui.form.components {
 		public function hideError() : void {
 			var leni : uint = mButtons.length;
 			for (var i:uint = 0; i < leni; i++) {
-				var btn : IHasError = mButtons[i] as IHasError;
+				var btn : IHasError = (mButtons[i] as Selection).button as IHasError;
 				if (btn) btn.hideError(); 
 			}
+		}
+		
+		/**
+		 * Reset the group by calling reset on all buttons if they implement IResettable, or deselecting & enabling them 
+		 */
+		public function reset () : void {
+			var leni : uint = mButtons.length;
+			for (var i:uint = 0; i < leni; i++) {
+				var sel:Selection = mButtons[i];
+				if (sel.button is IResettable) (sel.button as IResettable).reset();
+				else {
+					var btn : ISelectable = sel.button;
+					btn.setSelected(false);
+					btn.setEnabled(true);
+				}
+			}
+			mCurrentSelectedButton = null;
 		}
 
 		/**
 		 * Handle click event from radio buttons
 		 */
-		private function handleButtonSelected(e : MouseEvent) : void {
+		protected function handleButtonSelected(e : MouseEvent) : void {
 			selectButton(e.target as ISelectable);
 			
 			dispatchEvent(new Event(Event.CHANGE));
@@ -127,5 +163,17 @@ package org.asaplibrary.ui.form.components {
 		override public function toString():String {
 			return getQualifiedClassName(this);
 		}
+	}
+}
+
+import org.asaplibrary.ui.form.components.ISelectable;
+
+class Selection {
+	public var button : ISelectable;
+	public var value : *;
+	
+	public function Selection(inButton : ISelectable, inValue : *) {
+		button = inButton;
+		value = inValue;
 	}
 }
