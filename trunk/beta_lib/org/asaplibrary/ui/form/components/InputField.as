@@ -37,16 +37,16 @@ package org.asaplibrary.ui.form.components {
 	 * 		<li>Optionally, the library item has a MovieClip child with instance name "tError", to be used for displaying an error state</li>
 	 * 	</ul>
 	 */
-	public class InputField extends MovieClip implements IFocusable, IValidatable, IHasError {
+	public class InputField extends MovieClip implements IFocusable, IValidatable, IHasError, IResettable {
 		public var tInput : TextField;
 		public var tError : Sprite;
 		
-		private var mHasFocus : Boolean;
-		private var mText : String;
-		private var mHintText : String;
-		private var mShowsHint : Boolean;
-		private var mTextColor : uint;
-		private var mHintTextColor : uint;
+		protected var mHasFocus : Boolean;
+		protected var mText : String;
+		protected var mHintText : String;
+		protected var mShowsHint : Boolean;
+		protected var mTextColor : uint;
+		protected var mHintTextColor : uint;
 
 		/**
 		 * Constructor
@@ -146,11 +146,18 @@ package org.asaplibrary.ui.form.components {
 		public function hideError() : void {
 			if (tError) tError.visible = false;
 		}
+		
+		/**
+		 * Reset the input field
+		 */
+		public function reset () : void {
+			text = "";
+		}
 
 		/**
 		 * Handle FOCUS_IN event from input field
 		 */
-		private function handleFocusIn(event : FocusEvent) : void {
+		protected function handleFocusIn(event : FocusEvent) : void {
 			mHasFocus = true;
 			updateHint();
 		}
@@ -158,7 +165,7 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Handle FOCUS_OUT event from input field
 		 */
-		private function handleFocusOut(event : FocusEvent) : void {
+		protected function handleFocusOut(event : FocusEvent) : void {
 			clearFocus();
 			updateHint();
 		}
@@ -166,7 +173,7 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Handle KEY_FOCUS_CHANGE event from input field
 		 */
-		private function handleKeyFocusChange(event : FocusEvent) : void {
+		protected function handleKeyFocusChange(event : FocusEvent) : void {
 			// prevent default selecting behaviour
 			event.preventDefault();
 		}
@@ -174,11 +181,11 @@ package org.asaplibrary.ui.form.components {
 		/**
 		 * Handle MOUSE_FOCUS_CHANGE event from input field
 		 */
-		private function handleMouseFocusChange(event : FocusEvent) : void {
+		protected function handleMouseFocusChange(event : FocusEvent) : void {
 			setFocus();
 		}
 		
-		private function updateHint() : void {
+		protected function updateHint() : void {
 			if (!mHintText) return;
 			
 			if (mHasFocus && mShowsHint) {
