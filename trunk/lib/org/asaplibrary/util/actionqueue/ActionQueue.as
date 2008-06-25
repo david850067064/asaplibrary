@@ -335,7 +335,7 @@ package org.asaplibrary.util.actionqueue {
 		}
 
 		/**
-		Internal function, called by {@link #addWait}.
+		Internal function, called by {@link #addPause}.
 		*/
 		protected function doWait (inDuration:Number) : TimedAction {
 			return new TimedAction(idle, inDuration);

@@ -48,10 +48,10 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		@param inDO : DisplayObject to scale
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
-		@param inStartScaleX : x value to start scaling from; if null then inDO's current scaleX value is used
-		@param inStartScaleY : y value to start scaling from; if null then inDO's current scaleY value is used
-		@param inEndScaleX : x value to end scaling to; if null then inDO's current (dynamic) scaleX value is used
-		@param inEndScaleY : y value to end scaling to; if null then inDO's current (dynamic) scaleY value is used
+		@param inStartScaleX : x value to start scaling from; if NaN then inDO's current scaleX value is used
+		@param inStartScaleY : y value to start scaling from; if NaN then inDO's current scaleY value is used
+		@param inEndScaleX : x value to end scaling to; if NaN then inDO's current (dynamic) scaleX value is used
+		@param inEndScaleY : y value to end scaling to; if NaN then inDO's current (dynamic) scaleY value is used
 		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
 		@return A reference to {@link #initDoScale} that in turn returns the performing fade {@link TimedAction}.
 		*/
