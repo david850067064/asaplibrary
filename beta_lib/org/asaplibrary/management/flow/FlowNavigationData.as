@@ -36,7 +36,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public function toString () : String {
-			return return getQualifiedClassName(this) + ": name=" + name + "; trigger=" + trigger + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
+			return getQualifiedClassName(this) + ": name=" + name + "; trigger=" + trigger + "; stopEverythingFirst=" + stopEverythingFirst + "; updateState=" + updateState;
 		}
 		
 	}
