@@ -38,8 +38,8 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		@param inDO : DisplayObject to fade
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
-		@param inStartAlpha : value to start fading from; if null then inDO's current alpha value is used
-		@param inEndAlpha : value to start fading to; if null then inDO's current alpha value is used
+		@param inStartAlpha : value to start fading from; if NaN then inDO's current alpha value is used
+		@param inEndAlpha : value to start fading to; if NaN then inDO's current alpha value is used
 		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
 		@return A reference to {@link #initDoFade} that in turn returns the performing fade {@link TimedAction}.
 		*/

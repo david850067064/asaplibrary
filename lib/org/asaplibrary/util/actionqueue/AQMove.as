@@ -42,10 +42,10 @@ package org.asaplibrary.util.actionqueue {
 		/**
 		@param inDO : DisplayObject to move
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
-		@param inStartX : x value to start moving from; if null then inDO's current x value is used
-		@param inStartY : y value to start moving from; if null then inDO's current y value is used
-		@param inEndX : x value to start moving to; if null then inDO's current (dynamic) x value is used
-		@param inEndY : y value to start moving to; if null then inDO's current (dynamic) y value is used
+		@param inStartX : x value to start moving from; if NaN then inDO's current x value is used
+		@param inStartY : y value to start moving from; if NaN then inDO's current y value is used
+		@param inEndX : x value to start moving to; if NaN then inDO's current (dynamic) x value is used
+		@param inEndY : y value to start moving to; if NaN then inDO's current (dynamic) y value is used
 		@param inEffect : (optional) an effect function, for instance one of the fl.transitions.easing methods
 		
 		*/

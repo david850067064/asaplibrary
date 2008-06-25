@@ -38,8 +38,8 @@ package org.asaplibrary.util.actionqueue {
 		@param inObject : object to change; this may be a DisplayObject or any other object
 		@param inProperty : name of property (in inObject) that will be affected; for instance "x" for the x position of a DisplayObject
 		@param inDuration : length of change in seconds; 0 is used for perpetual animations - use -1 for instant change
-		@param inStartValue : (optional) the starting value of inProperty; if null the current object value will be used
-		@param inEndValue : (optional) the end value of inProperty; if null the current object value will be used
+		@param inStartValue : (optional) the starting value of inProperty; if NaN the current object value will be used
+		@param inEndValue : (optional) the end value of inProperty; if NaN the current object value will be used
 		@param inEffect : (optional) an effect function, for instance one of the fl.motion.easing methods
 		@return A reference to {@link #initDoChange} that in turn returns the performing change {@link TimedAction}.
 		*/
