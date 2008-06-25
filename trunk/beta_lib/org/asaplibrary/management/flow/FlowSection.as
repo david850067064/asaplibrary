@@ -189,7 +189,7 @@ package org.asaplibrary.management.flow {
 		@exclude
 		*/
 		public override function toString () : String {
-			return return getQualifiedClassName(this) + ":" + getName();
+			return getQualifiedClassName(this) + ":" + getName();
 		}
 		
 	}

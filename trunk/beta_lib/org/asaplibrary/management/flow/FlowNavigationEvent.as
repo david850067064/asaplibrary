@@ -95,7 +95,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public override function toString () : String {
-			return return getQualifiedClassName(this) + ": subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination + "; stoppingSections=" + stoppingSections + "; startingSections=" + startingSections;
+			return getQualifiedClassName(this) + ": subtype=" + subtype + "; name=" + name + "; trigger=" + trigger + "; destination=" + destination + "; stoppingSections=" + stoppingSections + "; startingSections=" + startingSections;
 		}
 		
 		/**

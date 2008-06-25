@@ -242,7 +242,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		override public function toString () : String {
-			return return getQualifiedClassName(this) + mName;
+			return getQualifiedClassName(this) + mName;
 		}
 		
 		/**

@@ -50,7 +50,7 @@ package org.asaplibrary.management.flow {
 		}
 		
 		public function toString () : String {
-			return return getQualifiedClassName(this) + ": name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
+			return getQualifiedClassName(this) + ": name=" + name + "; mode=" + mode + "; type=" + type + "; callback=" + callback;
 		}
 	}
 
