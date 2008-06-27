@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2008 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -31,9 +31,9 @@ package org.asaplibrary.ui.form.components {
 	 * <code>
 	 		// create new group, add radio buttons, select first button, listen to change event
 	 		var rg:RadioGroup = new RadioGroup();
-	 		rg.addButton(tRadio1);
-	 		rg.addButton(tRadio2);
-	 		rg.addButton(tRadio3);
+	 		rg.addButton(tRadio1, "1");
+	 		rg.addButton(tRadio2, "2");
+	 		rg.addButton(tRadio3, "3");
 	 		rg.selectButton(tRadio1);
 	 		rg.addEventListener(Event.CHANGE, handleRadioGroupChanged);
 	 		 
@@ -44,6 +44,10 @@ package org.asaplibrary.ui.form.components {
 	   To get the currently selected button, use this:
 	   <code>
 	   		var currentButton:SimpleCheckBox = rg.getSelection() as SimpleCheckBox;
+	   </code>
+	   To get the value of the currently selected button, use this:
+	   <code>
+	   		var value:* = rg.getValue();
 	   </code>
 	 */
 	public class RadioGroup extends EventDispatcher implements IValidatable, IHasError, IResettable {
@@ -60,7 +64,7 @@ package org.asaplibrary.ui.form.components {
 			mButtons.push(new Selection(inButton, inValue));
 			
 			// listen to click events from button in capture mode, to disable deselection for selected buttons
-			inButton.addSelectListener(handleButtonSelected);
+			inButton.addEventListener(MouseEvent.CLICK, handleButtonSelected);
 		}
 		
 		/**

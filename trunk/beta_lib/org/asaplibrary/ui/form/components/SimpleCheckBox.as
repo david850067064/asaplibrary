@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2008 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -74,13 +74,6 @@ package org.asaplibrary.ui.form.components {
 		 */
 		public function isEnabled () : Boolean {
 			return mouseEnabled;
-		}
-		
-		/**
-		 * Add a handler for change of selection state. This in fact adds a listener to MouseEvent.CLICK.
-		 */
-		public function addSelectListener (inHandler:Function) : void {
-			addEventListener(MouseEvent.CLICK, inHandler);
 		}
 		
 		/**
