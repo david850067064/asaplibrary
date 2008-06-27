@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2008 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
@@ -16,15 +16,15 @@ limitations under the License.
 */
 
 package org.asaplibrary.ui.form.components {
-
+	import flash.events.IEventDispatcher;	
+	
 	/**
 	 * Interface for selectable UI components, such as a checkbox
 	 */
-	public interface ISelectable {
+	public interface ISelectable extends IEventDispatcher {
 		function isSelected () : Boolean;
 		function setSelected (inSelected:Boolean) : void;
 		function isEnabled () : Boolean;
 		function setEnabled (inEnabled:Boolean) : void;
-		function addSelectListener (inHandler:Function) : void;
 	}
 }

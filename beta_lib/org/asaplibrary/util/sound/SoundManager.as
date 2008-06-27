@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright 2008 by the authors of asaplibrary, http://asaplibrary.org
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@ package org.asaplibrary.util.sound {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.events.MouseEvent;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
@@ -233,7 +234,7 @@ package org.asaplibrary.util.sound {
 		 */
 		public function setMuteSwitch (inSwitch : ISelectable) : void {
 			mMuteSwitch = inSwitch;
-			mMuteSwitch.addSelectListener(toggleMute);
+			mMuteSwitch.addEventListener(MouseEvent.CLICK, toggleMute);
 			
 			mMuteSwitch.setSelected(mIsMuted);
 		}
