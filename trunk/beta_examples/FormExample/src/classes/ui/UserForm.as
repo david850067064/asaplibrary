@@ -1,4 +1,4 @@
-package ui {
+﻿package ui {
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -122,7 +122,7 @@ package ui {
 				(mFields[i] as InputField).addEventListener(Event.CHANGE, handleInputChange);
 			}
 			mGenderGroup.addEventListener(Event.CHANGE, handleInputChange);
-			tTerms.addSelectListener(handleInputChange);
+			tTerms.addEventListener(MouseEvent.CLICK, handleInputChange);
 
 			tSubmit.addEventListener(MouseEvent.CLICK, handleSubmit);
 			
