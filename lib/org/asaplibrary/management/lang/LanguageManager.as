@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2007 by the authors of asaplibrary, http://asaplibrary.org
+Copyright 2007-2008 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,12 +27,17 @@ package org.asaplibrary.management.lang {
 	Class for managing language dependencies in an application.
 	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
 	<code>
+	
+	
+	<?xml version="1.0" encoding="UTF-8"?>
 	<texts>
 		<text id="helloWorld">Hello World</text>
 		<text id="helloBoldWorld"><![CDATA[<b>Hello</b> World with bold Hello]]></text>
 		<text id="helloHTMLWorld" html="false"><![CDATA[<b>Hello</b> World with visible html tags]]></text>
 		<text id="helloWorldInBrackets" html="false"><![CDATA[>>>Hello World<<<]]></text>
 	</texts>
+
+	
 	</code>
 	The 'id' attribute is mandatory, and has to be a String. It cannot contain "_" (underscore).
 	The 'html' attribute is optional. If left out, text is rendered as HTML text; any other value than "false" is seen as true. When false, the text is set directly into the text field, and any html tags are ignored.
@@ -207,7 +212,7 @@ package org.asaplibrary.management.lang {
 		* @return the text data with the right text if found, with an empty string if generateDebugText is set to false, or with '>> id = ' + id if generateDebugText is set to true
 		*/
 		public function getDataByID (inID:String) : TextItemData {
-			if (mTextDataItemMap[inID] == undefined) {
+			if (!mTextDataItemMap[inID]) {
 				if (mGenerateDebugText) {
 					return new TextItemData(inID, ">> id = " + inID);
 				} else {
