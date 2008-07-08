@@ -23,7 +23,7 @@ package org.asaplibrary.util {
 		
 		public function KeyMapper (inStage:Stage) {
 			mStage = inStage;
-			mStage.addEventListener(KeyboardEvent.KEY_UP, handleKeyEvent, false, 0, true);
+			mStage.addEventListener(KeyboardEvent.KEY_UP, handleKeyEvent);
 		}
 		
 		/**
