@@ -34,15 +34,15 @@ package org.asaplibrary.ui.buttons {
 	*/
 	public class HilightButton extends BaseButton {
 	
-		private static const LABEL_UP:String = "up";
-		private static const LABEL_OVER:String = "over";
-		private static const LABEL_ON:String = "on";
-		private static const LABEL_OUT:String = "out";
+		protected static const LABEL_UP:String = "up";
+		protected static const LABEL_OVER:String = "over";
+		protected static const LABEL_ON:String = "on";
+		protected static const LABEL_OUT:String = "out";
 		
-		private var mBehavior:DelayButtonBehavior;
+		protected var mBehavior:DelayButtonBehavior;
 
-		private var mAnimatingOver:Boolean;
-		private var mDoOutAnimation:Boolean;
+		protected var mAnimatingOver:Boolean;
+		protected var mDoOutAnimation:Boolean;
 
 		public function HilightButton () {
 			super();
