@@ -1,0 +1,6 @@
+# use this directory to quickly create a new example
+
+# command to remove svn directories from the copy:
+find ./ -name .svn -exec rm -rf {} \;
+
+# remove this file from the new copy
