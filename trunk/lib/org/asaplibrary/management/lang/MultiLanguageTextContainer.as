@@ -47,8 +47,8 @@ package org.asaplibrary.management.lang {
 		private var mTextFields : Array;
 		
 		public function MultiLanguageTextContainer () {
-			addEventListener(Event.ADDED, handleAdded);
-			addEventListener(Event.REMOVED, handleRemoved);
+			addEventListener(Event.ADDED_TO_STAGE, handleAdded);
+			addEventListener(Event.REMOVED_FROM_STAGE, handleRemoved);
 		}
 		
 		/**
