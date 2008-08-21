@@ -25,7 +25,7 @@ package org.asaplibrary.util {
 	Class to generate onEnterFrame events.
 	@usage
 	<code>	
-	FramePulse.addEventListener(handleEnterFrame);
+	FramePulse.addEnterFrameListener(handleEnterFrame);
 	
 	// function that handles onEnterFrame events
 	public function handleEnterFrame (e:Event) : void {
@@ -35,7 +35,7 @@ package org.asaplibrary.util {
 	</code>
 	To stop receiving the onEnterFrame event:
 	<code>
-	FramePulse.removeEventListener(handleEnterFrame);
+	FramePulse.removeEnterFrameListener(handleEnterFrame);
 	</code>
 	*/
 	
