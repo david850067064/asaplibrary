@@ -41,6 +41,23 @@ package org.asaplibrary.management.movie {
 	This means the local controller of a standalone running movie does not have a name. 
 	This can be circumvented (if necessary) by giving the local controller its name locally when it is running standalone. 
 	ILocalController has a function isStandalone() for checking this.
+	
+	@usage
+	Subscribe to MovieManager events:
+	<code>
+	MovieManager.getInstance().addEventListener(MovieManagerEvent._EVENT, handleMovieManager);
+	</code>
+	Load SWF movie named "home.swf":
+	<code>
+	MovieManager.getInstance().loadMovie("home.swf", "home");
+	</code>
+	Handle the movie event and place the movie onto the stage:
+	<code>
+	private function handleMovieManager(e : MovieManagerEvent) : void {
+		if (e.subtype != MovieManagerEvent.MOVIE_READY) return;
+		addChild(e.container);
+	}
+	</code>
 	*/
 	public class MovieManager extends EventDispatcher {
 	
