@@ -11,6 +11,7 @@
 	import org.asaplibrary.util.*;
 	import org.asaplibrary.util.actionqueue.*;
 	import org.asaplibrary.util.loader.*;
+	import org.asaplibrary.util.notificationcenter.*;
 	
 	public class AllTests extends TestSuite {
 
@@ -49,6 +50,7 @@
 			
 			addTest(new NumberUtilsTestCase());
 			addTest(new AssetLoaderTestCase());
+			addTest(new NotificationCenterTestCase());
 			
 			/*
 			PostCenter: see separate test in folder postcenter
