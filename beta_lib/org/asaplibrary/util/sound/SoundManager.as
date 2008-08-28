@@ -32,8 +32,7 @@ package org.asaplibrary.util.sound {
 	/**
 	 * Class for managing sounds in an application.
 	 * @example
-	 * Add a sound in the library as follows:
-	 * <code>
+	 * Add a sound in the library as follows:<code>
 	   var name:String = "linkageIDOfSoundInLibrary";
 	   SoundManager.getInstance().addSound(new (getDefinitionByName(name)) as Sound, name);
 	   </code>
@@ -42,8 +41,8 @@ package org.asaplibrary.util.sound {
 	 	SoundManager.getInstance().playSound(name);
 	   </code>
 	 * Sounds can be added only once for a particular name, so make sure they are removed with <code>removeSound(name)</code> when a swf containing sounds is removed.
-	 * External sounds (mp3's on the file system or server) can be added to the list of available sounds with <code>addExternalSound()</code>, after which they can be played & controlled by name. They can also be played directly with <code>playExternalSound()</code>, which is meant for external sounds that need less control.
-	 * Sounds that are currently being played, or present in the list, can be muted & unmuted with <code>muteAllSounds()</code> & <code>unmuteAllSounds()</code>. Muting is also applied to sounds that are started after mute is set. These sounds will start normally, but will not be audible if muting is applied.
+	 * External sounds (mp3's on the file system or server) can be added to the list of available sounds with <code>addExternalSound()</code>, after which they can be played and controlled by name. They can also be played directly with <code>playExternalSound()</code>, which is meant for external sounds that need less control.
+	 * Sounds that are currently being played, or present in the list, can be muted and unmuted with <code>muteAllSounds()</code> and <code>unmuteAllSounds()</code>. Muting is also applied to sounds that are started after mute is set. These sounds will start normally, but will not be audible if muting is applied.
 	 * The overall sound volume can be set with <code>setOverallVolume()</code>. This multiplies the volume of individual sounds with the overall volume value.
 	 */
 	public class SoundManager extends EventDispatcher {
@@ -76,7 +75,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		*	Add a sound for specified name
+		*	Add a sound for specified name.
 		*	@param inSound: Sound object to add
 		*	@param inName: unique identifier for sound
 		*/
@@ -90,7 +89,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		*	Add an external sound for specified name
+		*	Add an external sound for specified name.
 		*	@param inURL: url of sound to be added
 		*	@param inName: unique identifier for sound
 		*	@param inStartLoad: when true, the sound starts loading immediately
@@ -145,7 +144,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Play an external sound without explicit name - inURL is defined as name for sound; if a sound with specified url is already playing, it is stopped & removed
+		 * Play an external sound without explicit name - inURL is defined as name for sound; if a sound with specified url is already playing, it is stopped and removed.
 		 * @param inURL: url of sound to be played
 		 * @param inLoop: if true, sound will be looped indefinitely
 		 * @param inVolume: value for sound volume
@@ -159,7 +158,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 *	Stop sound with specified name
+		 *	Stop sound with specified name.
 		 *	@param inName: unique identifier of previously added sound
 		 */
 		public function stopSound (inName:String) : void {
@@ -168,7 +167,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 *	Set volume of sound with specified name
+		 *	Set volume of sound with specified name.
 		 *	@param inName: unique identifier of previously added sound
 		 *	@param inVolume: volume of sound (0 < inVolume < 1)
 		 */
@@ -190,7 +189,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		 *	Mute all sounds that have been added to the SoundManager
+		 *	Mute all sounds that have been added to the SoundManager.
 		 */
 		public function muteAllSounds() : void {
 			mIsMuted = true;
@@ -201,7 +200,7 @@ package org.asaplibrary.util.sound {
 		}
 				
 		/**
-		 *	Unmute all sounds that have been added to the SoundManager
+		 *	Unmute all sounds that have been added to the SoundManager.
 		 */
 		public function unmuteAllSounds() : void {
 			mIsMuted = false;
@@ -212,7 +211,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Remove sound with specified name
+		 * Remove sound with specified name.
 		 * @param inName: unique identifier of previously added sound
 		 */
 		public function removeSound (inName:String) : void {
@@ -240,7 +239,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		 * Handle event from mute switch to set mute state according to switch state
+		 * Handle event from mute switch to set mute state according to switch state.
 		 */
 		private function toggleMute (e:Event) : void {
 			if ((e.target as ISelectable).isSelected()) muteAllSounds();
@@ -248,14 +247,14 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Set volumes of all sounds again. The function setVolume() takes care of muting & overall volume
+		 * Set volumes of all sounds again. The function setVolume() takes care of muting and overall volume.
 		 */
 		private function updateAllVolumes() : void {
 			for each (var sd:SoundData in mSounds) setVolume(sd, sd.volume);
 		}
 		
 		/**
-		 * Set volume of sound specified by SoundData object; if mIsMuted == true, the volume is set to 0, otherwise it's set to the specified value multiplied with the overall value
+		 * Set volume of sound specified by SoundData object; if mIsMuted == true, the volume is set to 0, otherwise it's set to the specified value multiplied with the overall value.
 		 */	
 		private function setVolume (inSD:SoundData, inVolume:Number) : void {
 			if (!inSD.channel) return;
@@ -266,7 +265,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		 * Handle event sent by an external sound that is loaded, that load is complete
+		 * Handle event sent by an external sound that is loaded, that load is complete.
 		 */
 		private function handleSoundLoaded(e : Event) : void {
 			var sd:SoundData = getSoundDataBySound(e.target as Sound);
@@ -279,7 +278,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		 * Handle event sent by a looping sound channel that the loop is done
+		 * Handle event sent by a looping sound channel that the loop is done.
 		 */
 		private function handleSoundComplete (e : Event) : void {
 			var sd:SoundData = getSoundDataByChannel(e.target as SoundChannel);
@@ -296,7 +295,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Handle event sent by a loading sound that an error has occurred
+		 * Handle event sent by a loading sound that an error has occurred.
 		 */
 		private function handleSoundLoadError(e : Event) : void {
 			var sd:SoundData = getSoundDataBySound(e.target as Sound);
@@ -304,7 +303,7 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
-		 * Get sound data for specified channel
+		 * Get sound data for specified channel.
 		 */
 		private function getSoundDataByChannel (inChannel : SoundChannel) : SoundData {
 			for each (var sd:SoundData in mSounds) if (sd.channel == inChannel) return sd;
@@ -313,7 +312,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Get sound data for specified sound
+		 * Get sound data for specified sound.
 		 */
 		private function getSoundDataBySound (inSound : Sound) : SoundData {
 			for each (var sd:SoundData in mSounds) if (sd.sound == inSound) return sd;
@@ -322,7 +321,7 @@ package org.asaplibrary.util.sound {
 		}
 		
 		/**
-		 * Get sound data for specified name
+		 * Get sound data for specified name.
 		 */
 		private function getSoundDataByName(inName:String) : SoundData {
 			if (!mSounds[inName]) {
