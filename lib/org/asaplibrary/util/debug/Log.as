@@ -29,7 +29,7 @@ a String denoting the sender of the message,and the level of importance of the m
 By default, log messages are also output as traces to the Flash IDE output window. This behaviour can be changed.
 @example:
 <code>
-Log.addEventListener(EventDelegate.create(this, onLogEvent));	// handle events locally
+Log.addEventListener(onLogEvent);	// handle events locally
 Log.showTrace(false);	// don't output log messages as traces
 
 Log.debug("This is a debug message", toString());
@@ -179,7 +179,7 @@ public class Log extends EventDispatcher {
 	*	@param inFunction: the function to handle LogEvents
 	*	@use:
 	*	<code>
-	*	Log.addLogListener(EventDelegate.create(this, onLog));
+	*	Log.addLogListener(onLog);
 	*	
 	*	private function onLog (e:LogEvent) {
 	*	}
@@ -187,6 +187,14 @@ public class Log extends EventDispatcher {
 	*/
 	public static function addLogListener (inFunction:Function) : void {
 		Log.getInstance().addListener(inFunction);
+	}
+	
+	/**
+	*	Remove a function as listener to LogEvent events
+	*	@param inFunction: the function that handles LogEvents
+	*/
+	public static function removeLogListener (inFunction:Function) : void {
+		Log.getInstance().removeListener(inFunction);
 	}
 	
 	/**
@@ -216,6 +224,13 @@ public class Log extends EventDispatcher {
 	*/
 	private function addListener (inFunction:Function) : void {
 		addEventListener(LogEvent._EVENT, inFunction);
+	}
+	
+	/**
+	*	Remove a function from the event listeners
+	*/
+	private function removeListener (inFunction:Function) : void {
+		removeEventListener(LogEvent._EVENT, inFunction);
 	}
 	
 	/**
