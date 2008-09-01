@@ -62,7 +62,7 @@ package org.asaplibrary.data.xml {
 		/**
 		 * Set the number of parallel loaders
 		 */		
-		public function setLoaderCount (inLoaderCount:Number) : void {
+		public function setLoaderCount (inLoaderCount:int) : void {
 			mLoader.setLoaderCount(inLoaderCount);
 		}
 
