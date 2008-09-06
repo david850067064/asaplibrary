@@ -137,9 +137,9 @@ package org.asaplibrary.util.notificationcenter {
 		
 		/**
 		Registers inObserver to receive notifications with the name inNotificationName and/or containing inNotificationObject.
-		When a notification of name inNotificationName containing the object inNotificationObject is posted, inObserver's method inMethodName is called with a {@link Notification} as the argument. If inNotificationName is undefined, the notification center notifies the observer of all notifications with an object matching inNotificationObject. If inNotificationObject is nil, the notification center notifies the observer of all notifications with the name inNotificationName. inObserver may not be undefined.
+		When a notification of name inNotificationName containing the object inNotificationObject is posted, inObserver's method inMethod is called with a {@link Notification} as the argument. If inNotificationName is undefined, the notification center notifies the observer of all notifications with an object matching inNotificationObject. If inNotificationObject is nil, the notification center notifies the observer of all notifications with the name inNotificationName. inObserver may not be undefined.
 		@param inObserver : object to receive notifications
-		@param inMethodName : The observer's method that will be called when sent a notification. This method should only have one argument (of type Notification).
+		@param inMethod : The observer's method that will be called when sent a notification. This method should only have one argument (of type Notification).
 		@param inNotificationName : (optional) notification identifier name; if undefined, you must use inNotificationObject
 		@param inNotificationObject : (optional) notification identifier object; the notification center notifies the observer of all notifications with an object matching this object
 		@example
@@ -157,7 +157,7 @@ package org.asaplibrary.util.notificationcenter {
 		NotificationCenter.getDefaultCenter().post(null, myPanel, getTimer());
 		</code>
 		*/
-		public function addObserver (inObserver:Object, inMethodName:String, inNotificationName:String = null, inNotificationObject:Object = null) : void
+		public function addObserver (inObserver:Object, inMethod:Function, inNotificationName:String = null, inNotificationObject:Object = null) : void
 		{	
 			inNotificationName ||= DEFAULT_NOTIFICATION_NAME; // dummy because empty string cannot be searched on
 
@@ -165,18 +165,18 @@ package org.asaplibrary.util.notificationcenter {
 				mObservers[inNotificationName] = new Array();
 			}
 			// check if alreay in list with the same arguments
-			if (mCheckOnAdding && contains(mObservers, inObserver, inMethodName, inNotificationName, inNotificationObject)) {
+			if (mCheckOnAdding && contains(mObservers, inObserver, inMethod, inNotificationName, inNotificationObject)) {
 				if (mNotifyErrors) {
 					Log.warn("addObserver - Observer already added with same arguments: '" + arguments + "' -- not added.", toString());
 				}
 				return;
 			}
-			var observerData:NotificationObserverData = new NotificationObserverData(inObserver,					inMethodName, inNotificationName, inNotificationObject);
+			var observerData:NotificationObserverData = new NotificationObserverData(inObserver, inMethod, inNotificationName, inNotificationObject);
 			mObservers[inNotificationName].push(observerData);
 
 			// optimize object handling, to retrieve all messages targeted to the object
 			if (inNotificationObject != null) {
-				if (mCheckOnAdding && contains(mObjects, inObserver, inMethodName, inNotificationName, inNotificationObject)) {
+				if (mCheckOnAdding && contains(mObjects, inObserver, inMethod, inNotificationName, inNotificationObject)) {
 					// No warning, should be covered by previous warning message.
 					return;
 				}
@@ -268,7 +268,7 @@ package org.asaplibrary.util.notificationcenter {
 
 			if ( observers == null || observers.length == 0) {
 				if (mNotifyErrors) {
-					Log.error("postNotificationName - No notification with name '" + inNotificationName + "' known.", toString());
+					Log.info("postNotificationName - No notification with name '" + inNotificationName + "' known.", toString());
 				}
 				return;
 			}
@@ -291,16 +291,9 @@ package org.asaplibrary.util.notificationcenter {
 				}
 				
 				var note:Notification = new Notification(observerData.note, inNotificationObject, inData);
-				var func:Function = observerData.observer[observerData.method];
-				if (func == null) {
-					if (mNotifyErrors) {
-						Log.error("postNotificationName - Could not resolve method '" + observerData.method + "' for observer '" + observerData.observer + "'.", toString());
-					}
-					continue;
-				}
 				// We are now calling the method directly
 				// Another implementation might be to pass the Notification object to the NotificationCenter class and do the calling in another method. 
-				func.apply(observerData.observer, [note]);
+				observerData.method.apply(observerData.observer, [note]);
 			}
 		}
 		
@@ -310,7 +303,7 @@ package org.asaplibrary.util.notificationcenter {
 		Loops through the collection inCollection to check if the item is already present. This is very time consuming with large collections.
 		@return True when in list, false when not.
 		*/
-		private function contains (inCollection:Object, inObserver:Object, inMethodName:String, inNotificationName:String, inNotificationObject:Object) : Boolean
+		private function contains (inCollection:Object, inObserver:Object, inMethod:Function, inNotificationName:String, inNotificationObject:Object) : Boolean
 		{
 			for (var n:String in inCollection) {
 				var o:Object = inCollection[n];
@@ -319,7 +312,7 @@ package org.asaplibrary.util.notificationcenter {
 				var i:int = len;
 				while (--i != -1) {
 					var observerData:NotificationObserverData = o[i];
-					if (observerData.isEqualToParams(inObserver, inMethodName, inNotificationName, inNotificationObject)) {
+					if (observerData.isEqualToParams(inObserver, inMethod, inNotificationName, inNotificationObject)) {
 						return true;
 					}
 				}
@@ -410,11 +403,11 @@ package org.asaplibrary.util.notificationcenter {
 class NotificationObserverData {
 
 	public var observer:Object;
-	public var method:String;
+	public var method:Function;
 	public var note:String;
 	public var object:Object;
 	
-	public function NotificationObserverData (inObserver:Object, inMethod:String, inNote:String, inObject:Object) {
+	public function NotificationObserverData (inObserver:Object, inMethod:Function, inNote:String, inObject:Object) {
 		observer = inObserver;
 		method = inMethod;
 		note = inNote;
@@ -424,12 +417,12 @@ class NotificationObserverData {
 	/**
 	Tests if the variables of the current NotificationObserverData object is equal to the passed parameters.
 	*/
-	public function isEqualToParams (inObserver:Object, inMethod:String, inNote:String, inObject:Object) : Boolean
+	public function isEqualToParams (inObserver:Object, inMethod:Function, inNote:String, inObject:Object) : Boolean
 	{
-		if (observer == inObserver &&
-			method == inMethod &&
+		if (observer === inObserver &&
+			method === inMethod &&
 			note == inNote &&
-			object == inObject) {
+			object === inObject) {
 			return true;
 		}
 		return false;	
