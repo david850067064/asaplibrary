@@ -63,9 +63,9 @@
 			nc.setCheckOnAdding(true);
 			assertTrue("testCheckDuplicatesOnAdding", nc.getCheckOnAdding());
 			// first observer
-			nc.addObserver(this, "handleNotification", "someName");
+			nc.addObserver(this, handleNotification, "someName");
 			// second observer
-			nc.addObserver(this, "handleNotification", "someName");
+			nc.addObserver(this, handleNotification, "someName");
 			nc.post("someName", null, new Date());
 		}
 		
@@ -78,10 +78,10 @@
 			const NOTE_NAME:String = "addObserverTest";
 			
 			// name
-			nc.addObserver(this, "handleAddObserverNotification", NOTE_NAME);
+			nc.addObserver(this, handleAddObserverNotification, NOTE_NAME);
 
 			// object
-			nc.addObserver(this, "handleAddObserverNotification", null, mSenderObject);
+			nc.addObserver(this, handleAddObserverNotification, null, mSenderObject);
 			
 			// post
 			// 1
@@ -104,12 +104,12 @@
 			const NOTE_NAME:String = "removeObserverTest";
 			
 			// name
-			nc.addObserver(this, "handleAddObserverNotification", NOTE_NAME);
+			nc.addObserver(this, handleAddObserverNotification, NOTE_NAME);
 			nc.removeObserver(this, NOTE_NAME);
 			nc.post(NOTE_NAME); // should not get any result
 
 			// object
-			nc.addObserver(this, "handleAddObserverNotification", null, mSenderObject);
+			nc.addObserver(this, handleAddObserverNotification, null, mSenderObject);
 			nc.removeObserver(this, null, mSenderObject);
 			nc.post(NOTE_NAME, mSenderObject); // should not get any result
 		}

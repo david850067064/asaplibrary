@@ -11,7 +11,7 @@
 					
 		function AppController() {
 			MovieManager.getInstance().addEventListener(MovieManagerEvent._EVENT, handleMovieManager);
-			MovieManager.getInstance().loadMovie("receiver.swf", "Receiver");
+			MovieManager.getInstance().loadMovie("observer.swf", "Observer");
 		}
 		
 		private function handleMovieManager(e : MovieManagerEvent) : void {

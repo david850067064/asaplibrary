@@ -34,7 +34,6 @@
 		Test this movie on itself.
 		*/
 		private function testStandAlone () : void {
-			trace("testStandAlone");
 			addObserver();
 			var postData:Date = new Date();
 			NotificationCenter.getDefaultCenter().post(AppSettings.NOTE_NAME, null, postData);
@@ -55,7 +54,7 @@
 		
 		private function addObserver (e:Event = null) : void {
 			// register 'this' to the NotificationCenter and start listening for notifications with name AppSettings.NOTE_NAME.
-			NotificationCenter.getDefaultCenter().addObserver(this, "handleSenderDidUpdate", AppSettings.NOTE_NAME);
+			NotificationCenter.getDefaultCenter().addObserver(this, handleSenderDidUpdate, AppSettings.NOTE_NAME);
 			// update button states
 			tAddObserverBtn.enabled = false;
 			tRemoveObserverBtn.enabled = true;
