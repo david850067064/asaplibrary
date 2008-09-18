@@ -42,8 +42,8 @@ package org.asaplibrary.ui.animation {
 		Creates a new AnimationEvent.
 		@param inSubtype: either subtype; see above
 		*/
-		function AnimationEvent(inSubtype : String) {
-			super(_EVENT);
+		function AnimationEvent(inSubtype : String, inBubbles : Boolean = false) {
+			super(_EVENT, inBubbles);
 			
 			subtype = inSubtype;
 		}
