@@ -25,7 +25,7 @@ package org.asaplibrary.util.notificationcenter {
 	@use
 	Add an observer:
 	<code>
-	NotificationCenter.getDefaultCenter().addObserver(this, "handleAdviceAccordionDidUpdate", "AdviceAccordionDidUpdateNotification");
+	NotificationCenter.getDefaultCenter().addObserver(this, handleAdviceAccordionDidUpdate, "AdviceAccordionDidUpdateNotification");
 	</code>
 	The 'this' object will now listen to the notifications with name "AdviceAccordionDidUpdateNotification". This notification can be sent by any object, also from the timeline (see below).
 	When the notification "AdviceAccordionDidUpdateNotification" is posted, method <code>handleAdviceAccordionDidUpdate</code> is called (second argument).
@@ -64,7 +64,7 @@ package org.asaplibrary.util.notificationcenter {
 	</code>
 	And in our manager class we implement:
 	<code>
-	NotificationCenter.getDefaultCenter().addObserver(this, "handleMovieBackgroundDidFinishNotification", "MovieBackgroundDidFinishNotification");
+	NotificationCenter.getDefaultCenter().addObserver(this, handleMovieBackgroundDidFinishNotification, "MovieBackgroundDidFinishNotification");
 	</code>
 	<hr />
 	<b>On naming</b><br />
@@ -143,9 +143,9 @@ package org.asaplibrary.util.notificationcenter {
 		@param inNotificationName : (optional) notification identifier name; if undefined, you must use inNotificationObject
 		@param inNotificationObject : (optional) notification identifier object; the notification center notifies the observer of all notifications with an object matching this object
 		@example
-		This example adds an observer 'this', to let method 'doSomething' be called as soon as the notification named 'PanelWillUpdateNotification' is posted:
+		This example adds an observer to the current object ('this'), to let method 'doSomething' be called as soon as the notification named 'PanelWillUpdateNotification' is posted:
 		<code>
-		NotificationCenter.getDefaultCenter().addObserver(this, "doSomething", "PanelWillUpdateNotification");
+		NotificationCenter.getDefaultCenter().addObserver(this, doSomething, "PanelWillUpdateNotification");
 		</code>
 		<hr />
 		In the following example, we don't specify a notification name:
@@ -247,7 +247,7 @@ package org.asaplibrary.util.notificationcenter {
 		@example
 		This example finds all observers that are associated with the notification name 'ButtonDidUpdateNotification', and passes them a Notification object with data "My message".
 		<code>
-		NotificationCenter.getDefaultCenter().post("ButtonDidUpdateNotification, null, "My message");
+		NotificationCenter.getDefaultCenter().post("ButtonDidUpdateNotification", null, "My message");
 		</code>
 		The following example sends a notification to the observers that are associated with identifier object <i>anIdentifier</i>. Note that the name of the notification is not important when you pass an object - it may be an empty string. The object is associated with the observer in addObserver (<i>the notification center notifies the observer of all notifications with an object matching inNotificationObject</i>).
 		<code>
