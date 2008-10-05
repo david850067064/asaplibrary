@@ -93,7 +93,7 @@ package org.asaplibrary.util.notificationcenter {
 		
 		/**
 		Creates a new NotificationCenter. Call this constructor only if you explicitely don't want to use the default NotificationCenter, for instance if you want to control performance.
-		@param inShouldNotifyErrors (optional) if true, the NotificationCenter will report errors to the {@link Console}; by default error reporting is off.
+		@param inShouldNotifyErrors (optional) if true, the NotificationCenter will report errors to the {@link Log}; by default error reporting is off.
 		@see #getDefaultCenter
 		*/
 		public function NotificationCenter (inShouldNotifyErrors:Boolean = false) {
@@ -105,7 +105,7 @@ package org.asaplibrary.util.notificationcenter {
 		}
 		
 		/**
-		@param inFlag : If true, NotificationCenter will report errors to the {@link Console}. Error reporting is off by default.
+		@param inFlag : If true, NotificationCenter will report errors to the {@link Log}. Error reporting is off by default.
 		*/
 		public function setNotifyErrors (inFlag:Boolean) : void {
 			mNotifyErrors = inFlag;

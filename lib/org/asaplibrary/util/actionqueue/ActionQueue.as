@@ -135,16 +135,13 @@ package org.asaplibrary.util.actionqueue {
 		You can use any function that returns a {@link TimedAction}, or use one of the ready made class metods from these classes:
 		{@link AQAddMove}
 		{@link AQBlink}
-		{@link AQColor}
 		{@link AQFade}
 		{@link AQFollowMouse}
 		{@link AQMove}
-		{@link AQMoveRel}
 		{@link AQPulse}
 		{@link AQFunction}
 		{@link AQScale}
 		{@link AQSet}
-		{@link AQSpring}
 		{@link AQTimeline}
 		
 		Example:
