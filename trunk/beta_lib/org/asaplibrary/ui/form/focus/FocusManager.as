@@ -173,7 +173,7 @@ package org.asaplibrary.ui.form.focus {
 	
 		/**
 		Change the focus to the item with the 'index' passed
-		@sends FocusManagerEvent#ON_CHANGE_FOCUS
+		@sends FocusManagerEvent#FOCUS_CHANGE
 		*/
 		private function changeFocus ( inPrevFocus:Number, inNewFocus:Number ) : void {
 			// store new focus
