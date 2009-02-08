@@ -303,7 +303,7 @@ package org.asaplibrary.ui.buttons {
 				mMouseStates = new Array();
 			}
 			
-			ButtonStates.stateToString(state));
+			ButtonStates.stateToString(state);
 
 			if (state & ButtonStates.UP) {
 				if (mLabelHash[LABEL_RELEASE]) {    	
