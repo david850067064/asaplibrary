@@ -239,6 +239,24 @@ package org.asaplibrary.util.sound {
 		}
 
 		/**
+        * @param inSoundName the name of the added sound 
+        * @param inPanning The left-to-right panning of the sound, ranging from -1 (full pan left) to 1 (full pan right).
+        *
+        *	Thanks to Jankees van Woezik (hhtp://www.base24.nl)
+        */
+       public function setPan(inSoundName:String, inPanning:Number):void {
+           var sd:SoundData = getSoundDataByName(inSoundName);
+           if (!sd) return;
+           try {
+               var transform:SoundTransform = sd.channel.soundTransform;
+               transform.pan = inPanning;
+               sd.channel.soundTransform = transform;
+           } catch (e:Error) {
+               Debug.error("setPan error: " + e.message,toString());
+           }
+       }
+		
+		/**
 		 * Handle event from mute switch to set mute state according to switch state.
 		 */
 		private function toggleMute (e:Event) : void {
