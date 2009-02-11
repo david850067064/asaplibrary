@@ -252,7 +252,7 @@ package org.asaplibrary.util.sound {
                transform.pan = inPanning;
                sd.channel.soundTransform = transform;
            } catch (e:Error) {
-               Debug.error("setPan error: " + e.message,toString());
+               Log .error("setPan error: " + e.message,toString());
            }
        }
 		
