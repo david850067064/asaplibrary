@@ -38,10 +38,10 @@ package org.asaplibrary.util {
 		*	Map a key to a handler function for a specific event (key up or down), optionally passing the event itself
 		 *	@param inKey: see Keyboard class for possible values
 		 *	@param inHandler: function to be called when the key is pressed or released; by default called without parameters
-		 *	@param inEventType: specify KeyboardEvent.KEY_UP for key-up events, otherwise key-down events are handled
+		 *	@param inEventType: specify KeyboardEvent.KEY_UP for key-up events, or KeyboardEvent.KEY_DOWN for key-down events
 		 *	@param inSendEvent: when true, the KeyboardEvent event is passed to the handler function
 		 */
-		public function setMapping (inKey:uint, inHandler:Function, inEventType : String = KeyboardEvent.KEY_DOWN, inSendEvent : Boolean = false) : void {
+		public function setMapping (inKey:uint, inHandler:Function, inEventType : String, inSendEvent : Boolean = false) : void {
 			var map : Object = (inEventType == KeyboardEvent.KEY_UP) ? mKeyUpMap : mKeyDownMap;
 
 			map[inKey] = new KeyData(inHandler, inSendEvent);
