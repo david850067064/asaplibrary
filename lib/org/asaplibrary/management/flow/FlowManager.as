@@ -16,9 +16,7 @@ limitations under the License.
 */
 
 /**
-<div style="background:#ffc; padding:1em; margin:0 0 1em 0; text-align:center">
 WARNING: provided "AS IS" -- this code has not been tested on production sites!
-</div>
 */
 package org.asaplibrary.management.flow {
 	import flash.events.*;
