@@ -1,21 +1,18 @@
-﻿package controller {
-
-	import flash.events.MouseEvent;
+﻿package demo.SimpleSiteWithFlowManager.controller {
+	import demo.SimpleSiteWithFlowManager.data.AppSettings;
+	import demo.SimpleSiteWithFlowManager.ui.MenuButton;
 
 	import org.asaplibrary.management.flow.*;
 
-	import data.AppSettings;
-	import ui.MenuButton;
-	
-	public class MenuSection extends ProjectSection {
-	
-		public var tHomeBtn:MenuButton;
-		public var tGalleryBtn:MenuButton;
-		
-		private var mSelectedButton:MenuButton;
-		private var FM:FlowManager = FlowManager.defaultFlowManager;
+	import flash.events.MouseEvent;
 
-		function MenuSection () {
+	public class MenuSection extends ProjectSection {
+		public var tHomeBtn : MenuButton;
+		public var tGalleryBtn : MenuButton;
+		private var mSelectedButton : MenuButton;
+		private var FM : FlowManager = FlowManager.defaultFlowManager;
+
+		function MenuSection() {
 			super(AppSettings.MENU_NAME);
 			listen();
 			selfUpdate();
@@ -23,31 +20,31 @@
 				startStandalone();
 			}
 		}
-		
-		protected function listen () : void {
+
+		protected function listen() : void {
 			tHomeBtn.addEventListener(MouseEvent.CLICK, handleButtonClick);
 			tGalleryBtn.addEventListener(MouseEvent.CLICK, handleButtonClick);
 			FM.addEventListener(FlowNavigationEvent._EVENT, handleNavigationEvent);
 		}
-		
-		protected function selfUpdate () : void {
-			var state:String = FM.getCurrentSectionName();
+
+		protected function selfUpdate() : void {
+			var state : String = FM.getCurrentSectionName();
 			updateSelectedButtonState(state);
 		}
-		
-		protected function handleNavigationEvent (e:FlowNavigationEvent) : void {
+
+		protected function handleNavigationEvent(e : FlowNavigationEvent) : void {
 			switch (e.subtype) {
 				case FlowNavigationEvent.UPDATE:
-					// fall through
+				// fall through
 				case FlowNavigationEvent.WILL_LOAD:
-					// fall through
+				// fall through
 				case FlowNavigationEvent.WILL_UPDATE:
 					updateSelectedButtonState(e.name);
 					break;
 			}
 		}
-		
-		protected function updateSelectedButtonState (inState:String) : void {
+
+		protected function updateSelectedButtonState(inState : String) : void {
 			switch (inState) {
 				case AppSettings.HOME_NAME :
 					setSelectedButton(tHomeBtn);
@@ -57,8 +54,8 @@
 					break;
 			}
 		}
-		
-		protected function handleButtonClick (e:MouseEvent) : void {
+
+		protected function handleButtonClick(e : MouseEvent) : void {
 			switch (e.target) {
 				case tHomeBtn:
 					FM.goto(AppSettings.HOME_NAME, e.target);
@@ -68,8 +65,8 @@
 					break;
 			}
 		}
-		
-		protected function setSelectedButton (inButton:MenuButton) : void {
+
+		protected function setSelectedButton(inButton : MenuButton) : void {
 			if (mSelectedButton != null) {
 				mSelectedButton.select(false);
 				mSelectedButton.enable(true);
@@ -78,6 +75,5 @@
 			mSelectedButton.select(true);
 			mSelectedButton.enable(false);
 		}
-		
 	}
 }
