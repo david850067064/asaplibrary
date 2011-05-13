@@ -1,21 +1,19 @@
-package ui {
+package demo.SimpleSiteWithFlowManager.ui {
+	import org.asaplibrary.ui.buttons.*;
 
 	import flash.display.MovieClip;
 
-	import org.asaplibrary.ui.buttons.*;
-	
 	public class SimpleButton extends MovieClip {
-		
-		protected var mDelegate:ButtonBehavior;
+		protected var mDelegate : ButtonBehavior;
 
-		function SimpleButton () {
+		function SimpleButton() {
 			super();
 			mDelegate = new ButtonBehavior(this);
 			mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, update);
 			drawUpState();
 		}
-		
-		private function update (e:ButtonBehaviorEvent) : void {
+
+		private function update(e : ButtonBehaviorEvent) : void {
 			switch (e.state) {
 				case ButtonStates.SELECTED:
 					drawSelectedState();
@@ -32,18 +30,17 @@ package ui {
 			}
 			buttonMode = !e.selected;
 		}
-		
-		private function drawUpState () : void {
+
+		private function drawUpState() : void {
 			gotoAndStop("up");
 		}
-		
-		private function drawOverState () : void {
+
+		private function drawOverState() : void {
 			gotoAndStop("over");
 		}
-		
-		private function drawSelectedState () : void {
+
+		private function drawSelectedState() : void {
 			gotoAndStop("selected");
 		}
-
 	}
 }

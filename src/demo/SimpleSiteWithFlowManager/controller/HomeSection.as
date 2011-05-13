@@ -1,11 +1,11 @@
-﻿package controller {
+﻿package demo.SimpleSiteWithFlowManager.controller {
 
 	import flash.events.MouseEvent;
 
 	import org.asaplibrary.management.flow.*;
 
-	import data.AppSettings;
-	import ui.SimpleButton;
+	import demo.SimpleSiteWithFlowManager.data.AppSettings;
+	import demo.SimpleSiteWithFlowManager.ui.SimpleButton;
 	
 	public class HomeSection extends ProjectSection {
 		
