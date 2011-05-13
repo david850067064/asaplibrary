@@ -1,4 +1,4 @@
-﻿package controller {
+﻿package demo.ActionQueueRotate.controller {
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
