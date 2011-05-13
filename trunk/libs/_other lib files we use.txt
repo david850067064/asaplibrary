@@ -1,0 +1,11 @@
+﻿Added by FDT:
+flexunit-4.0.0.swc
+flexunit-aircilistener-4.0.0.swc
+flexunit-cilistener-4.0.0.swc
+flexunit-flexcoverlistener-4.0.0.swc
+flexunit-uilistener-4.0.0.swc
+hamcrest-as3-1.1.0.swc
+
+Added because flex is missing a couple of classes:
+flash.swc
+
