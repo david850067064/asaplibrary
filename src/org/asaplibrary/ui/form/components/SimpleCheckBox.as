@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2008 by the authors of asaplibrary, http://asaplibrary.org
+Copyright 2008-2011 by the authors of asaplibrary, http://asaplibrary.org
 Copyright 2005-2007 by the authors of asapframework, http://asapframework.org
 
 Licensed under the Apache License, Version 2.0 (the "License");
