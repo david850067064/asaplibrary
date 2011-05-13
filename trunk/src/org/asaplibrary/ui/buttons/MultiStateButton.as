@@ -26,48 +26,28 @@ package org.asaplibrary.ui.buttons {
 	 * the freedom to create timeline states and animations for buttons.
 	 * The animation is driven by labeled keyframes in the timeline.
 	 * 
-	 * The button may start out without any keyframes and later be enhanced
+	 * <p>The button may start out without any keyframes and later be enhanced
 	 * with up to nine labeled keyframes. There should be NO scripts that
 	 * affect the position of the playhead (stops, gotoAnd...) in the button's 
 	 * timeline.
 	 * After that, the designer may decide what other states need to be 
-	 * visualized in the animation chain:
+	 * visualized in the animation chain: <br />
+	 * {@img multistatebutton_all.png}</p>
 	 *
-	 * <code>
-	 * [intro]     [in]        [press]
-	 *      \    •    \      •       \
-	 *       •  /      •    /         •
-	 *        [up]      [over]         [down]
-	 *       /   •     /      •       /
-	 *      •     \   •        \     • 
-	 * [outtro]    [out]       [release]
-	 * </code>
-	 *
-	 * If any of these keyframes are missing, the flow will skip over them
+	 * <P>If any of these keyframes are missing, the flow will skip over them
 	 * to the next possible keyframe. So it would be possible to have just
-	 * a simple setup like this:
+	 * a simple setup like this: <br />
+	 * {@img multistatebutton_simple.png}</p>
 	 *
-	 * <code>
-	 *          [up] ---• [over] ---• [down]
-	 * </code>
+	 * <p>A bit more advanced is a button with 1 transition label plus an intro label:<br />
+	 * {@img multistatebutton_transitionlabel.png}</p>
 	 *
-	 * Or one with a hard down state, but with an animated in and out sequence. 
+	 * <p>Or one with a hard down state, but with an animated in and out sequence: <br />
+	 * {@img multistatebutton_animatedinout.png}</p>
 	 *
-	 * <code>
-	 *
-	 *            [in]        
-	 *           •    \   
-	 *          /      •  
-	 *       [up]      [over] ---• [down]
-	 *          •     /   
-	 *           \   •     
-	 *           [out]    
-	 * </code>
-	 * 
 	 * Mouse activity is stacked, in order to maintain a fluid experience of 
 	 * the button's animation flow. In lengthy animated buttons this may very
 	 * soon become irritating. 
-	 * @todo Outtro functionality is not yet realized
 	 */
 	public class MultiStateButton extends MovieClip {
 		private var mBehavior : ButtonBehavior;
