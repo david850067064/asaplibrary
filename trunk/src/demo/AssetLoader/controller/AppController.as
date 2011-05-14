@@ -1,4 +1,4 @@
-﻿package controller {
+﻿package demo.AssetLoader.controller {
 
 	import flash.events.Event;
 	import flash.display.MovieClip;
@@ -7,7 +7,7 @@
 	import org.asaplibrary.util.loader.AssetLoader;
 	import org.asaplibrary.util.loader.AssetLoaderEvent;
 	
-	import ui.ProgressImage;
+	import demo.AssetLoader.ui.ProgressImage;
 	
 	public class AppController extends MovieClip {
 		
@@ -15,17 +15,17 @@
 		private static const IMAGE_Y_DISTANCE:uint = 50;
 		
 		private const mImageUrls:Array = [
-			"http://www.marsdaily.com/images/nasa-mars-mro-victoria-crater-section-desktop-1280.jpg",
-			"http://www.simplydumb.com/wp-content/uploads/2007/07/nasa-drunk.gif",
-			"http://img.dailymail.co.uk/i/pix/2007/07_03/nasa1R3107_1000x1000.jpg",
-			"http://soho.nascom.nasa.gov/data/summary/gif/050120/seit_00195_fd_20050120_2238.gif",
-			"http://home-1.tiscali.nl/~edwinsel/land/sat/corsica,sat,hr%20(nasa)_se.jpg",
-			"http://www.ocean.com/resources/FEATURE/wilmacolor.jpg",
-			"http://www.spacearchive.info/2007-03-06-nasa-dust-storm-large.jpg",
-			"http://www.astro.uio.no/ita/nyheter/HUDF_0304/HUDF_IR_full.jpg",
-			"http://nssdc.gsfc.nasa.gov/planetary/image/earth_night.jpg",
-			"http://www.jpl.nasa.gov/images/earth/arctic/arctic20070515-hi-res.jpg",
-			"http://photojournal.jpl.nasa.gov/jpeg/PIA06141.jpg"
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2011-14-b-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2011-11-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2011-08-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2011-06-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2011-01-b-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2010-27-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2010-36-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2010-29-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2010-24-a-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2010-13-e-xlarge_web.jpg",
+			"http://imgsrc.hubblesite.org/hu/db/images/hs-2009-29-b-xlarge_web.jpg"
 		];
 		private var mImageClips:Object;
 		private var mLoader:AssetLoader;
@@ -80,7 +80,7 @@
 		private function loadImagesSingle (e:Event) : void {
 			var i:uint, ilen:uint = mImageUrls.length;
 			for (i=0; i<ilen; ++i) {
-				var image:ui.ProgressImage = new ui.ProgressImage();
+				var image:demo.AssetLoader.ui.ProgressImage = new demo.AssetLoader.ui.ProgressImage();
 				tImagesSingle.addChild(image);
 				image.y = i*IMAGE_Y_DISTANCE;
 				image.load( mImageUrls[i] );
