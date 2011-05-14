@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urls currentgroup="local">
+	<group id="local">
+		<url name="test" url="http://asaplibrary.org" target="_new" />
+		<url name="userform" url="xml/userform.xml" />
+	</group>
+	<group id="live">
+		<url name="test" url="http://asaplibrary.org" target="_new" />
+	</group>
+
+	<url name="lostboys" url="http://asaplibrary.org" target="_new" />
+</urls>

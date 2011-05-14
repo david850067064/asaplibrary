@@ -1,4 +1,4 @@
-package assets {
+package demo.Form.controller {
 	import flash.events.Event;
 	
 	/**
