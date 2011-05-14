@@ -1,25 +1,23 @@
-﻿
-package ui {
+﻿package demo.FlowManager.ui {
+	import org.asaplibrary.ui.buttons.*;
+
 	import flash.display.MovieClip;
-	
-	import org.asaplibrary.ui.buttons.*;	
 
 	/**
 	
-	*/
+	 */
 	public class CloseButton extends MovieClip {
+		protected var mDelegate : ButtonBehavior;
 
-		protected var mDelegate:ButtonBehavior;
-		
-		public function CloseButton () {
+		public function CloseButton() {
 			mDelegate = new ButtonBehavior(this);
 			mDelegate.addEventListener(ButtonBehaviorEvent._EVENT, update);
 			// don't handle mouse events on children
 			mouseChildren = false;
 			drawUpState();
 		}
-		
-		protected function update (e:ButtonBehaviorEvent) : void {
+
+		protected function update(e : ButtonBehaviorEvent) : void {
 			switch (e.state) {
 				case ButtonStates.SELECTED:
 				case ButtonStates.OVER:
@@ -35,14 +33,13 @@ package ui {
 			}
 			buttonMode = enabled = !e.selected;
 		}
-		
-		protected function drawUpState () : void {
+
+		protected function drawUpState() : void {
 			gotoAndStop("up");
 		}
-		
-		protected function drawOverState () : void {
+
+		protected function drawOverState() : void {
 			gotoAndStop("over");
 		}
-	
 	}
 }
