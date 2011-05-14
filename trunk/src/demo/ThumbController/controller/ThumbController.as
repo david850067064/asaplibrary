@@ -20,14 +20,10 @@
 		public static const IMAGE_LIST : Array = ["Agave.jpg", "Clown-Fish.jpg", "Daisies.jpg", "Dandelion-Seeds.jpg", "Dandelion.jpg", "Faux-Fur.jpg"];
 		public static const IMAGE_URL_FOLDER : String = "img/big/";
 		public static const THUMB_URL_FOLDER : String = "img/thumbs/";
-		private static const FADE_IN_DURATION : Number = .4;
-		// in seconds
-		private static const THUMB_WIDTH : Number = 32 + 6;
-		// add borders
-		private static const THUMB_HEIGHT : Number = 20 + 6;
-		// add borders
-		private static const THUMB_OFFSET : Number = 1;
-		// pixels between thumbs
+		private static const FADE_IN_DURATION : Number = .4; /**< in seconds */
+		private static const THUMB_WIDTH : Number = 32 + 6; /**< add borders */
+		private static const THUMB_HEIGHT : Number = 20 + 6; /**< add borders */
+		private static const THUMB_OFFSET : Number = 1; /**< pixels between thumbs */
 		public var tImage : ImagePlaceholder;
 		public var tThumb : ImagePlaceholder;
 		public var tPrevious : NextButton;
