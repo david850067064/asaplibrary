@@ -172,7 +172,7 @@ package org.asaplibrary.util.notificationcenter {
 				return;
 			}
 			var observerData : NotificationObserverData = new NotificationObserverData(inObserver, inMethod, inNotificationName, inNotificationObject);
-			Array(mObservers[inNotificationName]).push(observerData);
+			mObservers[inNotificationName].push(observerData);
 
 			// optimize object handling, to retrieve all messages targeted to the object
 			if (inNotificationObject != null) {
@@ -183,7 +183,7 @@ package org.asaplibrary.util.notificationcenter {
 				if (mObjects[inNotificationObject] == undefined) {
 					mObjects[inNotificationObject] = new Array();
 				}
-				Array(mObjects[inNotificationObject]).push(observerData);
+				mObjects[inNotificationObject].push(observerData);
 			}
 		}
 
