@@ -1,9 +1,9 @@
-package data {
-	import flash.utils.getQualifiedClassName;
-	
+package demo.Form.data {
 	import org.asaplibrary.data.URLData;
 	import org.asaplibrary.data.xml.Service;
-	import org.asaplibrary.data.xml.ServiceEvent;	
+	import org.asaplibrary.data.xml.ServiceEvent;
+
+	import flash.utils.getQualifiedClassName;
 
 	/**
 	 * @author stephan.bezoen
@@ -12,24 +12,24 @@ package data {
 		public function UserFormService() {
 			super();
 		}
-		
+
 		/**
 		 *
 		 */
-		public function postUserForm (inData:Object) : void {
-			var ud:URLData = URLManager.getURLDataByName(URLNames.USERFORM);
+		public function postUserForm(inData : Object) : void {
+			var ud : URLData = URLManager.getURLDataByName(URLNames.USERFORM);
 			if (!ud) return;
-			
+
 			load(ud, inData, true, true);
 		}
-		
-		override protected function processData (inData:XML, inName:String) : void {
-			var isSuccess:Boolean = (inData.@success == "true");
+
+		override protected function processData(inData : XML, inName : String) : void {
+			var isSuccess : Boolean = (inData.@success == "true");
 			if (isSuccess) dispatchEvent(new ServiceEvent(ServiceEvent.COMPLETE, inName));
 			else dispatchEvent(new ServiceEvent(ServiceEvent.LOAD_ERROR, inName, null, null, inData.@message));
 		}
-		
-		override public function toString():String {
+
+		override public function toString() : String {
 			return getQualifiedClassName(this);
 		}
 	}
