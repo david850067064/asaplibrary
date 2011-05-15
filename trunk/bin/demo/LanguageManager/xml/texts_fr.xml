@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texts>
+	<text id="1" html="false">English</text>
+	<text id="2" html="false">Deutsch</text>
+	<text id="3" html="false">Français</text>
+	<text id="4" html="false"><![CDATA[<<- Change à 10]]></text>
+	<text id="10" html="false">Bonjour Monde</text>
+</texts>

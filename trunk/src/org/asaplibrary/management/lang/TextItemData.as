@@ -14,16 +14,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-/**
-ValueObject class that holds data for a text item. 
-Classes that implement {@link IMultiLanguageTextContainer} get this type of data from the LanguageManager.
-Basic info contained in this class is the text and the id by which it is referenced.
- */
 package org.asaplibrary.management.lang {
 	import org.asaplibrary.data.xml.IParsable;
 
 	import flash.utils.getQualifiedClassName;
 
+	/**
+	ValueObject class that holds data for a text item. 
+	Classes that implement {@link IMultiLanguageTextContainer} get this type of data from the LanguageManager.
+	Basic info contained in this class is the text and the id by which it is referenced.
+	 */
 	public class TextItemData implements IParsable {
 		public var text : String;
 		public var id : String;

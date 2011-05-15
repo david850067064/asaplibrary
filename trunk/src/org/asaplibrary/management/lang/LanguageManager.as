@@ -26,8 +26,6 @@ package org.asaplibrary.management.lang {
 	Class for managing language dependencies in an application.
 	For text, the language dependent texts are expected to be in an xml per language, with the following structure:
 	<code>
-	
-	
 	<?xml version="1.0" encoding="UTF-8"?>
 	<texts>
 	<text id="helloWorld">Hello World</text>
@@ -35,8 +33,6 @@ package org.asaplibrary.management.lang {
 	<text id="helloHTMLWorld" html="false"><![CDATA[<b>Hello</b> World with visible html tags]]></text>
 	<text id="helloWorldInBrackets" html="false"><![CDATA[>>>Hello World<<<]]></text>
 	</texts>
-
-	
 	</code>
 	The 'id' attribute is mandatory, and has to be a String. It cannot contain "_" (underscore).
 	The 'html' attribute is optional. If left out, text is rendered as HTML text; any other value than "false" is seen as true. When false, the text is set directly into the text field, and any html tags are ignored.
@@ -68,7 +64,7 @@ package org.asaplibrary.management.lang {
 	lm.addEventListener(LanguageManager.EVENT_LOADED, handleLanguageLoaded);
 	lm.loadXML("../xml/texts_" + inCode + ".xml");
 	}
-	private function handleLanguageLoaded () : Void {
+	private function handleLanguageLoaded () : void {
 	Log.debug("handleLanguageLoaded: Language file loaded.", toString());
 	}
 	</code>
@@ -147,7 +143,7 @@ package org.asaplibrary.management.lang {
 		}
 
 		/**
-		 * Add a multi-laguage container to the LanguageManager.
+		 * Add a multi-language container to the LanguageManager.
 		 * If data has been loaded, the container will receive its data immediately.
 		 * If the container had been added already, it will not be added again.
 		 * @param inID: the id to be associated with the container
@@ -182,6 +178,7 @@ package org.asaplibrary.management.lang {
 			mTextDataItemMap[inData.id] = inData;
 
 			var len : uint = mTextContainers.length;
+
 			for (var i : uint = 0; i < len; ++i) {
 				var md : MultiLanguageContainerData = mTextContainers[i] as MultiLanguageContainerData;
 
@@ -225,7 +222,9 @@ package org.asaplibrary.management.lang {
 			var len : uint = mTextContainers.length;
 			for (var i : uint = 0; i < len; ++i) {
 				var md : MultiLanguageContainerData = mTextContainers[i] as MultiLanguageContainerData;
-				if (md.container == inContainer) return md;
+				if (md.container == inContainer) {
+					return md;
+				}
 			}
 			return null;
 		}
