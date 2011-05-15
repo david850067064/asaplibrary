@@ -14,11 +14,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-/**
-Interface to be implemented by any class that wishes to add itself to the LanguageManager.
-This interface provides two functions that the LanguageManager expects.
- */
 package org.asaplibrary.management.lang {
+	/**
+	Interface to be implemented by any class that wishes to add itself to the LanguageManager.
+	This interface provides two functions that the LanguageManager expects.
+	 */
 	public interface IMultiLanguageTextContainer {
 		/**
 		 * Set the data for the container
