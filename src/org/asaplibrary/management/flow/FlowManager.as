@@ -14,6 +14,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+ /**
+  * Enables to navigate a multi-part Flash movie using the principle of deep links. 
+  * Uses {@link LocalController} subclass {@link FlowSection} to identify movie "sections". 
+  * The syntax to go to a new section is simply:
+  * <code>
+  * FlowManager.defaultFlowManager.goto("Intro");
+  * </code>
+  * See {@link FlowManager} for usage details.
+  */
 package org.asaplibrary.management.flow {
 	import org.asaplibrary.management.movie.*;
 	import org.asaplibrary.util.actionqueue.*;
@@ -23,7 +32,7 @@ package org.asaplibrary.management.flow {
 	import flash.utils.getQualifiedClassName;
 
 	/**
-	Enables to move from one state to the other within a site structure, even using 'deep links'.
+	Enables to navigate a multi-part Flash movie using the principle of deep links.
 	
 	<h2>Introduction</h2>
 	Flow states are represented by site 'sections', using the {@link IFlowSection} type.
