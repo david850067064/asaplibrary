@@ -11,13 +11,5 @@
 			state = inState;
 			sender = inSender;
 		}
-
-		public override function toString() : String {
-			return "NavigationEvent; state=" + state + "; sender=" + sender;
-		}
-
-		public override function clone() : Event {
-			return new NavigationEvent(state, sender);
-		}
 	}
 }
