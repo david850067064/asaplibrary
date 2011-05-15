@@ -14,12 +14,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-/**
-Interface for the LocalController class. See {@link LocalController} for details.
- */
 package org.asaplibrary.management.movie {
 	import flash.events.IEventDispatcher;
 
+	/**
+	Interface for the LocalController class. See {@link LocalController} for details.
+	 */
 	public interface ILocalController extends IEventDispatcher {
 		function startMovie() : void;
 
