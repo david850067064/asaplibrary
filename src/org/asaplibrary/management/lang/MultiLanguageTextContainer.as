@@ -14,24 +14,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-/**
-Basic implementation of {@link IMultiLanguageTextContainer} to be used with the {@link LanguageManager} to provide language dependent texts in an application.
-To use this class, perform the following steps:
-<ol>
-<li>Create a new movieclip in the library</li>
-<li>Give it a significant name containing font information, p.e. "arial 11px center"; this allows for easy reuse of containers</li>
-<li>Link it to the class org.asaplibrary.management.lang.MultiLanguageTextContainer</li>
-<li>Inside the movieclip, create one or more <b>nameless</b> textfields</li>
-<li>Set font embedding as necessary</li>
-<li>Place instances of the library item on the stage where necessary.</li>
-<li>Name the instances whatever you like, as long as the name ends with underscore, followed by the string id of the text to be associated with the instance. P.e.: "myHeader_helloWorld"</li>
-<li>In your application, load an xml file containing texts into the LanguageManager: <code>LanguageManager.getInstance().loadXML("texts_en.xml");</code></li>
-</ol>
-This class can be used either
-<ul><li>directly,</li>
-<li>as base class for further extension or </li>
-<li>as example of how to implement the {@link IMultiLanguageTextContainer} interface.</li></ul>
- */
 package org.asaplibrary.management.lang {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
@@ -40,6 +22,24 @@ package org.asaplibrary.management.lang {
 	import flash.text.TextField;
 	import flash.utils.getQualifiedClassName;
 
+	/**
+	Basic implementation of {@link IMultiLanguageTextContainer} to be used with the {@link LanguageManager} to provide language dependent texts in an application.
+	To use this class, perform the following steps:
+	<ol>
+	<li>Create a new movieclip in the library</li>
+	<li>Give it a significant name containing font information, p.e. "arial 11px center"; this allows for easy reuse of containers</li>
+	<li>Link it to the class org.asaplibrary.management.lang.MultiLanguageTextContainer</li>
+	<li>Inside the movieclip, create one or more <b>nameless</b> textfields</li>
+	<li>Set font embedding as necessary</li>
+	<li>Place instances of the library item on the stage where necessary.</li>
+	<li>Name the instances whatever you like, as long as the name ends with underscore, followed by the string id of the text to be associated with the instance. P.e.: "myHeader_helloWorld"</li>
+	<li>In your application, load an xml file containing texts into the LanguageManager: <code>LanguageManager.getInstance().loadXML("texts_en.xml");</code></li>
+	</ol>
+	This class can be used either
+	<ul><li>directly,</li>
+	<li>as base class for further extension or </li>
+	<li>as example of how to implement the {@link IMultiLanguageTextContainer} interface.</li></ul>
+	 */
 	public class MultiLanguageTextContainer extends MovieClip implements IMultiLanguageTextContainer {
 		private var mTextFields : Array;
 
@@ -67,9 +67,11 @@ package org.asaplibrary.management.lang {
 			var len : uint = mTextFields.length;
 			for (var i : uint = 0; i < len; i++) {
 				var tf : TextField = mTextFields[i] as TextField;
-
-				if (inIsHTML) tf.htmlText = inText;
-				else tf.text = inText;
+				if (inIsHTML) {
+					tf.htmlText = inText;
+				} else {
+					tf.text = inText;
+				}
 			}
 		}
 

@@ -14,6 +14,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+ /**
+  * Facilitates the creation of multi-language Flash movies, by semi-automatically "feeding" strings from localized XML files into text containers. See {@link LanguageManager} for usage details.
+  */
 package org.asaplibrary.management.lang {
 	/**
 	Interface to be implemented by any class that wishes to add itself to the LanguageManager.
