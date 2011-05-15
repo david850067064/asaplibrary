@@ -23,7 +23,7 @@ package org.asaplibrary.util.debug {
 	The object sent with the event is of type LogEvent. The LogEvent class contains public properties for the text of the message, 
 	a String denoting the sender of the message,and the level of importance of the message.
 	By default, log messages are also output as traces to the Flash IDE output window. This behaviour can be changed.
-	@example:
+	@example
 	<code>
 	Log.addEventListener(onLogEvent);	// handle events locally
 	Log.showTrace(false);	// don't output log messages as traces
@@ -194,7 +194,7 @@ package org.asaplibrary.util.debug {
 		 *	@use
 		 *	<code>
 		 *	Log.showTrace(false);
-		 *	<code>
+		 *	</code>
 		 */
 		public static function showTrace(inShow : Boolean) : void {
 			Log.getInstance().doShowTrace(inShow);
